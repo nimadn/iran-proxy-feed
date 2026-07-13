@@ -1,0 +1,15 @@
+mixed-port: 7890
+allow-lan: false
+mode: rule
+log-level: warning
+
+proxies: []
+
+proxy-groups:
+  - name: IR-SELECT
+    type: select
+    proxies:
+      - DIRECT
+
+rules:
+  - MATCH,IR-SELECT
