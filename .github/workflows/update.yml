@@ -9,10 +9,14 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: iran-proxy-feed-update
+  cancel-in-progress: true
+
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
 
     steps:
       - name: Check out repository
@@ -23,15 +27,63 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Generate subscription
+      - name: Generate combined sing-box configuration
         run: python convert.py
+
+      - name: Validate generated JSON
+        run: |
+          python -m json.tool docs/iran-all.json > /dev/null
+          test -s docs/iran-all.json
+          test -s docs/iran-all-plain.txt
+
+      - name: Show generated proxy counts
+        run: |
+          python - <<'PY'
+          import json
+
+          with open(
+              "docs/iran-all.json",
+              "r",
+              encoding="utf-8",
+          ) as file:
+              config = json.load(file)
+
+          proxy_outbounds = [
+              outbound
+              for outbound in config["outbounds"]
+              if outbound.get("type") in {"http", "socks"}
+          ]
+
+          http_count = sum(
+              outbound["type"] == "http"
+              for outbound in proxy_outbounds
+          )
+
+          socks4_count = sum(
+              outbound["type"] == "socks"
+              and outbound.get("version") in {"4", "4a"}
+              for outbound in proxy_outbounds
+          )
+
+          socks5_count = sum(
+              outbound["type"] == "socks"
+              and outbound.get("version") == "5"
+              for outbound in proxy_outbounds
+          )
+
+          print(f"HTTP/HTTPS: {http_count}")
+          print(f"SOCKS4/4A: {socks4_count}")
+          print(f"SOCKS5: {socks5_count}")
+          print(f"Total: {len(proxy_outbounds)}")
+          PY
 
       - name: Commit updated feed
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add docs/*.txt
+          git add docs/iran-all.json docs/iran-all-plain.txt
 
           if git diff --cached --quiet; then
             echo "No changes to commit"
