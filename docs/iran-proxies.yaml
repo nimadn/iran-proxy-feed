@@ -3,12 +3,32 @@ allow-lan: false
 mode: rule
 log-level: warning
 
-proxies: []
+proxies:
+  - name: 'IR-HTTP-01'
+    type: http
+    server: '5.200.72.62'
+    port: 3128
+  - name: 'IR-HTTP-02'
+    type: http
+    server: '185.193.209.1'
+    port: 8080
 
 proxy-groups:
-  - name: IR-SELECT
+  - name: 'IR-AUTO'
+    type: url-test
+    url: 'https://www.gstatic.com/generate_204'
+    interval: 300
+    tolerance: 150
+    proxies:
+      - 'IR-HTTP-01'
+      - 'IR-HTTP-02'
+
+  - name: 'IR-SELECT'
     type: select
     proxies:
+      - 'IR-AUTO'
+      - 'IR-HTTP-01'
+      - 'IR-HTTP-02'
       - DIRECT
 
 rules:
