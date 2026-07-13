@@ -1,218 +1,309 @@
 #!/usr/bin/env python3
 
-import base64
 import ipaddress
-import urllib.parse
+import json
+import re
 import urllib.request
 from pathlib import Path
+from typing import Any
+from urllib.parse import urlsplit
 
-SOURCES = {
-    "http": (
-        "https://cdn.jsdelivr.net/gh/proxyscrape/"
-        "free-proxy-list@main/proxies/countries/ir/http/data.txt"
-    ),
-    "https": (
-        "https://cdn.jsdelivr.net/gh/proxyscrape/"
-        "free-proxy-list@main/proxies/countries/ir/https/data.txt"
-    ),
-    "socks4": (
-        "https://cdn.jsdelivr.net/gh/proxyscrape/"
-        "free-proxy-list@main/proxies/countries/ir/socks4/data.txt"
-    ),
+SOURCE_URL = (
+    "https://cdn.jsdelivr.net/gh/proxyscrape/"
+    "free-proxy-list@main/proxies/countries/ir/data.txt"
+)
+
+OUTPUT_FILE = Path("docs/iran-all.json")
+PLAIN_FILE = Path("docs/iran-all-plain.txt")
+
+SUPPORTED_SCHEMES = {
+    "http",
+    "https",
+    "socks4",
+    "socks4a",
+    "socks5",
 }
 
-OUTPUT_DIRECTORY = Path("docs")
 
-
-def download_text(url: str) -> str:
+def download_source() -> str:
     request = urllib.request.Request(
-        url,
+        SOURCE_URL,
         headers={
-            "User-Agent": "IranProxyFeed/4.0",
+            "User-Agent": "IranProxyFeed/5.0",
             "Accept": "text/plain",
         },
     )
 
     with urllib.request.urlopen(request, timeout=60) as response:
-        return response.read().decode("utf-8", errors="replace")
+        return response.read().decode(
+            "utf-8",
+            errors="replace",
+        )
 
 
-def parse_proxy_line(line: str) -> tuple[str, int] | None:
-    value = line.strip()
+def extract_proxy_values(text: str) -> list[str]:
+    """
+    Supports both newline-separated and whitespace-separated sources.
+    """
 
-    if not value or value.startswith("#"):
+    pattern = re.compile(
+        r"(?:https?|socks4a?|socks5)://"
+        r"(?:\[[0-9a-fA-F:]+\]|[^ \t\r\n:/#]+)"
+        r":\d{1,5}"
+        r"(?:#[^ \t\r\n]+)?",
+        flags=re.IGNORECASE,
+    )
+
+    return pattern.findall(text)
+
+
+def normalize_host(host: str) -> str | None:
+    value = host.strip().strip("[]")
+
+    if not value:
         return None
 
-    # Also tolerate source lines that already contain a scheme.
-    if "://" in value:
-        value = value.split("://", 1)[1]
-
-    # Remove an existing fragment or path.
-    value = value.split("#", 1)[0]
-    value = value.split("/", 1)[0]
-
     try:
-        host, port_text = value.rsplit(":", 1)
-        port = int(port_text)
-    except (ValueError, TypeError):
-        return None
-
-    host = host.strip().strip("[]")
-
-    if not 1 <= port <= 65535:
-        return None
-
-    try:
-        ipaddress.ip_address(host)
-    except ValueError:
-        # Keep valid-looking domain names too.
-        if not host or " " in host:
-            return None
-
-    return host, port
-
-
-def read_source(source_name: str) -> list[tuple[str, int]]:
-    text = download_text(SOURCES[source_name])
-
-    unique: dict[tuple[str, int], None] = {}
-
-    for line in text.splitlines():
-        parsed = parse_proxy_line(line)
-
-        if parsed is not None:
-            unique[parsed] = None
-
-    return list(unique.keys())
-
-
-def format_host(host: str) -> str:
-    try:
-        address = ipaddress.ip_address(host)
-
-        if address.version == 6:
-            return f"[{host}]"
+        ipaddress.ip_address(value)
+        return value
     except ValueError:
         pass
 
-    return host
+    # Permit a conventional hostname if one appears in the source.
+    if (
+        len(value) <= 253
+        and " " not in value
+        and "." in value
+    ):
+        return value.lower()
+
+    return None
 
 
-def build_links(
-    proxies: list[tuple[str, int]],
-    source_type: str,
-) -> list[str]:
-    links: list[str] = []
+def parse_proxy(
+    value: str,
+) -> dict[str, Any] | None:
+    try:
+        parsed = urlsplit(value)
+    except ValueError:
+        return None
 
-    for index, (host, port) in enumerate(proxies, start=1):
-        label = urllib.parse.quote(
-            f"IR-{source_type.upper()}-{index:03d}",
-            safe="",
-        )
+    scheme = parsed.scheme.lower()
 
-        formatted_host = format_host(host)
+    if scheme not in SUPPORTED_SCHEMES:
+        return None
 
-        if source_type == "socks4":
-            scheme = "socks4"
-        else:
-            # Both ProxyScrape HTTP and HTTPS proxy lists are HTTP proxy
-            # servers. HTTPS means they support HTTPS CONNECT tunnelling.
-            scheme = "http"
+    host = normalize_host(parsed.hostname or "")
 
-        link = (
-            f"{scheme}://{formatted_host}:{port}"
-            f"#{label}"
-        )
+    if host is None:
+        return None
 
-        links.append(link)
+    try:
+        port = parsed.port
+    except ValueError:
+        return None
 
-    return links
+    if port is None or not 1 <= port <= 65535:
+        return None
+
+    return {
+        "scheme": scheme,
+        "host": host,
+        "port": port,
+    }
 
 
-def write_subscription(
-    filename: str,
-    links: list[str],
-) -> None:
-    plain_content = "\n".join(links)
+def make_outbound(
+    proxy: dict[str, Any],
+    index: int,
+) -> tuple[str, dict[str, Any]]:
+    scheme = proxy["scheme"]
+    host = proxy["host"]
+    port = proxy["port"]
 
-    encoded_content = base64.b64encode(
-        plain_content.encode("utf-8")
-    ).decode("ascii")
+    tag = f"IR-{scheme.upper()}-{index:03d}"
 
-    output_path = OUTPUT_DIRECTORY / filename
-    output_path.write_text(
-        encoded_content,
-        encoding="ascii",
-    )
+    if scheme in {"http", "https"}:
+        # ProxyScrape's HTTPS entries generally identify HTTP proxies
+        # capable of HTTPS CONNECT, not necessarily TLS-wrapped proxy
+        # servers. Therefore both are represented as HTTP outbounds.
+        outbound = {
+            "type": "http",
+            "tag": tag,
+            "server": host,
+            "server_port": port,
+        }
 
-    debug_path = OUTPUT_DIRECTORY / filename.replace(
-        ".txt",
-        "-plain.txt",
-    )
-    debug_path.write_text(
-        plain_content + ("\n" if plain_content else ""),
-        encoding="utf-8",
-    )
+    elif scheme == "socks4":
+        outbound = {
+            "type": "socks",
+            "tag": tag,
+            "server": host,
+            "server_port": port,
+            "version": "4",
+            "network": "tcp",
+        }
+
+    elif scheme == "socks4a":
+        outbound = {
+            "type": "socks",
+            "tag": tag,
+            "server": host,
+            "server_port": port,
+            "version": "4a",
+            "network": "tcp",
+        }
+
+    else:
+        outbound = {
+            "type": "socks",
+            "tag": tag,
+            "server": host,
+            "server_port": port,
+            "version": "5",
+        }
+
+    return tag, outbound
+
+
+def build_config(
+    proxies: list[dict[str, Any]],
+) -> dict[str, Any]:
+    tags: list[str] = []
+    outbounds: list[dict[str, Any]] = []
+
+    for index, proxy in enumerate(proxies, start=1):
+        tag, outbound = make_outbound(proxy, index)
+        tags.append(tag)
+        outbounds.append(outbound)
+
+    selector_members = ["AUTO", *tags, "DIRECT"]
+
+    config: dict[str, Any] = {
+        "log": {
+            "level": "info",
+            "timestamp": True,
+        },
+        "inbounds": [
+            {
+                "type": "mixed",
+                "tag": "mixed-in",
+                "listen": "127.0.0.1",
+                "listen_port": 2080,
+            }
+        ],
+        "outbounds": [
+            {
+                "type": "selector",
+                "tag": "PROXY",
+                "outbounds": selector_members,
+                "default": "AUTO",
+                "interrupt_exist_connections": True,
+            },
+            {
+                "type": "urltest",
+                "tag": "AUTO",
+                "outbounds": tags,
+                "url": "https://www.gstatic.com/generate_204",
+                "interval": "5m",
+                "tolerance": 200,
+                "interrupt_exist_connections": True,
+            },
+            *outbounds,
+            {
+                "type": "direct",
+                "tag": "DIRECT",
+            },
+        ],
+        "route": {
+            "final": "PROXY",
+            "auto_detect_interface": True,
+        },
+    }
+
+    return config
 
 
 def main() -> None:
-    OUTPUT_DIRECTORY.mkdir(
+    source_text = download_source()
+    raw_values = extract_proxy_values(source_text)
+
+    unique: dict[
+        tuple[str, str, int],
+        dict[str, Any],
+    ] = {}
+
+    for value in raw_values:
+        proxy = parse_proxy(value)
+
+        if proxy is None:
+            continue
+
+        key = (
+            proxy["scheme"],
+            proxy["host"],
+            proxy["port"],
+        )
+
+        unique[key] = proxy
+
+    proxies = list(unique.values())
+
+    proxies.sort(
+        key=lambda item: (
+            item["scheme"],
+            item["host"],
+            item["port"],
+        )
+    )
+
+    config = build_config(proxies)
+
+    OUTPUT_FILE.parent.mkdir(
         parents=True,
         exist_ok=True,
     )
 
-    http_proxies = read_source("http")
-    https_proxies = read_source("https")
-    socks4_proxies = read_source("socks4")
-
-    http_links = build_links(
-        http_proxies,
-        "http",
-    )
-
-    https_links = build_links(
-        https_proxies,
-        "https",
-    )
-
-    socks4_links = build_links(
-        socks4_proxies,
-        "socks4",
-    )
-
-    # Deduplicate the combined feed while preserving order.
-    all_links = list(
-        dict.fromkeys(
-            http_links
-            + https_links
-            + socks4_links
+    OUTPUT_FILE.write_text(
+        json.dumps(
+            config,
+            indent=2,
+            ensure_ascii=False,
         )
+        + "\n",
+        encoding="utf-8",
     )
 
-    write_subscription(
-        "iran-http.txt",
-        http_links,
+    plain_lines = [
+        f"{proxy['scheme']}://"
+        f"{proxy['host']}:{proxy['port']}"
+        for proxy in proxies
+    ]
+
+    PLAIN_FILE.write_text(
+        "\n".join(plain_lines)
+        + ("\n" if plain_lines else ""),
+        encoding="utf-8",
     )
 
-    write_subscription(
-        "iran-https.txt",
-        https_links,
-    )
+    counts = {
+        scheme: sum(
+            proxy["scheme"] == scheme
+            for proxy in proxies
+        )
+        for scheme in sorted(SUPPORTED_SCHEMES)
+    }
 
-    write_subscription(
-        "iran-socks4.txt",
-        socks4_links,
-    )
+    print(f"Source entries found: {len(raw_values)}")
+    print(f"Unique valid proxies: {len(proxies)}")
+    print(f"Protocol counts: {counts}")
+    print(f"Config written to: {OUTPUT_FILE}")
+    print(f"Plain list written to: {PLAIN_FILE}")
 
-    write_subscription(
-        "iran-all.txt",
-        all_links,
-    )
-
-    print(f"HTTP proxies: {len(http_links)}")
-    print(f"HTTPS proxies: {len(https_links)}")
-    print(f"SOCKS4 proxies: {len(socks4_links)}")
-    print(f"Combined unique links: {len(all_links)}")
+    if not proxies:
+        raise RuntimeError(
+            "No valid proxies were found in the source."
+        )
 
 
 if __name__ == "__main__":
