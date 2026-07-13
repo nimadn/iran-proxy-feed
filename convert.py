@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-import concurrent.futures
+import base64
 import json
-import subprocess
+import urllib.parse
 import urllib.request
 from pathlib import Path
 from typing import Any
@@ -12,21 +12,17 @@ SOURCE_URL = (
     "proxyscrape/free-proxy-list@main/proxies/all/data.json"
 )
 
-YAML_OUTPUT = Path("docs/iran-proxies.yaml")
-JSON_OUTPUT = Path("docs/iran-proxies.json")
+OUTPUT_BASE64 = Path("docs/iran-proxies.txt")
+OUTPUT_PLAIN = Path("docs/iran-proxies-plain.txt")
 
 SUPPORTED_PROTOCOLS = {"http", "socks4", "socks5"}
 
-TEST_TIMEOUT_SECONDS = 8
-TEST_WORKERS = 40
-TEST_URL = "https://www.gstatic.com/generate_204"
 
-
-def download_json() -> list[dict[str, Any]]:
+def download_proxy_data() -> list[dict[str, Any]]:
     request = urllib.request.Request(
         SOURCE_URL,
         headers={
-            "User-Agent": "IranProxyFeed/2.0",
+            "User-Agent": "IranProxyFeed/3.0",
             "Accept": "application/json",
         },
     )
@@ -35,19 +31,29 @@ def download_json() -> list[dict[str, Any]]:
         data = json.load(response)
 
     if not isinstance(data, list):
-        raise ValueError("The source response is not a JSON list")
+        raise ValueError("Proxy source is not a JSON list")
 
     return data
 
 
 def is_iranian(item: dict[str, Any]) -> bool:
-    country_code = str(item.get("country_code", "")).strip().upper()
-    country = str(item.get("country", "")).strip().lower()
-    city = str(item.get("city", "")).strip().lower()
+    country_code = str(
+        item.get("country_code", "")
+    ).strip().upper()
+
+    country = str(
+        item.get("country", "")
+    ).strip().lower()
+
+    city = str(
+        item.get("city", "")
+    ).strip().lower()
 
     return (
         country_code == "IR"
+        or country == "iran"
         or "iran" in country
+        or city == "tehran"
         or "tehran" in city
     )
 
@@ -55,266 +61,81 @@ def is_iranian(item: dict[str, Any]) -> bool:
 def normalize_proxy(
     item: dict[str, Any],
 ) -> dict[str, Any] | None:
-    protocol = str(item.get("protocol", "")).strip().lower()
-    ip = str(item.get("ip", "")).strip()
+    protocol = str(
+        item.get("protocol", "")
+    ).strip().lower()
+
+    ip = str(
+        item.get("ip", "")
+    ).strip()
 
     try:
         port = int(item.get("port"))
     except (TypeError, ValueError):
         return None
 
-    if protocol not in SUPPORTED_PROTOCOLS:
-        return None
-
     if not is_iranian(item):
         return None
 
-    if not ip or not 1 <= port <= 65535:
+    if protocol not in SUPPORTED_PROTOCOLS:
+        return None
+
+    if not ip:
+        return None
+
+    if not 1 <= port <= 65535:
         return None
 
     return {
         "protocol": protocol,
         "ip": ip,
         "port": port,
-        "country": str(item.get("country", "")),
-        "country_code": str(item.get("country_code", "")),
-        "city": str(item.get("city", "")),
-        "uptime": item.get("uptime_percent", 0),
-        "latency": item.get("latency_ms", 0),
+        "city": str(item.get("city", "")).strip(),
+        "country": str(item.get("country", "")).strip(),
     }
 
 
-def proxy_url(proxy: dict[str, Any]) -> str:
+def build_proxy_link(
+    proxy: dict[str, Any],
+    number: int,
+) -> str:
     protocol = proxy["protocol"]
+    ip = proxy["ip"]
+    port = proxy["port"]
+
+    city = proxy["city"] or "Iran"
+
+    name = (
+        f"IR-{protocol.upper()}-"
+        f"{number:03d}-{city}"
+    )
+
+    encoded_name = urllib.parse.quote(
+        name,
+        safe="",
+    )
+
+    # Use conventional URI schemes.
+    if protocol == "http":
+        return (
+            f"http://{ip}:{port}"
+            f"#{encoded_name}"
+        )
 
     if protocol == "socks5":
-        protocol = "socks5h"
-
-    return f"{protocol}://{proxy['ip']}:{proxy['port']}"
-
-
-def test_proxy(
-    proxy: dict[str, Any],
-) -> dict[str, Any] | None:
-    command = [
-        "curl",
-        "--silent",
-        "--output",
-        "/dev/null",
-        "--proxy",
-        proxy_url(proxy),
-        "--connect-timeout",
-        str(TEST_TIMEOUT_SECONDS),
-        "--max-time",
-        str(TEST_TIMEOUT_SECONDS),
-        "--write-out",
-        "%{http_code} %{time_total}",
-        TEST_URL,
-    ]
-
-    try:
-        result = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            timeout=TEST_TIMEOUT_SECONDS + 3,
-            check=False,
-        )
-    except (subprocess.TimeoutExpired, OSError):
-        return None
-
-    if result.returncode != 0:
-        return None
-
-    parts = result.stdout.strip().split()
-
-    if len(parts) != 2 or parts[0] != "204":
-        return None
-
-    tested = dict(proxy)
-
-    try:
-        tested["measured_latency"] = float(parts[1])
-    except ValueError:
-        tested["measured_latency"] = 999
-
-    return tested
-
-
-def yaml_quote(value: str) -> str:
-    return "'" + value.replace("'", "''") + "'"
-
-
-def build_clash_yaml(
-    proxies: list[dict[str, Any]],
-) -> str:
-    # Clash/Hiddify YAML feed: HTTP and SOCKS5 only.
-    compatible = [
-        proxy
-        for proxy in proxies
-        if proxy["protocol"] in {"http", "socks5"}
-    ]
-
-    lines = [
-        "mixed-port: 7890",
-        "allow-lan: false",
-        "mode: rule",
-        "log-level: warning",
-        "",
-        "proxies:",
-    ]
-
-    names = []
-
-    for index, proxy in enumerate(compatible, start=1):
-        protocol = proxy["protocol"]
-        name = f"IR-{protocol.upper()}-{index:03d}"
-        names.append(name)
-
-        lines.extend(
-            [
-                f"  - name: {yaml_quote(name)}",
-                f"    type: {protocol}",
-                f"    server: {yaml_quote(proxy['ip'])}",
-                f"    port: {proxy['port']}",
-            ]
+        return (
+            f"socks5://{ip}:{port}"
+            f"#{encoded_name}"
         )
 
-        if protocol == "socks5":
-            lines.append("    udp: false")
-
-    lines.extend(
-        [
-            "",
-            "proxy-groups:",
-            "  - name: 'IR-AUTO'",
-            "    type: url-test",
-            "    url: 'https://www.gstatic.com/generate_204'",
-            "    interval: 300",
-            "    tolerance: 200",
-            "    proxies:",
-        ]
+    return (
+        f"socks4://{ip}:{port}"
+        f"#{encoded_name}"
     )
-
-    if names:
-        for name in names:
-            lines.append(f"      - {yaml_quote(name)}")
-    else:
-        lines.append("      - DIRECT")
-
-    lines.extend(
-        [
-            "",
-            "  - name: 'IR-SELECT'",
-            "    type: select",
-            "    proxies:",
-            "      - 'IR-AUTO'",
-        ]
-    )
-
-    for name in names:
-        lines.append(f"      - {yaml_quote(name)}")
-
-    lines.extend(
-        [
-            "      - DIRECT",
-            "",
-            "rules:",
-            "  - MATCH,IR-SELECT",
-            "",
-        ]
-    )
-
-    return "\n".join(lines)
-
-
-def make_singbox_outbound(
-    proxy: dict[str, Any],
-    index: int,
-) -> tuple[str, dict[str, Any]]:
-    protocol = proxy["protocol"]
-    tag = f"IR-{protocol.upper()}-{index:03d}"
-
-    if protocol == "http":
-        outbound = {
-            "type": "http",
-            "tag": tag,
-            "server": proxy["ip"],
-            "server_port": proxy["port"],
-        }
-    else:
-        outbound = {
-            "type": "socks",
-            "tag": tag,
-            "server": proxy["ip"],
-            "server_port": proxy["port"],
-            "version": "4" if protocol == "socks4" else "5",
-        }
-
-    return tag, outbound
-
-
-def build_singbox_json(
-    proxies: list[dict[str, Any]],
-) -> dict[str, Any]:
-    tags = []
-    proxy_outbounds = []
-
-    for index, proxy in enumerate(proxies, start=1):
-        tag, outbound = make_singbox_outbound(proxy, index)
-        tags.append(tag)
-        proxy_outbounds.append(outbound)
-
-    if not tags:
-        return {
-            "log": {"level": "warn"},
-            "outbounds": [
-                {
-                    "type": "direct",
-                    "tag": "DIRECT",
-                }
-            ],
-            "route": {
-                "final": "DIRECT",
-                "auto_detect_interface": True,
-            },
-        }
-
-    return {
-        "log": {
-            "level": "warn",
-            "timestamp": True,
-        },
-        "outbounds": [
-            {
-                "type": "selector",
-                "tag": "IR-SELECT",
-                "outbounds": ["IR-AUTO", *tags, "DIRECT"],
-                "default": "IR-AUTO",
-            },
-            {
-                "type": "urltest",
-                "tag": "IR-AUTO",
-                "outbounds": tags,
-                "url": TEST_URL,
-                "interval": "10m",
-                "tolerance": 200,
-            },
-            *proxy_outbounds,
-            {
-                "type": "direct",
-                "tag": "DIRECT",
-            },
-        ],
-        "route": {
-            "final": "IR-SELECT",
-            "auto_detect_interface": True,
-        },
-    }
 
 
 def main() -> None:
-    raw_items = download_json()
+    raw_items = download_proxy_data()
 
     unique: dict[
         tuple[str, str, int],
@@ -322,22 +143,22 @@ def main() -> None:
     ] = {}
 
     for item in raw_items:
-        normalized = normalize_proxy(item)
+        proxy = normalize_proxy(item)
 
-        if normalized is None:
+        if proxy is None:
             continue
 
         key = (
-            normalized["protocol"],
-            normalized["ip"],
-            normalized["port"],
+            proxy["protocol"],
+            proxy["ip"],
+            proxy["port"],
         )
 
-        unique[key] = normalized
+        unique[key] = proxy
 
-    all_iranian = list(unique.values())
+    proxies = list(unique.values())
 
-    all_iranian.sort(
+    proxies.sort(
         key=lambda proxy: (
             proxy["protocol"],
             proxy["ip"],
@@ -345,64 +166,47 @@ def main() -> None:
         )
     )
 
-    print(f"All matched Iranian proxies: {len(all_iranian)}")
+    links = [
+        build_proxy_link(proxy, number)
+        for number, proxy in enumerate(
+            proxies,
+            start=1,
+        )
+    ]
 
-    protocol_counts = {
+    plain_subscription = "\n".join(links)
+
+    encoded_subscription = base64.b64encode(
+        plain_subscription.encode("utf-8")
+    ).decode("ascii")
+
+    OUTPUT_BASE64.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    OUTPUT_PLAIN.write_text(
+        plain_subscription + "\n",
+        encoding="utf-8",
+    )
+
+    OUTPUT_BASE64.write_text(
+        encoded_subscription,
+        encoding="ascii",
+    )
+
+    counts = {
         protocol: sum(
             proxy["protocol"] == protocol
-            for proxy in all_iranian
+            for proxy in proxies
         )
         for protocol in sorted(SUPPORTED_PROTOCOLS)
     }
 
-    print(f"Protocol counts: {protocol_counts}")
-
-    # Test all matching proxies. No initial uptime or latency filtering.
-    working: list[dict[str, Any]] = []
-
-    with concurrent.futures.ThreadPoolExecutor(
-        max_workers=TEST_WORKERS
-    ) as executor:
-        futures = [
-            executor.submit(test_proxy, proxy)
-            for proxy in all_iranian
-        ]
-
-        for future in concurrent.futures.as_completed(futures):
-            tested = future.result()
-
-            if tested is not None:
-                working.append(tested)
-
-    working.sort(
-        key=lambda proxy: proxy.get(
-            "measured_latency",
-            999,
-        )
-    )
-
-    print(f"Working from GitHub runner: {len(working)}")
-
-    YAML_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-
-    # Tested HTTP/SOCKS5 feed.
-    YAML_OUTPUT.write_text(
-        build_clash_yaml(working),
-        encoding="utf-8",
-    )
-
-    # Complete feed: every Iranian HTTP/SOCKS4/SOCKS5 entry.
-    JSON_OUTPUT.write_text(
-        json.dumps(
-            build_singbox_json(all_iranian),
-            indent=2,
-            ensure_ascii=False,
-        ),
-        encoding="utf-8",
-    )
-
-    print(f"Tested YAML written to: {YAML_OUTPUT}")
-    print(f"Complete JSON written to: {JSON_OUTPUT}")
+    print(f"Total Iranian proxies: {len(proxies)}")
+    print(f"Protocol counts: {counts}")
+    print(f"Base64 subscription: {OUTPUT_BASE64}")
+    print(f"Plain list: {OUTPUT_PLAIN}")
 
 
 if __name__ == "__main__":
