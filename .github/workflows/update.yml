@@ -27,68 +27,83 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Generate combined sing-box configuration
+      - name: Generate proxy subscriptions
         run: python convert.py
 
-      - name: Validate generated JSON
+      - name: Validate generated files
         run: |
           python -m json.tool docs/iran-all.json > /dev/null
+
           test -s docs/iran-all.json
           test -s docs/iran-all-plain.txt
+          test -s docs/iran-v2ray.txt
+          test -s docs/iran-v2ray-plain.txt
 
-      - name: Show generated proxy counts
-        run: |
           python - <<'PY'
-          import json
+          import base64
+          from pathlib import Path
 
-          with open(
-              "docs/iran-all.json",
-              "r",
-              encoding="utf-8",
-          ) as file:
-              config = json.load(file)
+          encoded = Path(
+              "docs/iran-v2ray.txt"
+          ).read_text(
+              encoding="ascii"
+          ).strip()
 
-          proxy_outbounds = [
-              outbound
-              for outbound in config["outbounds"]
-              if outbound.get("type") in {"http", "socks"}
+          decoded = base64.b64decode(
+              encoded,
+              validate=True,
+          ).decode("utf-8")
+
+          links = [
+              line
+              for line in decoded.splitlines()
+              if line.strip()
           ]
 
-          http_count = sum(
-              outbound["type"] == "http"
-              for outbound in proxy_outbounds
-          )
+          if not links:
+              raise RuntimeError(
+                  "v2ray subscription contains no links"
+              )
 
-          socks4_count = sum(
-              outbound["type"] == "socks"
-              and outbound.get("version") in {"4", "4a"}
-              for outbound in proxy_outbounds
-          )
+          invalid = [
+              link
+              for link in links
+              if not link.startswith(
+                  (
+                      "socks4://",
+                      "socks4a://",
+                      "socks5://",
+                  )
+              )
+          ]
 
-          socks5_count = sum(
-              outbound["type"] == "socks"
-              and outbound.get("version") == "5"
-              for outbound in proxy_outbounds
-          )
+          if invalid:
+              raise RuntimeError(
+                  f"Invalid v2ray links: {invalid[:3]}"
+              )
 
-          print(f"HTTP/HTTPS: {http_count}")
-          print(f"SOCKS4/4A: {socks4_count}")
-          print(f"SOCKS5: {socks5_count}")
-          print(f"Total: {len(proxy_outbounds)}")
+          print(
+              f"Validated {len(links)} "
+              "v2rayN SOCKS links"
+          )
           PY
 
-      - name: Commit updated feed
+      - name: Commit updated feeds
         run: |
           git config user.name "github-actions[bot]"
           git config user.email \
             "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add docs/iran-all.json docs/iran-all-plain.txt
+          git add \
+            docs/iran-all.json \
+            docs/iran-all-plain.txt \
+            docs/iran-v2ray.txt \
+            docs/iran-v2ray-plain.txt
 
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
           fi
 
-          git commit -m "Update Iranian proxy feed"
+          git commit -m "Update Iranian proxy feeds"
           git push
