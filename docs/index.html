@@ -11,144 +11,315 @@
   <title>Iran Proxy Feeds</title>
 
   <style>
+    :root {
+      color-scheme: light dark;
+      --background: #f5f7fb;
+      --surface: #ffffff;
+      --text: #152033;
+      --muted: #5c687b;
+      --border: #d8deea;
+      --accent: #1769e0;
+      --warning: #fff8e6;
+      --warning-border: #e0ad38;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --background: #0f1520;
+        --surface: #182131;
+        --text: #edf3ff;
+        --muted: #b2bed0;
+        --border: #344158;
+        --accent: #78aaff;
+        --warning: #302713;
+        --warning-border: #aa7f27;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px 64px;
+      background: var(--background);
+      color: var(--text);
       font-family: system-ui, sans-serif;
       line-height: 1.6;
     }
 
-    li {
-      margin-bottom: 16px;
+    h1,
+    h2,
+    h3 {
+      line-height: 1.2;
+    }
+
+    a {
+      color: var(--accent);
     }
 
     code {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.75rem;
       overflow-wrap: anywhere;
     }
 
+    .intro {
+      max-width: 760px;
+    }
+
+    .subscription-grid {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(260px, 1fr)
+      );
+      gap: 20px;
+      margin: 24px 0 40px;
+    }
+
+    .subscription-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+      text-align: center;
+      box-shadow: 0 8px 24px rgb(0 0 0 / 8%);
+    }
+
+    .subscription-card h3 {
+      min-height: 2.4em;
+      margin: 0;
+    }
+
+    .subscription-card > p {
+      margin: 8px 0 14px;
+      color: var(--muted);
+    }
+
+    .qr-link {
+      display: block;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #ffffff;
+    }
+
+    .qr-code {
+      display: block;
+      width: 208px;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .subscription-card .scan-label {
+      margin: 10px 0 2px;
+      color: var(--text);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .feed-link {
+      font-weight: 650;
+      overflow-wrap: anywhere;
+    }
+
+    .diagnostics li {
+      margin-bottom: 12px;
+    }
+
     .warning {
-      padding: 14px;
-      border: 1px solid #888;
-      border-radius: 8px;
+      margin-top: 28px;
+      padding: 16px;
+      border: 1px solid var(--warning-border);
+      border-radius: 10px;
+      background: var(--warning);
     }
   </style>
 </head>
 
 <body>
-  <h1>Iran Proxy Feeds</h1>
+  <header class="intro">
+    <h1>Iran Proxy Feeds</h1>
 
-  <p>
-    Conventional HTTP, SOCKS4 and SOCKS5 proxies are
-    collected from several sources, deduplicated and tested.
-  </p>
+    <p>
+      Conventional HTTP, SOCKS4 and SOCKS5 proxies are
+      collected from several sources, deduplicated and tested.
+    </p>
 
-  <p>
-    A conventional proxy is published only after:
-  </p>
+    <p>
+      A conventional proxy is published only after:
+    </p>
 
-  <ol>
-    <li>Its TCP port opens.</li>
-    <li>ISNA opens through that proxy.</li>
-    <li>Google generate_204 opens through that proxy.</li>
-  </ol>
+    <ol>
+      <li>Its TCP port opens.</li>
+      <li>ISNA opens through that proxy.</li>
+      <li>Google generate_204 opens through that proxy.</li>
+    </ol>
 
-  <p>
-    Previously verified proxies remain available for up to
-    30 days after their most recent successful test.
-  </p>
+    <p>
+      Previously verified proxies remain available for up to
+      30 days after their most recent successful test.
+    </p>
+  </header>
 
-  <h2>Subscriptions</h2>
+  <main>
+    <h2>Subscriptions</h2>
 
-  <ul>
-    <li>
-      <strong>
-        Verified HTTP/SOCKS proxies
-      </strong><br>
+    <p>
+      Scan a QR code with Hiddify or another compatible client,
+      or open the link below it.
+    </p>
 
-      <a href="iran-verified-proxies.txt">
-        iran-verified-proxies.txt
+    <section class="subscription-grid" aria-label="Proxy subscriptions">
+    <article class="subscription-card">
+      <h3>Verified HTTP/SOCKS proxies</h3>
+      <p>Tested subscription</p>
+      <a class="qr-link" href="iran-verified-proxies.txt" aria-label="Open Verified HTTP/SOCKS proxies">
+        <img
+          class="qr-code"
+          src="qr/iran-verified-proxies.txt.svg"
+          alt="QR code for Verified HTTP/SOCKS proxies"
+          width="208"
+          height="208"
+          loading="lazy"
+        >
       </a>
-    </li>
+      <p class="scan-label">Scan to import</p>
+      <a class="feed-link" href="iran-verified-proxies.txt">iran-verified-proxies.txt</a>
+      <code>https://nimadn.github.io/iran-proxy-feed/iran-verified-proxies.txt</code>
+    </article>
 
-    <li>
-      <strong>
-        Verified HTTP/SOCKS proxies — readable
-      </strong><br>
-
-      <a href="iran-verified-proxies-plain.txt">
-        iran-verified-proxies-plain.txt
+    <article class="subscription-card">
+      <h3>Verified HTTP/SOCKS — readable</h3>
+      <p>Plain-text subscription</p>
+      <a class="qr-link" href="iran-verified-proxies-plain.txt" aria-label="Open Verified HTTP/SOCKS — readable">
+        <img
+          class="qr-code"
+          src="qr/iran-verified-proxies-plain.txt.svg"
+          alt="QR code for Verified HTTP/SOCKS — readable"
+          width="208"
+          height="208"
+          loading="lazy"
+        >
       </a>
-    </li>
+      <p class="scan-label">Scan to import</p>
+      <a class="feed-link" href="iran-verified-proxies-plain.txt">iran-verified-proxies-plain.txt</a>
+      <code>https://nimadn.github.io/iran-proxy-feed/iran-verified-proxies-plain.txt</code>
+    </article>
 
-    <li>
-      <strong>
-        OpenRay VLESS/VMess/Shadowsocks
-      </strong><br>
-
-      <a href="iran-openray.txt">
-        iran-openray.txt
+    <article class="subscription-card">
+      <h3>OpenRay VLESS/VMess/Shadowsocks</h3>
+      <p>Unverified OpenRay subscription</p>
+      <a class="qr-link" href="iran-openray.txt" aria-label="Open OpenRay VLESS/VMess/Shadowsocks">
+        <img
+          class="qr-code"
+          src="qr/iran-openray.txt.svg"
+          alt="QR code for OpenRay VLESS/VMess/Shadowsocks"
+          width="208"
+          height="208"
+          loading="lazy"
+        >
       </a>
-    </li>
+      <p class="scan-label">Scan to import</p>
+      <a class="feed-link" href="iran-openray.txt">iran-openray.txt</a>
+      <code>https://nimadn.github.io/iran-proxy-feed/iran-openray.txt</code>
+    </article>
 
-    <li>
-      <strong>
-        OpenRay — readable
-      </strong><br>
-
-      <a href="iran-openray-plain.txt">
-        iran-openray-plain.txt
+    <article class="subscription-card">
+      <h3>OpenRay — readable</h3>
+      <p>Plain-text OpenRay list</p>
+      <a class="qr-link" href="iran-openray-plain.txt" aria-label="Open OpenRay — readable">
+        <img
+          class="qr-code"
+          src="qr/iran-openray-plain.txt.svg"
+          alt="QR code for OpenRay — readable"
+          width="208"
+          height="208"
+          loading="lazy"
+        >
       </a>
-    </li>
+      <p class="scan-label">Scan to import</p>
+      <a class="feed-link" href="iran-openray-plain.txt">iran-openray-plain.txt</a>
+      <code>https://nimadn.github.io/iran-proxy-feed/iran-openray-plain.txt</code>
+    </article>
 
-    <li>
-      <strong>
-        Combined subscription
-      </strong><br>
-
-      <a href="iran-combined.txt">
-        iran-combined.txt
+    <article class="subscription-card">
+      <h3>Combined subscription</h3>
+      <p>Verified proxies plus OpenRay links</p>
+      <a class="qr-link" href="iran-combined.txt" aria-label="Open Combined subscription">
+        <img
+          class="qr-code"
+          src="qr/iran-combined.txt.svg"
+          alt="QR code for Combined subscription"
+          width="208"
+          height="208"
+          loading="lazy"
+        >
       </a>
-    </li>
+      <p class="scan-label">Scan to import</p>
+      <a class="feed-link" href="iran-combined.txt">iran-combined.txt</a>
+      <code>https://nimadn.github.io/iran-proxy-feed/iran-combined.txt</code>
+    </article>
 
-    <li>
-      <strong>
-        Combined subscription — readable
-      </strong><br>
-
-      <a href="iran-combined-plain.txt">
-        iran-combined-plain.txt
+    <article class="subscription-card">
+      <h3>Combined — readable</h3>
+      <p>Plain-text combined list</p>
+      <a class="qr-link" href="iran-combined-plain.txt" aria-label="Open Combined — readable">
+        <img
+          class="qr-code"
+          src="qr/iran-combined-plain.txt.svg"
+          alt="QR code for Combined — readable"
+          width="208"
+          height="208"
+          loading="lazy"
+        >
       </a>
-    </li>
-  </ul>
+      <p class="scan-label">Scan to import</p>
+      <a class="feed-link" href="iran-combined-plain.txt">iran-combined-plain.txt</a>
+      <code>https://nimadn.github.io/iran-proxy-feed/iran-combined-plain.txt</code>
+    </article>
+    </section>
 
-  <h2>Diagnostics</h2>
+    <section class="diagnostics">
+      <h2>Diagnostics</h2>
 
-  <ul>
-    <li>
-      <a href="iran-report.json">
-        Generation report
-      </a>
-    </li>
+      <ul>
+        <li>
+          <a href="iran-report.json">
+            Generation report
+          </a>
+        </li>
 
-    <li>
-      <a href="iran-test-results.json">
-        Detailed proxy test results
-      </a>
-    </li>
+        <li>
+          <a href="iran-test-results.json">
+            Detailed proxy test results
+          </a>
+        </li>
 
-    <li>
-      <a href="proxy-history.json">
-        Persistent 30-day proxy history
-      </a>
-    </li>
+        <li>
+          <a href="proxy-history.json">
+            Persistent 30-day proxy history
+          </a>
+        </li>
 
-    <li>
-      <a href="iran-all.json">
-        Verified sing-box configuration
-      </a>
-    </li>
-  </ul>
+        <li>
+          <a href="iran-all.json">
+            Verified sing-box configuration
+          </a>
+        </li>
+      </ul>
+    </section>
+  </main>
 
   <div class="warning">
     OpenRay links are collected and deduplicated but are not
