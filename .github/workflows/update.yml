@@ -51,12 +51,10 @@ jobs:
           from xml.etree import ElementTree
 
           names = [
-              "iran-verified-proxies.txt",
-              "iran-verified-proxies-plain.txt",
-              "iran-openray.txt",
-              "iran-openray-plain.txt",
-              "iran-combined.txt",
-              "iran-combined-plain.txt",
+              "hiddify.txt",
+              "v2rayn.txt",
+              "happ.txt",
+              "sing-box.json",
           ]
           base_url = "https://nimadn.github.io/iran-proxy-feed/"
           html = Path("docs/index.html").read_text(encoding="utf-8")
@@ -67,12 +65,12 @@ jobs:
               if f'src="qr/{name}.svg"' not in html:
                   raise RuntimeError(f"Missing QR image reference for {name}")
               if f"{base_url}{name}" not in html:
-                  raise RuntimeError(f"Missing encoded public URL for {name}")
-              happ_link = f'href="happ://add/{base_url}{name}"'
-              if happ_link not in html:
-                  raise RuntimeError(f"Missing HAPP deep link for {name}")
+                  raise RuntimeError(f"Missing public URL for {name}")
 
-          print(f"Validated {len(names)} QR and HAPP subscription links")
+          if "happ://add/" in html:
+              raise RuntimeError("HAPP deep-link buttons must not be published")
+
+          print(f"Validated {len(names)} app-specific QR subscriptions")
           PY
 
       - name: Run unit tests
@@ -173,7 +171,64 @@ jobs:
                   f"Subscription count mismatch: actual={decoded_counts}, expected={expected}"
               )
 
-          print(json.dumps(decoded_counts, indent=2))
+          app_files = {
+              "hiddify": (
+                  Path("docs/hiddify.txt"),
+                  False,
+                  {"vless", "vmess", "trojan", "ss", "hysteria2", "hy2", "tuic"},
+              ),
+              "v2rayn": (
+                  Path("docs/v2rayn.txt"),
+                  True,
+                  {"vless", "vmess", "trojan", "ss", "hysteria2", "hy2", "tuic", "socks"},
+              ),
+              "happ": (
+                  Path("docs/happ.txt"),
+                  False,
+                  {"vless", "vmess", "trojan", "ss", "socks"},
+              ),
+          }
+          app_counts = {}
+
+          for name, (path, encoded, allowed) in app_files.items():
+              content = path.read_text(encoding="ascii" if encoded else "utf-8").strip()
+              if encoded:
+                  content = (
+                      base64.b64decode(content, validate=True).decode("utf-8")
+                      if content
+                      else ""
+                  )
+              links = [line.strip() for line in content.splitlines() if line.strip()]
+              invalid = [
+                  link
+                  for link in links
+                  if "://" not in link
+                  or link.split("://", 1)[0].lower() not in allowed
+              ]
+              if invalid:
+                  raise RuntimeError(
+                      f"{name} has unsupported app links: {invalid[:5]}"
+                  )
+              app_counts[name] = len(links)
+
+          expected_app_counts = report["app_subscription_counts"]
+          for name, count in app_counts.items():
+              if count != expected_app_counts[name]:
+                  raise RuntimeError(
+                      f"{name} count mismatch: actual={count}, "
+                      f"expected={expected_app_counts[name]}"
+                  )
+
+          if Path("docs/sing-box.json").read_bytes() != Path("docs/iran-all.json").read_bytes():
+              raise RuntimeError("sing-box.json must match the generated native config")
+
+          print(json.dumps(
+              {
+                  "legacy": decoded_counts,
+                  "apps": app_counts,
+              },
+              indent=2,
+          ))
           PY
 
       - name: Commit generated files
@@ -184,6 +239,10 @@ jobs:
 
           git add \
             docs/iran-all.json \
+            docs/sing-box.json \
+            docs/hiddify.txt \
+            docs/v2rayn.txt \
+            docs/happ.txt \
             docs/iran-verified-proxies.txt \
             docs/iran-verified-proxies-plain.txt \
             docs/iran-openray.txt \

@@ -123,6 +123,88 @@ class ConvertTests(unittest.TestCase):
 
         self.assertEqual(decoded.splitlines(), links)
 
+    def test_app_protocol_filters(self) -> None:
+        links = [
+            "vless://one",
+            "vmess://two",
+            "trojan://three",
+            "ss://four",
+            "ssr://five",
+            "hysteria2://six",
+            "tuic://seven",
+        ]
+        self.assertEqual(
+            convert.filter_share_links(
+                links,
+                convert.HAPP_SHARE_SCHEMES,
+            ),
+            links[:4],
+        )
+        self.assertEqual(
+            convert.filter_share_links(
+                links,
+                convert.HIDDIFY_SHARE_SCHEMES,
+            ),
+            [*links[:4], *links[5:]],
+        )
+
+    def test_socks5_links_use_app_compatible_scheme(self) -> None:
+        socks5 = convert.normalize_proxy(
+            "socks5",
+            "1.2.3.4",
+            1080,
+            "test",
+        )
+        socks4 = convert.normalize_proxy(
+            "socks4",
+            "5.6.7.8",
+            1080,
+            "test",
+        )
+        self.assertIsNotNone(socks5)
+        self.assertIsNotNone(socks4)
+
+        links = convert.build_socks5_share_links(
+            [socks4, socks5]
+        )
+
+        self.assertEqual(len(links), 1)
+        self.assertTrue(
+            links[0].startswith(
+                "socks://1.2.3.4:1080#"
+            )
+        )
+
+    def test_client_specific_serialization(self) -> None:
+        links = [
+            "vless://one",
+            "ss://two",
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            plain = Path(directory) / "happ.txt"
+            encoded = Path(directory) / "v2rayn.txt"
+            convert.write_plain_subscription(
+                plain,
+                links,
+            )
+            convert.write_base64_subscription(
+                encoded,
+                links,
+            )
+            plain_text = plain.read_text(
+                encoding="utf-8"
+            )
+            decoded = base64.b64decode(
+                encoded.read_text(encoding="ascii"),
+                validate=True,
+            ).decode("utf-8")
+
+        self.assertEqual(
+            plain_text.splitlines(),
+            links,
+        )
+        self.assertEqual(decoded.splitlines(), links)
+
 
 if __name__ == "__main__":
     unittest.main()

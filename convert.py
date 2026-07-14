@@ -86,6 +86,11 @@ COMBINED_SUB_OUTPUT = (
     DOCS_DIR / "iran-combined.txt"
 )
 
+HIDDIFY_OUTPUT = DOCS_DIR / "hiddify.txt"
+V2RAYN_OUTPUT = DOCS_DIR / "v2rayn.txt"
+HAPP_OUTPUT = DOCS_DIR / "happ.txt"
+SINGBOX_APP_OUTPUT = DOCS_DIR / "sing-box.json"
+
 
 # ---------------------------------------------------------------------------
 # Settings
@@ -106,6 +111,33 @@ SUPPORTED_SHARE_SCHEMES = {
     "hysteria2",
     "hy2",
     "tuic",
+}
+
+HIDDIFY_SHARE_SCHEMES = {
+    "vless",
+    "vmess",
+    "trojan",
+    "ss",
+    "hysteria2",
+    "hy2",
+    "tuic",
+}
+
+V2RAYN_SHARE_SCHEMES = {
+    "vless",
+    "vmess",
+    "trojan",
+    "ss",
+    "hysteria2",
+    "hy2",
+    "tuic",
+}
+
+HAPP_SHARE_SCHEMES = {
+    "vless",
+    "vmess",
+    "trojan",
+    "ss",
 }
 
 RETENTION_DAYS = 30
@@ -1646,29 +1678,88 @@ def build_singbox_config(
     }
 
 
-def write_plain_and_base64(
-    plain_path: Path,
-    encoded_path: Path,
-    links: list[str],
-) -> None:
+def plain_subscription(links: list[str]) -> str:
     plain = "\n".join(links)
 
     if plain:
         plain += "\n"
 
-    plain_path.write_text(
-        plain,
+    return plain
+
+
+def write_plain_subscription(
+    path: Path,
+    links: list[str],
+) -> None:
+    path.write_text(
+        plain_subscription(links),
         encoding="utf-8",
     )
 
+
+def write_base64_subscription(
+    path: Path,
+    links: list[str],
+) -> None:
     encoded = base64.b64encode(
-        plain.encode("utf-8")
+        plain_subscription(links).encode("utf-8")
     ).decode("ascii")
 
-    encoded_path.write_text(
+    path.write_text(
         encoded,
         encoding="ascii",
     )
+
+
+def write_plain_and_base64(
+    plain_path: Path,
+    encoded_path: Path,
+    links: list[str],
+) -> None:
+    write_plain_subscription(
+        plain_path,
+        links,
+    )
+    write_base64_subscription(
+        encoded_path,
+        links,
+    )
+
+
+def filter_share_links(
+    links: Iterable[str],
+    allowed_schemes: set[str],
+) -> list[str]:
+    return [
+        link
+        for link in links
+        if link.split("://", 1)[0].lower()
+        in allowed_schemes
+    ]
+
+
+def build_socks5_share_links(
+    proxies: list[dict[str, Any]],
+) -> list[str]:
+    links = []
+
+    for index, proxy in enumerate(
+        proxies,
+        start=1,
+    ):
+        if proxy["protocol"] != "socks5":
+            continue
+
+        tag = urllib.parse.quote(
+            proxy_display_tag(proxy, index),
+            safe="",
+        )
+        links.append(
+            f"socks://{format_host(proxy['host'])}:"
+            f"{proxy['port']}#{tag}"
+        )
+
+    return links
 
 
 def write_test_results(
@@ -1893,6 +1984,54 @@ def main() -> None:
         combined_links,
     )
 
+    socks5_links = build_socks5_share_links(
+        verified_proxies
+    )
+    hiddify_links = filter_share_links(
+        openray_links,
+        HIDDIFY_SHARE_SCHEMES,
+    )
+    v2rayn_links = deduplicate_strings(
+        socks5_links
+        + filter_share_links(
+            openray_links,
+            V2RAYN_SHARE_SCHEMES,
+        )
+    )
+    happ_links = deduplicate_strings(
+        socks5_links
+        + filter_share_links(
+            openray_links,
+            HAPP_SHARE_SCHEMES,
+        )
+    )
+
+    # Client-specific outputs intentionally use the format each
+    # application documents: Hiddify and HAPP receive readable
+    # URI lines, v2rayN receives Base64 URI lines, and sing-box
+    # receives a native JSON configuration.
+    write_plain_subscription(
+        HIDDIFY_OUTPUT,
+        hiddify_links,
+    )
+    write_base64_subscription(
+        V2RAYN_OUTPUT,
+        v2rayn_links,
+    )
+    write_plain_subscription(
+        HAPP_OUTPUT,
+        happ_links,
+    )
+    SINGBOX_APP_OUTPUT.write_text(
+        json.dumps(
+            singbox_config,
+            indent=2,
+            ensure_ascii=False,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
     current_run_time = iso_time(now)
     working_now = sum(
         bool(
@@ -1959,6 +2098,12 @@ def main() -> None:
         "openray_count": len(openray_links),
         "combined_subscription_links": len(combined_links),
         "combined_count": len(combined_links),
+        "app_subscription_counts": {
+            "hiddify": len(hiddify_links),
+            "v2rayn": len(v2rayn_links),
+            "happ": len(happ_links),
+            "sing_box": len(verified_proxies),
+        },
         "openray_verification_notice": (
             "OpenRay share links are not verified by curl; "
             "they are published separately and in the combined feed."
@@ -1988,12 +2133,20 @@ def main() -> None:
             "openray_plain": "iran-openray-plain.txt",
             "combined_subscription": "iran-combined.txt",
             "combined_plain": "iran-combined-plain.txt",
+            "hiddify": "hiddify.txt",
+            "v2rayn": "v2rayn.txt",
+            "happ": "happ.txt",
+            "sing_box": "sing-box.json",
             "singbox_verified_proxies": "iran-all.json",
             "test_results": "iran-test-results.json",
             "history": "proxy-history.json",
         },
         "output_filenames": [
             "iran-all.json",
+            "sing-box.json",
+            "hiddify.txt",
+            "v2rayn.txt",
+            "happ.txt",
             "iran-verified-proxies-plain.txt",
             "iran-verified-proxies.txt",
             "iran-openray-plain.txt",
