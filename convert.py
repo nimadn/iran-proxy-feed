@@ -8,20 +8,27 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
+
 SOURCE_URL = (
     "https://cdn.jsdelivr.net/gh/proxyscrape/"
     "free-proxy-list@main/proxies/all/data.json"
 )
 
-SINGBOX_OUTPUT = Path("docs/iran-all.json")
-PLAIN_OUTPUT = Path("docs/iran-all-plain.txt")
+DOCS_DIR = Path("docs")
 
-V2RAY_OUTPUT = Path("docs/iran-v2ray.txt")
-V2RAY_PLAIN_OUTPUT = Path("docs/iran-v2ray-plain.txt")
+SINGBOX_OUTPUT = DOCS_DIR / "iran-all.json"
+PLAIN_OUTPUT = DOCS_DIR / "iran-all-plain.txt"
+
+MIXED_SUB_OUTPUT = DOCS_DIR / "iran-v2ray.txt"
+MIXED_SUB_PLAIN_OUTPUT = DOCS_DIR / "iran-v2ray-plain.txt"
+
+REPORT_OUTPUT = DOCS_DIR / "iran-report.json"
 
 SUPPORTED_PROTOCOLS = {
     "http",
+    "https",
     "socks4",
+    "socks4a",
     "socks5",
 }
 
@@ -30,16 +37,22 @@ def download_source() -> list[dict[str, Any]]:
     request = urllib.request.Request(
         SOURCE_URL,
         headers={
-            "User-Agent": "IranProxyFeed/7.0",
+            "User-Agent": "IranProxyFeed/10.0",
             "Accept": "application/json",
+            "Cache-Control": "no-cache",
         },
     )
 
-    with urllib.request.urlopen(request, timeout=90) as response:
+    with urllib.request.urlopen(
+        request,
+        timeout=120,
+    ) as response:
         data = json.load(response)
 
     if not isinstance(data, list):
-        raise ValueError("ProxyScrape response is not a JSON list")
+        raise ValueError(
+            "ProxyScrape response is not a JSON array"
+        )
 
     return data
 
@@ -59,24 +72,37 @@ def is_iranian(item: dict[str, Any]) -> bool:
     )
 
 
-def normalize_host(host: str) -> str | None:
-    value = host.strip().strip("[]")
+def normalize_protocol(value: Any) -> str:
+    protocol = str(value or "").strip().lower()
 
-    if not value:
+    aliases = {
+        "sock4": "socks4",
+        "sock5": "socks5",
+        "socks": "socks5",
+    }
+
+    return aliases.get(protocol, protocol)
+
+
+def normalize_host(value: Any) -> str | None:
+    host = str(value or "").strip().strip("[]")
+
+    if not host:
         return None
 
     try:
-        ipaddress.ip_address(value)
-        return value
+        ipaddress.ip_address(host)
+        return host
     except ValueError:
         pass
 
     if (
-        len(value) <= 253
-        and "." in value
-        and " " not in value
+        len(host) <= 253
+        and "." in host
+        and " " not in host
+        and "/" not in host
     ):
-        return value.lower()
+        return host.lower()
 
     return None
 
@@ -87,15 +113,17 @@ def normalize_proxy(
     if not is_iranian(item):
         return None
 
-    protocol = str(
-        item.get("protocol", "")
-    ).strip().lower()
+    protocol = normalize_protocol(
+        item.get("protocol")
+    )
 
     if protocol not in SUPPORTED_PROTOCOLS:
         return None
 
     host = normalize_host(
-        str(item.get("ip", ""))
+        item.get("ip")
+        or item.get("host")
+        or item.get("server")
     )
 
     if host is None:
@@ -113,24 +141,33 @@ def normalize_proxy(
         "protocol": protocol,
         "host": host,
         "port": port,
-        "country": str(item.get("country", "")).strip(),
+        "country": str(
+            item.get("country", "")
+        ).strip(),
         "country_code": str(
             item.get("country_code", "")
         ).strip(),
-        "city": str(item.get("city", "")).strip(),
-        "uptime_percent": item.get(
-            "uptime_percent",
+        "city": str(
+            item.get("city", "")
+        ).strip(),
+        "uptime_percent": to_float(
+            item.get("uptime_percent"),
             0,
         ),
-        "latency_ms": item.get(
-            "latency_ms",
-            0,
+        "latency_ms": to_float(
+            item.get("latency_ms"),
+            999999,
         ),
-        "ssl": bool(item.get("ssl", False)),
+        "ssl": bool(
+            item.get("ssl", False)
+        ),
+        "anonymity": str(
+            item.get("anonymity", "")
+        ).strip(),
     }
 
 
-def number(
+def to_float(
     value: Any,
     default: float,
 ) -> float:
@@ -152,7 +189,29 @@ def format_host(host: str) -> str:
     return host
 
 
-def make_outbound(
+def make_tag(
+    proxy: dict[str, Any],
+    index: int,
+) -> str:
+    protocol = proxy["protocol"].upper()
+    city = proxy["city"] or "Iran"
+
+    safe_city = "".join(
+        character
+        if character.isalnum()
+        else "-"
+        for character in city
+    ).strip("-")
+
+    safe_city = safe_city or "Iran"
+
+    return (
+        f"IR-{protocol}-"
+        f"{index:03d}-{safe_city}"
+    )
+
+
+def make_singbox_outbound(
     proxy: dict[str, Any],
     index: int,
 ) -> tuple[str, dict[str, Any]]:
@@ -160,15 +219,21 @@ def make_outbound(
     host = proxy["host"]
     port = proxy["port"]
 
-    tag = f"IR-{protocol.upper()}-{index:03d}"
+    tag = make_tag(proxy, index)
 
-    if protocol == "http":
-        outbound = {
+    if protocol in {"http", "https"}:
+        outbound: dict[str, Any] = {
             "type": "http",
             "tag": tag,
             "server": host,
             "server_port": port,
         }
+
+        # ProxyScrape "https" commonly means an HTTP proxy
+        # capable of HTTPS CONNECT. It does not always mean
+        # that the proxy endpoint itself uses TLS.
+        #
+        # Therefore no TLS block is added here.
 
     elif protocol == "socks4":
         outbound = {
@@ -180,7 +245,17 @@ def make_outbound(
             "network": "tcp",
         }
 
-    else:
+    elif protocol == "socks4a":
+        outbound = {
+            "type": "socks",
+            "tag": tag,
+            "server": host,
+            "server_port": port,
+            "version": "4a",
+            "network": "tcp",
+        }
+
+    elif protocol == "socks5":
         outbound = {
             "type": "socks",
             "tag": tag,
@@ -189,6 +264,11 @@ def make_outbound(
             "version": "5",
         }
 
+    else:
+        raise ValueError(
+            f"Unsupported protocol: {protocol}"
+        )
+
     return tag, outbound
 
 
@@ -196,16 +276,19 @@ def build_singbox_config(
     proxies: list[dict[str, Any]],
 ) -> dict[str, Any]:
     tags: list[str] = []
-    proxy_outbounds: list[dict[str, Any]] = []
+    outbounds: list[dict[str, Any]] = []
 
-    for index, proxy in enumerate(proxies, start=1):
-        tag, outbound = make_outbound(
+    for index, proxy in enumerate(
+        proxies,
+        start=1,
+    ):
+        tag, outbound = make_singbox_outbound(
             proxy,
             index,
         )
 
         tags.append(tag)
-        proxy_outbounds.append(outbound)
+        outbounds.append(outbound)
 
     if not tags:
         raise RuntimeError(
@@ -249,7 +332,7 @@ def build_singbox_config(
                 "tolerance": 200,
                 "interrupt_exist_connections": True,
             },
-            *proxy_outbounds,
+            *outbounds,
             {
                 "type": "direct",
                 "tag": "DIRECT",
@@ -262,98 +345,115 @@ def build_singbox_config(
     }
 
 
-def build_v2ray_links(
-    proxies: list[dict[str, Any]],
-) -> list[str]:
-    links: list[str] = []
+def build_share_link(
+    proxy: dict[str, Any],
+    index: int,
+) -> str:
+    protocol = proxy["protocol"]
+    host = format_host(proxy["host"])
+    port = proxy["port"]
 
-    # Keep SOCKS4 and SOCKS5 for the v2rayN-style feed.
-    socks_proxies = [
-        proxy
-        for proxy in proxies
-        if proxy["protocol"] in {
-            "socks4",
-            "socks5",
-        }
-    ]
+    tag = make_tag(proxy, index)
 
-    for index, proxy in enumerate(
-        socks_proxies,
-        start=1,
-    ):
-        protocol = proxy["protocol"]
-        host = format_host(proxy["host"])
-        port = proxy["port"]
+    encoded_tag = urllib.parse.quote(
+        tag,
+        safe="",
+    )
 
-        city = proxy["city"] or "Iran"
+    if protocol in {"http", "https"}:
+        # HTTPS-classified ProxyScrape records are exposed
+        # as HTTP proxy share links because the classification
+        # usually means CONNECT support.
+        scheme = "http"
 
-        name = urllib.parse.quote(
-            (
-                f"IR-{protocol.upper()}-"
-                f"{index:03d}-{city}"
-            ),
-            safe="",
+    elif protocol == "socks4":
+        scheme = "socks4"
+
+    elif protocol == "socks4a":
+        scheme = "socks4a"
+
+    elif protocol == "socks5":
+        scheme = "socks5"
+
+    else:
+        raise ValueError(
+            f"Unsupported protocol: {protocol}"
         )
 
-        links.append(
-            f"{protocol}://{host}:{port}#{name}"
-        )
+    return (
+        f"{scheme}://{host}:{port}"
+        f"#{encoded_tag}"
+    )
 
-    return links
 
-
-def write_v2ray_subscription(
-    links: list[str],
+def write_text(
+    path: Path,
+    content: str,
 ) -> None:
-    plain_content = "\n".join(links)
-
-    encoded_content = base64.b64encode(
-        plain_content.encode("utf-8")
-    ).decode("ascii")
-
-    V2RAY_PLAIN_OUTPUT.write_text(
-        plain_content
-        + ("\n" if plain_content else ""),
+    path.write_text(
+        content,
         encoding="utf-8",
     )
 
-    V2RAY_OUTPUT.write_text(
-        encoded_content,
-        encoding="ascii",
-    )
+
+def count_protocols(
+    proxies: list[dict[str, Any]],
+) -> dict[str, int]:
+    counts = {
+        protocol: 0
+        for protocol in sorted(
+            SUPPORTED_PROTOCOLS
+        )
+    }
+
+    for proxy in proxies:
+        protocol = proxy["protocol"]
+
+        counts[protocol] = (
+            counts.get(protocol, 0) + 1
+        )
+
+    return counts
 
 
 def main() -> None:
+    DOCS_DIR.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
     raw_items = download_source()
 
+    raw_iranian_items = [
+        item
+        for item in raw_items
+        if is_iranian(item)
+    ]
+
+    normalized_records: list[
+        dict[str, Any]
+    ] = []
+
+    rejected_records = 0
+
+    for item in raw_iranian_items:
+        proxy = normalize_proxy(item)
+
+        if proxy is None:
+            rejected_records += 1
+            continue
+
+        normalized_records.append(proxy)
+
+    # Deduplicate only exact protocol + host + port duplicates.
     unique: dict[
         tuple[str, str, int],
         dict[str, Any],
     ] = {}
 
-    country_matches = 0
-    code_matches = 0
+    duplicate_records = 0
 
-    for item in raw_items:
-        country = str(
-            item.get("country", "")
-        ).strip().casefold()
-
-        country_code = str(
-            item.get("country_code", "")
-        ).strip().upper()
-
-        if country == "iran":
-            country_matches += 1
-
-        if country_code == "IR":
-            code_matches += 1
-
-        proxy = normalize_proxy(item)
-
-        if proxy is None:
-            continue
-
+    for proxy in normalized_records:
         key = (
             proxy["protocol"],
             proxy["host"],
@@ -362,31 +462,25 @@ def main() -> None:
 
         existing = unique.get(key)
 
-        # Keep the duplicate with the better reported uptime.
         if existing is None:
             unique[key] = proxy
-        elif number(
-            proxy["uptime_percent"],
-            0,
-        ) > number(
-            existing["uptime_percent"],
-            0,
+            continue
+
+        duplicate_records += 1
+
+        # Keep the duplicate record with the higher reported uptime.
+        if (
+            proxy["uptime_percent"]
+            > existing["uptime_percent"]
         ):
             unique[key] = proxy
 
     proxies = list(unique.values())
 
-    # Better reported entries appear first.
     proxies.sort(
         key=lambda proxy: (
-            -number(
-                proxy["uptime_percent"],
-                0,
-            ),
-            number(
-                proxy["latency_ms"],
-                999999,
-            ),
+            -proxy["uptime_percent"],
+            proxy["latency_ms"],
             proxy["protocol"],
             proxy["host"],
             proxy["port"],
@@ -395,19 +489,16 @@ def main() -> None:
 
     if not proxies:
         raise RuntimeError(
-            "No Iranian proxies were found in the global JSON"
+            "No valid Iranian proxies were found"
         )
 
-    SINGBOX_OUTPUT.parent.mkdir(
-        parents=True,
-        exist_ok=True,
+    singbox_config = build_singbox_config(
+        proxies
     )
-
-    config = build_singbox_config(proxies)
 
     SINGBOX_OUTPUT.write_text(
         json.dumps(
-            config,
+            singbox_config,
             indent=2,
             ensure_ascii=False,
         )
@@ -415,52 +506,103 @@ def main() -> None:
         encoding="utf-8",
     )
 
-    plain_lines = []
+    share_links = [
+        build_share_link(
+            proxy,
+            index,
+        )
+        for index, proxy in enumerate(
+            proxies,
+            start=1,
+        )
+    ]
 
-    for proxy in proxies:
-        host = format_host(proxy["host"])
+    plain_content = "\n".join(
+        share_links
+    ) + "\n"
 
-        plain_lines.append(
-            (
-                f"{proxy['protocol']}://"
-                f"{host}:{proxy['port']}"
-            )
+    write_text(
+        PLAIN_OUTPUT,
+        plain_content,
+    )
+
+    write_text(
+        MIXED_SUB_PLAIN_OUTPUT,
+        plain_content,
+    )
+
+    base64_content = base64.b64encode(
+        plain_content.encode("utf-8")
+    ).decode("ascii")
+
+    write_text(
+        MIXED_SUB_OUTPUT,
+        base64_content,
+    )
+
+    raw_protocol_counts: dict[str, int] = {}
+
+    for item in raw_iranian_items:
+        protocol = normalize_protocol(
+            item.get("protocol")
         )
 
-    PLAIN_OUTPUT.write_text(
-        "\n".join(plain_lines) + "\n",
+        raw_protocol_counts[protocol] = (
+            raw_protocol_counts.get(
+                protocol,
+                0,
+            )
+            + 1
+        )
+
+    report = {
+        "source_url": SOURCE_URL,
+        "global_records": len(raw_items),
+        "raw_iranian_records": len(
+            raw_iranian_items
+        ),
+        "raw_iranian_protocol_counts": (
+            raw_protocol_counts
+        ),
+        "normalized_records": len(
+            normalized_records
+        ),
+        "rejected_records": rejected_records,
+        "duplicate_records_removed": (
+            duplicate_records
+        ),
+        "published_unique_proxies": len(
+            proxies
+        ),
+        "published_protocol_counts": (
+            count_protocols(proxies)
+        ),
+        "subscription_links_written": len(
+            share_links
+        ),
+        "filter": {
+            "country": "Iran",
+            "country_code": "IR",
+            "operator": "OR",
+        },
+    }
+
+    REPORT_OUTPUT.write_text(
+        json.dumps(
+            report,
+            indent=2,
+            ensure_ascii=False,
+        )
+        + "\n",
         encoding="utf-8",
     )
 
-    v2ray_links = build_v2ray_links(proxies)
-    write_v2ray_subscription(v2ray_links)
-
-    counts = {
-        protocol: sum(
-            proxy["protocol"] == protocol
-            for proxy in proxies
+    print(
+        json.dumps(
+            report,
+            indent=2,
+            ensure_ascii=False,
         )
-        for protocol in sorted(
-            SUPPORTED_PROTOCOLS
-        )
-    }
-
-    print(f"Global records: {len(raw_items)}")
-    print(
-        "Records matching country=Iran: "
-        f"{country_matches}"
-    )
-    print(
-        "Records matching country_code=IR: "
-        f"{code_matches}"
-    )
-    print(
-        f"Unique Iranian proxies: {len(proxies)}"
-    )
-    print(f"Protocol counts: {counts}")
-    print(
-        "v2rayN SOCKS links: "
-        f"{len(v2ray_links)}"
     )
 
 
