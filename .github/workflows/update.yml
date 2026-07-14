@@ -1,4 +1,4 @@
-name: Update Iranian proxy feed
+name: Update Iranian proxy feeds
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
 
     steps:
       - name: Check out repository
@@ -27,11 +27,11 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Confirm curl availability
+      - name: Confirm curl SOCKS support
         run: |
           curl --version
 
-      - name: Generate and test proxy feeds
+      - name: Generate and test feeds
         run: |
           python convert.py
 
@@ -42,7 +42,7 @@ jobs:
           python -m json.tool docs/iran-test-results.json > /dev/null
           python -m json.tool docs/proxy-history.json > /dev/null
 
-      - name: Validate report and subscription
+      - name: Validate subscriptions
         run: |
           python - <<'PY'
           import base64
@@ -57,70 +57,137 @@ jobs:
               )
           )
 
-          encoded = Path(
-              "docs/iran-v2ray.txt"
-          ).read_text(
-              encoding="ascii"
-          ).strip()
+          files = {
+              "verified": (
+                  Path(
+                      "docs/iran-verified-proxies.txt"
+                  ),
+                  {
+                      "http",
+                      "socks4",
+                      "socks5",
+                  },
+              ),
+              "openray": (
+                  Path(
+                      "docs/iran-openray.txt"
+                  ),
+                  {
+                      "vless",
+                      "vmess",
+                      "trojan",
+                      "ss",
+                      "ssr",
+                      "hysteria2",
+                      "hy2",
+                      "tuic",
+                  },
+              ),
+              "combined": (
+                  Path(
+                      "docs/iran-combined.txt"
+                  ),
+                  {
+                      "http",
+                      "socks4",
+                      "socks5",
+                      "vless",
+                      "vmess",
+                      "trojan",
+                      "ss",
+                      "ssr",
+                      "hysteria2",
+                      "hy2",
+                      "tuic",
+                  },
+              ),
+          }
 
-          if encoded:
-              decoded = base64.b64decode(
-                  encoded,
-                  validate=True,
-              ).decode("utf-8")
-          else:
-              decoded = ""
+          decoded_counts = {}
 
-          links = [
-              line.strip()
-              for line in decoded.splitlines()
-              if line.strip()
+          for name, (path, allowed) in files.items():
+              encoded = path.read_text(
+                  encoding="ascii"
+              ).strip()
+
+              if encoded:
+                  decoded = base64.b64decode(
+                      encoded,
+                      validate=True,
+                  ).decode("utf-8")
+              else:
+                  decoded = ""
+
+              links = [
+                  line.strip()
+                  for line in decoded.splitlines()
+                  if line.strip()
+              ]
+
+              invalid = []
+
+              for link in links:
+                  if "://" not in link:
+                      invalid.append(link)
+                      continue
+
+                  scheme = link.split(
+                      "://",
+                      1,
+                  )[0].lower()
+
+                  if scheme not in allowed:
+                      invalid.append(link)
+
+              if invalid:
+                  raise RuntimeError(
+                      f"{name} has invalid links: "
+                      f"{invalid[:5]}"
+                  )
+
+              decoded_counts[name] = len(links)
+
+          expected_verified = report[
+              "published_verified_proxies"
           ]
 
-          allowed_prefixes = (
-              "http://",
-              "socks4://",
-              "socks5://",
-          )
-
-          invalid = [
-              link
-              for link in links
-              if not link.startswith(
-                  allowed_prefixes
-              )
+          expected_openray = report[
+              "openray_share_links"
           ]
 
-          if invalid:
+          expected_combined = report[
+              "combined_subscription_links"
+          ]
+
+          if (
+              decoded_counts["verified"]
+              != expected_verified
+          ):
               raise RuntimeError(
-                  "Invalid subscription links: "
-                  + repr(invalid[:5])
+                  "Verified subscription count mismatch"
               )
 
-          expected = report[
-              "published_proxies"
-          ]
-
-          if len(links) != expected:
+          if (
+              decoded_counts["openray"]
+              != expected_openray
+          ):
               raise RuntimeError(
-                  f"Report says {expected} proxies, "
-                  f"but subscription contains "
-                  f"{len(links)} links"
+                  "OpenRay subscription count mismatch"
+              )
+
+          if (
+              decoded_counts["combined"]
+              != expected_combined
+          ):
+              raise RuntimeError(
+                  "Combined subscription count mismatch"
               )
 
           print(
-              f"Validated {len(links)} "
-              "published proxy links"
-          )
-
-          print(
-              f"Working now: "
-              f"{report['working_now_passed_both_urls']}"
-          )
-
-          print(
-              f"Retained from history: "
-              f"{report['retained_from_previous_success']}"
+              json.dumps(
+                  decoded_counts,
+                  indent=2,
+              )
           )
           PY
 
@@ -134,9 +201,12 @@ jobs:
 
           git add \
             docs/iran-all.json \
-            docs/iran-all-plain.txt \
-            docs/iran-v2ray.txt \
-            docs/iran-v2ray-plain.txt \
+            docs/iran-verified-proxies.txt \
+            docs/iran-verified-proxies-plain.txt \
+            docs/iran-openray.txt \
+            docs/iran-openray-plain.txt \
+            docs/iran-combined.txt \
+            docs/iran-combined-plain.txt \
             docs/iran-report.json \
             docs/iran-test-results.json \
             docs/proxy-history.json
@@ -147,6 +217,6 @@ jobs:
           fi
 
           git commit \
-            -m "Test and update Iranian proxy feeds"
+            -m "Update Iranian proxy feeds"
 
           git push
