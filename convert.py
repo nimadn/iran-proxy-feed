@@ -11,7 +11,6 @@ import urllib.parse
 import urllib.request
 
 from datetime import datetime, timedelta, timezone
-from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -34,6 +33,7 @@ OPENRAY_URL = (
 
 DANIYAL_URL = (
     "https://daniyal-abbassi.github.io/iran-proxy/"
+    "proxies.json"
 )
 
 VAKHOV_URL = (
@@ -109,6 +109,8 @@ SUPPORTED_SHARE_SCHEMES = {
 }
 
 RETENTION_DAYS = 30
+HISTORICAL_RETEST_HOURS = 24
+MAX_HISTORICAL_RETESTS_PER_RUN = 200
 
 TCP_TIMEOUT_SECONDS = 5
 REQUEST_TIMEOUT_SECONDS = 15
@@ -172,6 +174,13 @@ def to_float(
         return float(value)
     except (TypeError, ValueError):
         return default
+
+
+def to_nonnegative_int(value: Any) -> int:
+    try:
+        return max(0, int(value))
+    except (TypeError, ValueError):
+        return 0
 
 
 def normalize_protocol(value: Any) -> str:
@@ -720,123 +729,35 @@ def load_databay() -> list[dict[str, Any]]:
     return results
 
 
-class ResourceParser(HTMLParser):
-    def __init__(self) -> None:
-        super().__init__()
-        self.urls: list[str] = []
-
-    def handle_starttag(
-        self,
-        tag: str,
-        attrs: list[tuple[str, str | None]],
-    ) -> None:
-        attributes = dict(attrs)
-
-        if tag == "script":
-            value = attributes.get("src")
-        elif tag == "link":
-            value = attributes.get("href")
-        else:
-            value = None
-
-        if value:
-            self.urls.append(value)
-
-
 def load_daniyal() -> list[dict[str, Any]]:
-    html = download_text(DANIYAL_URL)
+    data = download_json(DANIYAL_URL)
 
-    combined_texts = [html]
-
-    parser = ResourceParser()
-    parser.feed(html)
-
-    for resource in parser.urls:
-        resolved = urllib.parse.urljoin(
-            DANIYAL_URL,
-            resource,
+    if not isinstance(data, list):
+        raise ValueError(
+            "Daniyal proxies.json response is not a list"
         )
-
-        parsed = urllib.parse.urlsplit(
-            resolved
-        )
-
-        if parsed.scheme not in {"http", "https"}:
-            continue
-
-        try:
-            resource_text = download_text(
-                resolved
-            )
-        except Exception:
-            continue
-
-        combined_texts.append(resource_text)
-
-        # Discover JSON/TXT resources referenced by JS.
-        referenced_files = re.findall(
-            r"""["']([^"']+\.(?:json|txt)(?:\?[^"']*)?)["']""",
-            resource_text,
-            flags=re.IGNORECASE,
-        )
-
-        for referenced_file in referenced_files:
-            referenced_url = urllib.parse.urljoin(
-                resolved,
-                referenced_file,
-            )
-
-            try:
-                combined_texts.append(
-                    download_text(referenced_url)
-                )
-            except Exception:
-                continue
 
     results = []
 
-    for text in combined_texts:
-        results.extend(
-            extract_proxy_uris(
-                text,
-                "daniyal",
-            )
+    for item in data:
+        if not isinstance(item, dict):
+            continue
+
+        proxy = normalize_proxy(
+            protocol=item.get("protocol"),
+            host=item.get("host") or item.get("ip"),
+            port=item.get("port"),
+            source="daniyal",
+            metadata={
+                **item,
+                "latency_ms": item.get("latency"),
+            },
         )
 
-        # Also support plain IP:port records accompanied
-        # by an obvious protocol field in JSON/JavaScript.
-        for match in re.finditer(
-            r"""(?is)
-            ["']?(?:ip|host|server)["']?\s*:\s*
-            ["']([^"']+)["']
-            .*?
-            ["']?port["']?\s*:\s*
-            ["']?(\d{1,5})["']?
-            .*?
-            ["']?(?:protocol|type)["']?\s*:\s*
-            ["'](https?|socks4|socks5)["']
-            """,
-            text,
-            flags=re.VERBOSE,
-        ):
-            host, port, protocol = (
-                match.group(1),
-                match.group(2),
-                match.group(3),
-            )
-
-            proxy = normalize_proxy(
-                protocol=protocol,
-                host=host,
-                port=port,
-                source="daniyal",
-            )
-
-            if proxy is not None:
-                results.append(proxy)
+        if proxy is not None:
+            results.append(proxy)
 
     return results
-
 
 # ---------------------------------------------------------------------------
 # OpenRay share links
@@ -882,19 +803,19 @@ def normalize_share_link_for_dedup(
     return link.split("#", 1)[0].strip()
 
 
+def deduplicate_share_links(links: Iterable[str]) -> list[str]:
+    unique: dict[str, str] = {}
+    for link in links:
+        key = normalize_share_link_for_dedup(link)
+        if key and key not in unique:
+            unique[key] = link
+    return list(unique.values())
+
+
 def load_openray() -> list[str]:
     text = download_text(OPENRAY_URL)
     links = extract_share_links(text)
-
-    unique: dict[str, str] = {}
-
-    for link in links:
-        key = normalize_share_link_for_dedup(
-            link
-        )
-        unique[key] = link
-
-    return list(unique.values())
+    return deduplicate_share_links(links)
 
 
 # ---------------------------------------------------------------------------
@@ -1029,6 +950,9 @@ def curl_proxy_url(
     if protocol == "socks5":
         # Proxy performs DNS resolution.
         protocol = "socks5h"
+    elif protocol == "socks4":
+        # Prefer proxy-side DNS resolution for SOCKS4.
+        protocol = "socks4a"
 
     return (
         f"{protocol}://"
@@ -1066,6 +990,22 @@ def test_one_url(
         definition["url"],
     ]
 
+    empty_evidence: dict[str, Any] = {
+        "name": definition["name"],
+        "url": definition["url"],
+        "success": False,
+        "proxy_argument": proxy_argument,
+        "curl_returncode": None,
+        "http_code": None,
+        "http_status": None,
+        "measured_seconds": None,
+        "response_time": None,
+        "remote_ip": "",
+        "effective_url": "",
+        "stderr": "",
+        "error": "",
+    }
+
     try:
         completed = subprocess.run(
             command,
@@ -1079,36 +1019,27 @@ def test_one_url(
         OSError,
     ) as error:
         return {
-            "name": definition["name"],
-            "url": definition["url"],
-            "success": False,
-            "proxy_argument": proxy_argument,
+            **empty_evidence,
             "error": str(error),
         }
 
     output = completed.stdout.strip()
     parts = output.split("|", 3)
-
-    result: dict[str, Any] = {
-        "name": definition["name"],
-        "url": definition["url"],
-        "success": False,
-        "proxy_argument": proxy_argument,
-        "curl_returncode": (
-            completed.returncode
-        ),
+    result = {
+        **empty_evidence,
+        "curl_returncode": completed.returncode,
+        "stderr": completed.stderr.strip(),
     }
-
-    if completed.stderr.strip():
-        result["stderr"] = (
-            completed.stderr.strip()
-        )
 
     if (
         completed.returncode != 0
         or len(parts) != 4
     ):
         result["raw_output"] = output
+        result["error"] = (
+            completed.stderr.strip()
+            or f"curl exited with {completed.returncode}"
+        )
         return result
 
     try:
@@ -1116,15 +1047,18 @@ def test_one_url(
         elapsed = float(parts[1])
     except ValueError:
         result["raw_output"] = output
+        result["error"] = "Could not parse curl write-out fields"
         return result
 
     result.update(
         {
             "http_code": http_code,
+            "http_status": http_code,
             "measured_seconds": round(
                 elapsed,
                 3,
             ),
+            "response_time": round(elapsed, 3),
             "remote_ip": parts[2],
             "effective_url": parts[3],
             "success": (
@@ -1137,7 +1071,6 @@ def test_one_url(
     )
 
     return result
-
 
 def test_proxy(
     proxy: dict[str, Any],
@@ -1183,6 +1116,74 @@ def test_proxy(
 # History
 # ---------------------------------------------------------------------------
 
+def normalize_history_record(
+    key: str,
+    value: Any,
+) -> tuple[str, dict[str, Any]] | None:
+    if not isinstance(value, dict):
+        return None
+
+    protocol = normalize_protocol(value.get("protocol"))
+    host = normalize_host(value.get("host"))
+
+    try:
+        port = int(value.get("port"))
+    except (TypeError, ValueError):
+        port = 0
+
+    if (
+        protocol not in SUPPORTED_PROXY_PROTOCOLS
+        or host is None
+        or not 1 <= port <= 65535
+    ):
+        parsed = parse_proxy_uri(key, "history")
+        if parsed is None:
+            return None
+        protocol = parsed["protocol"]
+        host = parsed["host"]
+        port = parsed["port"]
+
+    raw_sources = value.get("source_names", [])
+    if isinstance(raw_sources, str):
+        raw_sources = [raw_sources]
+    if not isinstance(raw_sources, list):
+        raw_sources = []
+    source_names = deduplicate_strings(
+        str(source).strip()
+        for source in raw_sources
+        if str(source).strip()
+    )
+
+    raw_result = value.get("last_test_result")
+    result = dict(raw_result) if isinstance(raw_result, dict) else {}
+    raw_url_tests = result.get("url_tests")
+    result["url_tests"] = (
+        [dict(test) for test in raw_url_tests if isinstance(test, dict)]
+        if isinstance(raw_url_tests, list)
+        else []
+    )
+    result["passed_all_tests"] = bool(
+        result.get("passed_all_tests", False)
+    )
+    result["working"] = bool(result.get("working", False))
+
+    record = {
+        **value,
+        "protocol": protocol,
+        "host": host,
+        "port": port,
+        "source_names": source_names,
+        "success_count": to_nonnegative_int(
+            value.get("success_count")
+        ),
+        "failure_count": to_nonnegative_int(
+            value.get("failure_count")
+        ),
+        "last_test_result": result,
+    }
+    return proxy_key(record), record
+
+
 def load_history() -> dict[str, dict[str, Any]]:
     if not HISTORY_FILE.exists():
         return {}
@@ -1202,12 +1203,15 @@ def load_history() -> dict[str, dict[str, Any]]:
     if not isinstance(data, dict):
         return {}
 
-    return {
-        str(key): value
-        for key, value in data.items()
-        if isinstance(value, dict)
-    }
-
+    history: dict[str, dict[str, Any]] = {}
+    for key, value in data.items():
+        normalized = normalize_history_record(
+            str(key), value
+        )
+        if normalized is not None:
+            normalized_key, record = normalized
+            history[normalized_key] = record
+    return history
 
 def merge_current_proxies_into_history(
     history: dict[str, dict[str, Any]],
@@ -1269,8 +1273,12 @@ def merge_current_proxies_into_history(
 def test_all_history_records(
     history: dict[str, dict[str, Any]],
     now: datetime,
-) -> None:
-    candidates = []
+) -> int:
+    current_candidates = []
+    historical_candidates = []
+    historical_cutoff = now - timedelta(
+        hours=HISTORICAL_RETEST_HOURS
+    )
 
     for record in history.values():
         if (
@@ -1290,7 +1298,27 @@ def test_all_history_records(
         if not 1 <= port <= 65535:
             continue
 
-        candidates.append(record)
+        if record.get("currently_in_source", False):
+            current_candidates.append(record)
+            continue
+
+        last_tested = parse_time(record.get("last_tested"))
+        if (
+            last_tested is None
+            or last_tested <= historical_cutoff
+        ):
+            historical_candidates.append(record)
+
+    historical_candidates.sort(
+        key=lambda record: (
+            parse_time(record.get("last_tested"))
+            or datetime.min.replace(tzinfo=timezone.utc),
+            proxy_key(record),
+        )
+    )
+    candidates = current_candidates + historical_candidates[
+        :MAX_HISTORICAL_RETESTS_PER_RUN
+    ]
 
     with concurrent.futures.ThreadPoolExecutor(
         max_workers=TEST_WORKERS
@@ -1319,6 +1347,11 @@ def test_all_history_records(
                     "passed_all_tests": False,
                     "proxy": key,
                     "tested_at": iso_time(now),
+                    "tcp": {
+                        "success": False,
+                        "error": "Unhandled test exception",
+                    },
+                    "url_tests": [],
                     "error": str(error),
                 }
 
@@ -1338,25 +1371,18 @@ def test_all_history_records(
                     iso_time(now)
                 )
                 record["success_count"] = (
-                    int(
-                        record.get(
-                            "success_count",
-                            0,
-                        )
-                    )
-                    + 1
+                    to_nonnegative_int(
+                        record.get("success_count")
+                    ) + 1
                 )
             else:
                 record["failure_count"] = (
-                    int(
-                        record.get(
-                            "failure_count",
-                            0,
-                        )
-                    )
-                    + 1
+                    to_nonnegative_int(
+                        record.get("failure_count")
+                    ) + 1
                 )
 
+    return len(candidates)
 
 def remove_expired_history(
     history: dict[str, dict[str, Any]],
@@ -1402,14 +1428,10 @@ def select_verified_proxies(
     selected = []
 
     for record in history.values():
+        result = record.get("last_test_result")
         passed_now = bool(
-            record.get(
-                "last_test_result",
-                {},
-            ).get(
-                "passed_all_tests",
-                False,
-            )
+            isinstance(result, dict)
+            and result.get("passed_all_tests", False)
         )
 
         last_success = parse_time(
@@ -1424,29 +1446,32 @@ def select_verified_proxies(
         if passed_now or passed_recently:
             selected.append(record)
 
+    def latest_test_latency(proxy: dict[str, Any]) -> float:
+        result = proxy.get("last_test_result")
+        if not isinstance(result, dict):
+            return 999999
+        url_tests = result.get("url_tests")
+        if not isinstance(url_tests, list) or not url_tests:
+            return 999999
+        latest = url_tests[-1]
+        if not isinstance(latest, dict):
+            return 999999
+        return to_float(
+            latest.get("measured_seconds"),
+            999999,
+        )
+
     selected.sort(
         key=lambda proxy: (
             0
-            if proxy.get(
-                "last_test_result",
-                {},
-            ).get(
-                "passed_all_tests",
-                False,
+            if (
+                isinstance(proxy.get("last_test_result"), dict)
+                and proxy["last_test_result"].get(
+                    "passed_all_tests", False
+                )
             )
             else 1,
-            to_float(
-                proxy.get(
-                    "last_test_result",
-                    {},
-                )
-                .get("url_tests", [{}])[-1]
-                .get(
-                    "measured_seconds",
-                    999999,
-                ),
-                999999,
-            ),
+            latest_test_latency(proxy),
             -to_float(
                 proxy.get(
                     "uptime_percent"
@@ -1460,7 +1485,6 @@ def select_verified_proxies(
     )
 
     return selected
-
 
 # ---------------------------------------------------------------------------
 # Output generation
@@ -1720,6 +1744,31 @@ def write_test_results(
 # Main
 # ---------------------------------------------------------------------------
 
+def collect_conventional_sources(
+    source_loaders: dict[str, Any],
+) -> tuple[
+    list[dict[str, Any]],
+    dict[str, int],
+    dict[str, str],
+]:
+    records: list[dict[str, Any]] = []
+    counts: dict[str, int] = {}
+    errors: dict[str, str] = {}
+
+    for name, loader in source_loaders.items():
+        try:
+            source_records = loader()
+            if not isinstance(source_records, list):
+                raise TypeError("source loader did not return a list")
+            counts[name] = len(source_records)
+            records.extend(source_records)
+        except Exception as error:
+            counts[name] = 0
+            errors[name] = f"{type(error).__name__}: {error}"
+
+    return records, counts, errors
+
+
 def main() -> None:
     DOCS_DIR.mkdir(
         parents=True,
@@ -1736,20 +1785,11 @@ def main() -> None:
         "daniyal": load_daniyal,
     }
 
-    source_counts: dict[str, int] = {}
-    source_errors: dict[str, str] = {}
-    conventional_records = []
-
-    for name, loader in source_loaders.items():
-        try:
-            records = loader()
-            source_counts[name] = len(records)
-            conventional_records.extend(
-                records
-            )
-        except Exception as error:
-            source_counts[name] = 0
-            source_errors[name] = str(error)
+    (
+        conventional_records,
+        source_counts,
+        source_errors,
+    ) = collect_conventional_sources(source_loaders)
 
     try:
         openray_links = load_openray()
@@ -1759,7 +1799,9 @@ def main() -> None:
     except Exception as error:
         openray_links = []
         source_counts["openray"] = 0
-        source_errors["openray"] = str(error)
+        source_errors["openray"] = (
+            f"{type(error).__name__}: {error}"
+        )
 
     current_proxies = merge_proxy_records(
         conventional_records
@@ -1773,7 +1815,7 @@ def main() -> None:
         now,
     )
 
-    test_all_history_records(
+    tested_count = test_all_history_records(
         history,
         now,
     )
@@ -1851,12 +1893,12 @@ def main() -> None:
         combined_links,
     )
 
+    current_run_time = iso_time(now)
     working_now = sum(
         bool(
-            proxy.get(
-                "last_test_result",
-                {},
-            ).get(
+            proxy.get("last_tested") == current_run_time
+            and isinstance(proxy.get("last_test_result"), dict)
+            and proxy["last_test_result"].get(
                 "passed_all_tests",
                 False,
             )
@@ -1884,51 +1926,55 @@ def main() -> None:
 
     report = {
         "generated_at": iso_time(now),
-        "source_counts_before_deduplication": (
-            source_counts
-        ),
+        "generation_time": iso_time(now),
+        "source_counts_before_deduplication": source_counts,
         "source_errors": source_errors,
-        "conventional_records_before_deduplication": (
-            len(conventional_records)
+        "source_failures": source_errors,
+        "conventional_records_before_deduplication": len(
+            conventional_records
         ),
-        "current_unique_conventional_proxies": (
-            len(current_proxies)
+        "count_before_deduplication": len(
+            conventional_records
+        ),
+        "current_unique_conventional_proxies": len(
+            current_proxies
+        ),
+        "count_after_deduplication": len(
+            current_proxies
         ),
         "history_records": len(history),
-        "working_now_passed_all_tests": (
-            working_now
-        ),
-        "retained_from_previous_success": (
-            retained_from_history
-        ),
+        "tested_count": tested_count,
+        "working_now_passed_all_tests": working_now,
+        "working_now_count": working_now,
+        "retained_from_previous_success": retained_from_history,
+        "retained_history_count": retained_from_history,
         "retention_days": RETENTION_DAYS,
-        "expired_history_removed": (
-            expired_removed
-        ),
-        "published_verified_proxies": (
-            len(verified_proxies)
-        ),
-        "verified_protocol_counts": (
-            protocol_counts
-        ),
-        "openray_share_links": len(
-            openray_links
-        ),
-        "combined_subscription_links": (
-            len(combined_links)
+        "historical_retest_hours": HISTORICAL_RETEST_HOURS,
+        "historical_retest_cap": MAX_HISTORICAL_RETESTS_PER_RUN,
+        "expired_history_removed": expired_removed,
+        "published_verified_proxies": len(verified_proxies),
+        "verified_protocol_counts": protocol_counts,
+        "protocol_counts": protocol_counts,
+        "openray_share_links": len(openray_links),
+        "openray_count": len(openray_links),
+        "combined_subscription_links": len(combined_links),
+        "combined_count": len(combined_links),
+        "openray_verification_notice": (
+            "OpenRay share links are not verified by curl; "
+            "they are published separately and in the combined feed."
         ),
         "verification": {
             "conventional_proxy_tcp_required": True,
             "all_urls_must_pass": True,
             "test_urls": [
                 definition["url"]
-                for definition
-                in TEST_DEFINITIONS
+                for definition in TEST_DEFINITIONS
             ],
             "openray_links_verified": False,
             "openray_reason": (
-                "VLESS/VMess/SS links cannot be "
-                "tested with curl --proxy."
+                "VLESS, VMess, Shadowsocks, SSR, Trojan, "
+                "Hysteria2 and TUIC links are not supported "
+                "by curl --proxy."
             ),
         },
         "outputs": {
@@ -1938,28 +1984,26 @@ def main() -> None:
             "verified_proxy_plain": (
                 "iran-verified-proxies-plain.txt"
             ),
-            "openray_subscription": (
-                "iran-openray.txt"
-            ),
-            "openray_plain": (
-                "iran-openray-plain.txt"
-            ),
-            "combined_subscription": (
-                "iran-combined.txt"
-            ),
-            "combined_plain": (
-                "iran-combined-plain.txt"
-            ),
-            "singbox_verified_proxies": (
-                "iran-all.json"
-            ),
-            "test_results": (
-                "iran-test-results.json"
-            ),
-            "history": (
-                "proxy-history.json"
-            ),
+            "openray_subscription": "iran-openray.txt",
+            "openray_plain": "iran-openray-plain.txt",
+            "combined_subscription": "iran-combined.txt",
+            "combined_plain": "iran-combined-plain.txt",
+            "singbox_verified_proxies": "iran-all.json",
+            "test_results": "iran-test-results.json",
+            "history": "proxy-history.json",
         },
+        "output_filenames": [
+            "iran-all.json",
+            "iran-verified-proxies-plain.txt",
+            "iran-verified-proxies.txt",
+            "iran-openray-plain.txt",
+            "iran-openray.txt",
+            "iran-combined-plain.txt",
+            "iran-combined.txt",
+            "iran-report.json",
+            "iran-test-results.json",
+            "proxy-history.json",
+        ],
     }
 
     REPORT_FILE.write_text(
