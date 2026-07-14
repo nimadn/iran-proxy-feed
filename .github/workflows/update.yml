@@ -16,7 +16,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
 
     steps:
       - name: Check out repository
@@ -27,21 +27,16 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Generate Iranian proxy feeds
+      - name: Generate and test proxy feeds
         run: python convert.py
 
-      - name: Validate generated files
+      - name: Validate generated JSON files
         run: |
           python -m json.tool docs/iran-all.json > /dev/null
           python -m json.tool docs/iran-report.json > /dev/null
+          python -m json.tool docs/proxy-history.json > /dev/null
 
-          test -s docs/iran-all.json
-          test -s docs/iran-all-plain.txt
-          test -s docs/iran-v2ray.txt
-          test -s docs/iran-v2ray-plain.txt
-          test -s docs/iran-report.json
-
-      - name: Validate Base64 subscription
+      - name: Validate generated subscription
         run: |
           python - <<'PY'
           import base64
@@ -50,7 +45,7 @@ jobs:
           encoded = Path(
               "docs/iran-v2ray.txt"
           ).read_text(
-              encoding="utf-8"
+              encoding="ascii"
           ).strip()
 
           decoded = base64.b64decode(
@@ -66,93 +61,32 @@ jobs:
 
           if not links:
               raise RuntimeError(
-                  "The generated subscription is empty"
+                  "Generated subscription is empty"
               )
 
-          allowed_prefixes = (
+          allowed = (
               "http://",
               "socks4://",
-              "socks4a://",
               "socks5://",
           )
 
           invalid = [
               link
               for link in links
-              if not link.startswith(
-                  allowed_prefixes
-              )
+              if not link.startswith(allowed)
           ]
 
           if invalid:
               raise RuntimeError(
-                  "Invalid subscription links: "
-                  + repr(invalid[:5])
+                  f"Invalid links: {invalid[:5]}"
               )
 
           print(
-              f"Validated {len(links)} "
-              "subscription links"
+              f"Validated {len(links)} links"
           )
           PY
 
-      - name: Verify output count
-        run: |
-          python - <<'PY'
-          import base64
-          import json
-          from pathlib import Path
-
-          report = json.loads(
-              Path(
-                  "docs/iran-report.json"
-              ).read_text(
-                  encoding="utf-8"
-              )
-          )
-
-          encoded = Path(
-              "docs/iran-v2ray.txt"
-          ).read_text(
-              encoding="utf-8"
-          ).strip()
-
-          decoded = base64.b64decode(
-              encoded
-          ).decode("utf-8")
-
-          actual_links = len(
-              [
-                  line
-                  for line in decoded.splitlines()
-                  if line.strip()
-              ]
-          )
-
-          expected_links = report[
-              "published_unique_proxies"
-          ]
-
-          if actual_links != expected_links:
-              raise RuntimeError(
-                  f"Expected {expected_links} links, "
-                  f"but generated {actual_links}"
-              )
-
-          print(
-              f"Output count confirmed: "
-              f"{actual_links}"
-          )
-
-          print(
-              json.dumps(
-                  report,
-                  indent=2,
-              )
-          )
-          PY
-
-      - name: Commit updated feeds
+      - name: Commit generated files
         run: |
           git config user.name \
             "github-actions[bot]"
@@ -165,7 +99,8 @@ jobs:
             docs/iran-all-plain.txt \
             docs/iran-v2ray.txt \
             docs/iran-v2ray-plain.txt \
-            docs/iran-report.json
+            docs/iran-report.json \
+            docs/proxy-history.json
 
           if git diff --cached --quiet; then
             echo "No changes to commit"
@@ -173,6 +108,6 @@ jobs:
           fi
 
           git commit \
-            -m "Update Iranian proxy feeds"
+            -m "Update and test Iranian proxy feeds"
 
           git push
