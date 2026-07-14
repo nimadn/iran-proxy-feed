@@ -68,8 +68,11 @@ jobs:
                   raise RuntimeError(f"Missing QR image reference for {name}")
               if f"{base_url}{name}" not in html:
                   raise RuntimeError(f"Missing encoded public URL for {name}")
+              happ_link = f'href="happ://add/{base_url}{name}"'
+              if happ_link not in html:
+                  raise RuntimeError(f"Missing HAPP deep link for {name}")
 
-          print(f"Validated {len(names)} QR subscription assets")
+          print(f"Validated {len(names)} QR and HAPP subscription links")
           PY
 
       - name: Run unit tests
