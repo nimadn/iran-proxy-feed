@@ -2,15 +2,18 @@ name: Update Iranian proxy feeds
 
 on:
   workflow_dispatch:
-
   schedule:
     - cron: "17,47 * * * *"
+  pull_request:
+    paths:
+      - "convert.py"
+      - ".github/workflows/update.yml"
 
 permissions:
   contents: write
 
 concurrency:
-  group: iran-proxy-feed-update
+  group: iran-proxy-feed-update-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -20,20 +23,21 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
+      - name: Check Python syntax
+        run: python -m py_compile convert.py
+
       - name: Confirm curl SOCKS support
-        run: |
-          curl --version
+        run: curl --version
 
       - name: Generate and test feeds
-        run: |
-          python convert.py
+        run: python convert.py
 
       - name: Validate JSON files
         run: |
@@ -50,28 +54,16 @@ jobs:
           from pathlib import Path
 
           report = json.loads(
-              Path(
-                  "docs/iran-report.json"
-              ).read_text(
-                  encoding="utf-8"
-              )
+              Path("docs/iran-report.json").read_text(encoding="utf-8")
           )
 
           files = {
               "verified": (
-                  Path(
-                      "docs/iran-verified-proxies.txt"
-                  ),
-                  {
-                      "http",
-                      "socks4",
-                      "socks5",
-                  },
+                  Path("docs/iran-verified-proxies.txt"),
+                  {"http", "socks4", "socks5"},
               ),
               "openray": (
-                  Path(
-                      "docs/iran-openray.txt"
-                  ),
+                  Path("docs/iran-openray.txt"),
                   {
                       "vless",
                       "vmess",
@@ -84,9 +76,7 @@ jobs:
                   },
               ),
               "combined": (
-                  Path(
-                      "docs/iran-combined.txt"
-                  ),
+                  Path("docs/iran-combined.txt"),
                   {
                       "http",
                       "socks4",
@@ -106,98 +96,47 @@ jobs:
           decoded_counts = {}
 
           for name, (path, allowed) in files.items():
-              encoded = path.read_text(
-                  encoding="ascii"
-              ).strip()
-
-              if encoded:
-                  decoded = base64.b64decode(
-                      encoded,
-                      validate=True,
-                  ).decode("utf-8")
-              else:
-                  decoded = ""
-
-              links = [
-                  line.strip()
-                  for line in decoded.splitlines()
-                  if line.strip()
-              ]
+              encoded = path.read_text(encoding="ascii").strip()
+              decoded = (
+                  base64.b64decode(encoded, validate=True).decode("utf-8")
+                  if encoded
+                  else ""
+              )
+              links = [line.strip() for line in decoded.splitlines() if line.strip()]
 
               invalid = []
-
               for link in links:
                   if "://" not in link:
                       invalid.append(link)
                       continue
-
-                  scheme = link.split(
-                      "://",
-                      1,
-                  )[0].lower()
-
+                  scheme = link.split("://", 1)[0].lower()
                   if scheme not in allowed:
                       invalid.append(link)
 
               if invalid:
-                  raise RuntimeError(
-                      f"{name} has invalid links: "
-                      f"{invalid[:5]}"
-                  )
+                  raise RuntimeError(f"{name} has invalid links: {invalid[:5]}")
 
               decoded_counts[name] = len(links)
 
-          expected_verified = report[
-              "published_verified_proxies"
-          ]
+          expected = {
+              "verified": report["published_verified_proxies"],
+              "openray": report["openray_share_links"],
+              "combined": report["combined_subscription_links"],
+          }
 
-          expected_openray = report[
-              "openray_share_links"
-          ]
-
-          expected_combined = report[
-              "combined_subscription_links"
-          ]
-
-          if (
-              decoded_counts["verified"]
-              != expected_verified
-          ):
+          if decoded_counts != expected:
               raise RuntimeError(
-                  "Verified subscription count mismatch"
+                  f"Subscription count mismatch: actual={decoded_counts}, expected={expected}"
               )
 
-          if (
-              decoded_counts["openray"]
-              != expected_openray
-          ):
-              raise RuntimeError(
-                  "OpenRay subscription count mismatch"
-              )
-
-          if (
-              decoded_counts["combined"]
-              != expected_combined
-          ):
-              raise RuntimeError(
-                  "Combined subscription count mismatch"
-              )
-
-          print(
-              json.dumps(
-                  decoded_counts,
-                  indent=2,
-              )
-          )
+          print(json.dumps(decoded_counts, indent=2))
           PY
 
       - name: Commit generated files
+        if: github.event_name != 'pull_request'
         run: |
-          git config user.name \
-            "github-actions[bot]"
-
-          git config user.email \
-            "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add \
             docs/iran-all.json \
@@ -216,7 +155,5 @@ jobs:
             exit 0
           fi
 
-          git commit \
-            -m "Update Iranian proxy feeds"
-
+          git commit -m "Update Iranian proxy feeds"
           git push
