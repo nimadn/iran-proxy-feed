@@ -1,45 +1,86 @@
 #!/usr/bin/env python3
 
 import base64
+import concurrent.futures
 import ipaddress
 import json
+import socket
+import subprocess
 import urllib.parse
 import urllib.request
+
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
 
 SOURCE_URL = (
-    "https://cdn.jsdelivr.net/gh/proxyscrape/"
-    "free-proxy-list@main/proxies/all/data.json"
+    "https://raw.githubusercontent.com/"
+    "ProxyScrape/free-proxy-list/main/"
+    "proxies/all/data.json"
 )
 
 DOCS_DIR = Path("docs")
 
+HISTORY_FILE = DOCS_DIR / "proxy-history.json"
+REPORT_FILE = DOCS_DIR / "iran-report.json"
+
 SINGBOX_OUTPUT = DOCS_DIR / "iran-all.json"
 PLAIN_OUTPUT = DOCS_DIR / "iran-all-plain.txt"
 
-MIXED_SUB_OUTPUT = DOCS_DIR / "iran-v2ray.txt"
-MIXED_SUB_PLAIN_OUTPUT = DOCS_DIR / "iran-v2ray-plain.txt"
-
-REPORT_OUTPUT = DOCS_DIR / "iran-report.json"
+SUB_OUTPUT = DOCS_DIR / "iran-v2ray.txt"
+SUB_PLAIN_OUTPUT = DOCS_DIR / "iran-v2ray-plain.txt"
 
 SUPPORTED_PROTOCOLS = {
     "http",
-    "https",
     "socks4",
-    "socks4a",
     "socks5",
 }
+
+RETENTION_DAYS = 30
+
+TCP_TIMEOUT_SECONDS = 4
+PROXY_TIMEOUT_SECONDS = 10
+TEST_WORKERS = 20
+
+TEST_URLS = [
+    "https://www.isna.ir/",
+    "https://www.gstatic.com/generate_204",
+]
+
+
+def utc_now() -> datetime:
+    return datetime.now(timezone.utc)
+
+
+def iso_time(value: datetime) -> str:
+    return value.replace(microsecond=0).isoformat()
+
+
+def parse_time(value: Any) -> datetime | None:
+    if not value:
+        return None
+
+    try:
+        parsed = datetime.fromisoformat(str(value))
+
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+
+        return parsed.astimezone(timezone.utc)
+
+    except ValueError:
+        return None
 
 
 def download_source() -> list[dict[str, Any]]:
     request = urllib.request.Request(
         SOURCE_URL,
         headers={
-            "User-Agent": "IranProxyFeed/10.0",
+            "User-Agent": "IranProxyFeed/12.0",
             "Accept": "application/json",
             "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
         },
     )
 
@@ -107,6 +148,16 @@ def normalize_host(value: Any) -> str | None:
     return None
 
 
+def to_float(
+    value: Any,
+    default: float,
+) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
 def normalize_proxy(
     item: dict[str, Any],
 ) -> dict[str, Any] | None:
@@ -158,23 +209,367 @@ def normalize_proxy(
             item.get("latency_ms"),
             999999,
         ),
-        "ssl": bool(
-            item.get("ssl", False)
-        ),
-        "anonymity": str(
-            item.get("anonymity", "")
-        ).strip(),
     }
 
 
-def to_float(
-    value: Any,
-    default: float,
-) -> float:
+def proxy_key(proxy: dict[str, Any]) -> str:
+    return (
+        f"{proxy['protocol']}://"
+        f"{proxy['host']}:{proxy['port']}"
+    )
+
+
+def load_history() -> dict[str, dict[str, Any]]:
+    if not HISTORY_FILE.exists():
+        return {}
+
     try:
-        return float(value)
-    except (TypeError, ValueError):
-        return default
+        data = json.loads(
+            HISTORY_FILE.read_text(
+                encoding="utf-8"
+            )
+        )
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+    if not isinstance(data, dict):
+        return {}
+
+    return {
+        str(key): value
+        for key, value in data.items()
+        if isinstance(value, dict)
+    }
+
+
+def tcp_test(proxy: dict[str, Any]) -> bool:
+    try:
+        with socket.create_connection(
+            (
+                proxy["host"],
+                proxy["port"],
+            ),
+            timeout=TCP_TIMEOUT_SECONDS,
+        ):
+            return True
+    except OSError:
+        return False
+
+
+def curl_proxy_url(
+    proxy: dict[str, Any],
+) -> str:
+    protocol = proxy["protocol"]
+
+    if protocol == "socks5":
+        protocol = "socks5h"
+
+    return (
+        f"{protocol}://"
+        f"{proxy['host']}:{proxy['port']}"
+    )
+
+
+def test_proxy(
+    proxy: dict[str, Any],
+) -> dict[str, Any]:
+    result = {
+        "working": False,
+        "tcp_open": False,
+        "tested_url": None,
+        "http_code": None,
+        "measured_seconds": None,
+    }
+
+    if not tcp_test(proxy):
+        return result
+
+    result["tcp_open"] = True
+
+    for test_url in TEST_URLS:
+        command = [
+            "curl",
+            "--silent",
+            "--show-error",
+            "--location",
+            "--output",
+            "/dev/null",
+            "--proxy",
+            curl_proxy_url(proxy),
+            "--connect-timeout",
+            str(PROXY_TIMEOUT_SECONDS),
+            "--max-time",
+            str(PROXY_TIMEOUT_SECONDS),
+            "--write-out",
+            "%{http_code} %{time_total}",
+            test_url,
+        ]
+
+        try:
+            completed = subprocess.run(
+                command,
+                capture_output=True,
+                text=True,
+                timeout=PROXY_TIMEOUT_SECONDS + 3,
+                check=False,
+            )
+        except (
+            subprocess.TimeoutExpired,
+            OSError,
+        ):
+            continue
+
+        if completed.returncode != 0:
+            continue
+
+        parts = completed.stdout.strip().split()
+
+        if len(parts) != 2:
+            continue
+
+        code_text, time_text = parts
+
+        try:
+            code = int(code_text)
+            measured_seconds = float(time_text)
+        except ValueError:
+            continue
+
+        # Accept normal success and redirect responses.
+        if 200 <= code < 400:
+            result.update(
+                {
+                    "working": True,
+                    "tested_url": test_url,
+                    "http_code": code,
+                    "measured_seconds": (
+                        measured_seconds
+                    ),
+                }
+            )
+
+            return result
+
+    return result
+
+
+def merge_current_source(
+    history: dict[str, dict[str, Any]],
+    source_proxies: list[dict[str, Any]],
+    now: datetime,
+) -> None:
+    for proxy in source_proxies:
+        key = proxy_key(proxy)
+
+        existing = history.get(key, {})
+
+        history[key] = {
+            **existing,
+            **proxy,
+            "first_seen": existing.get(
+                "first_seen",
+                iso_time(now),
+            ),
+            "last_seen_in_source": iso_time(now),
+            "currently_in_source": True,
+        }
+
+    current_keys = {
+        proxy_key(proxy)
+        for proxy in source_proxies
+    }
+
+    for key, record in history.items():
+        if key not in current_keys:
+            record["currently_in_source"] = False
+
+
+def select_test_candidates(
+    history: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    candidates = []
+
+    for record in history.values():
+        if (
+            record.get("protocol")
+            not in SUPPORTED_PROTOCOLS
+        ):
+            continue
+
+        if not record.get("host"):
+            continue
+
+        if not record.get("port"):
+            continue
+
+        candidates.append(record)
+
+    return candidates
+
+
+def update_test_results(
+    history: dict[str, dict[str, Any]],
+    candidates: list[dict[str, Any]],
+    now: datetime,
+) -> None:
+    with concurrent.futures.ThreadPoolExecutor(
+        max_workers=TEST_WORKERS
+    ) as executor:
+        future_map = {
+            executor.submit(
+                test_proxy,
+                proxy,
+            ): proxy
+            for proxy in candidates
+        }
+
+        for future in concurrent.futures.as_completed(
+            future_map
+        ):
+            proxy = future_map[future]
+            key = proxy_key(proxy)
+
+            try:
+                test_result = future.result()
+            except Exception as error:
+                test_result = {
+                    "working": False,
+                    "error": str(error),
+                }
+
+            record = history[key]
+
+            record["last_tested"] = iso_time(now)
+            record["last_test_result"] = (
+                test_result
+            )
+
+            if test_result.get("working"):
+                record["last_success"] = iso_time(
+                    now
+                )
+
+                success_count = int(
+                    record.get(
+                        "success_count",
+                        0,
+                    )
+                )
+
+                record["success_count"] = (
+                    success_count + 1
+                )
+            else:
+                failure_count = int(
+                    record.get(
+                        "failure_count",
+                        0,
+                    )
+                )
+
+                record["failure_count"] = (
+                    failure_count + 1
+                )
+
+
+def remove_expired(
+    history: dict[str, dict[str, Any]],
+    now: datetime,
+) -> int:
+    cutoff = now - timedelta(
+        days=RETENTION_DAYS
+    )
+
+    expired_keys = []
+
+    for key, record in history.items():
+        last_success = parse_time(
+            record.get("last_success")
+        )
+
+        currently_in_source = bool(
+            record.get(
+                "currently_in_source",
+                False,
+            )
+        )
+
+        # Current source records remain in history even if
+        # they have not passed a test yet.
+        if currently_in_source:
+            continue
+
+        # Disappeared proxies are retained only when they
+        # succeeded within the retention period.
+        if (
+            last_success is None
+            or last_success < cutoff
+        ):
+            expired_keys.append(key)
+
+    for key in expired_keys:
+        del history[key]
+
+    return len(expired_keys)
+
+
+def select_published_proxies(
+    history: dict[str, dict[str, Any]],
+    now: datetime,
+) -> list[dict[str, Any]]:
+    cutoff = now - timedelta(
+        days=RETENTION_DAYS
+    )
+
+    published = []
+
+    for record in history.values():
+        last_success = parse_time(
+            record.get("last_success")
+        )
+
+        currently_in_source = bool(
+            record.get(
+                "currently_in_source",
+                False,
+            )
+        )
+
+        # Publish current source entries immediately.
+        # Also publish old entries that worked within 30 days.
+        keep = (
+            currently_in_source
+            or (
+                last_success is not None
+                and last_success >= cutoff
+            )
+        )
+
+        if keep:
+            published.append(record)
+
+    published.sort(
+        key=lambda proxy: (
+            0
+            if proxy.get("last_test_result", {}).get(
+                "working"
+            )
+            else 1,
+            -to_float(
+                proxy.get("uptime_percent"),
+                0,
+            ),
+            to_float(
+                proxy.get("latency_ms"),
+                999999,
+            ),
+            proxy["protocol"],
+            proxy["host"],
+            proxy["port"],
+        )
+    )
+
+    return published
 
 
 def format_host(host: str) -> str:
@@ -193,8 +588,7 @@ def make_tag(
     proxy: dict[str, Any],
     index: int,
 ) -> str:
-    protocol = proxy["protocol"].upper()
-    city = proxy["city"] or "Iran"
+    city = proxy.get("city") or "Iran"
 
     safe_city = "".join(
         character
@@ -203,71 +597,45 @@ def make_tag(
         for character in city
     ).strip("-")
 
-    safe_city = safe_city or "Iran"
-
     return (
-        f"IR-{protocol}-"
-        f"{index:03d}-{safe_city}"
+        f"IR-{proxy['protocol'].upper()}-"
+        f"{index:03d}-{safe_city or 'Iran'}"
     )
 
 
-def make_singbox_outbound(
+def make_outbound(
     proxy: dict[str, Any],
     index: int,
 ) -> tuple[str, dict[str, Any]]:
     protocol = proxy["protocol"]
-    host = proxy["host"]
-    port = proxy["port"]
-
     tag = make_tag(proxy, index)
 
-    if protocol in {"http", "https"}:
-        outbound: dict[str, Any] = {
+    if protocol == "http":
+        outbound = {
             "type": "http",
             "tag": tag,
-            "server": host,
-            "server_port": port,
+            "server": proxy["host"],
+            "server_port": proxy["port"],
         }
-
-        # ProxyScrape "https" commonly means an HTTP proxy
-        # capable of HTTPS CONNECT. It does not always mean
-        # that the proxy endpoint itself uses TLS.
-        #
-        # Therefore no TLS block is added here.
 
     elif protocol == "socks4":
         outbound = {
             "type": "socks",
             "tag": tag,
-            "server": host,
-            "server_port": port,
+            "server": proxy["host"],
+            "server_port": proxy["port"],
             "version": "4",
             "network": "tcp",
         }
 
-    elif protocol == "socks4a":
+    else:
         outbound = {
             "type": "socks",
             "tag": tag,
-            "server": host,
-            "server_port": port,
-            "version": "4a",
-            "network": "tcp",
-        }
-
-    elif protocol == "socks5":
-        outbound = {
-            "type": "socks",
-            "tag": tag,
-            "server": host,
-            "server_port": port,
+            "server": proxy["host"],
+            "server_port": proxy["port"],
             "version": "5",
         }
-
-    else:
-        raise ValueError(
-            f"Unsupported protocol: {protocol}"
-        )
 
     return tag, outbound
 
@@ -275,14 +643,14 @@ def make_singbox_outbound(
 def build_singbox_config(
     proxies: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    tags: list[str] = []
-    outbounds: list[dict[str, Any]] = []
+    tags = []
+    outbounds = []
 
     for index, proxy in enumerate(
         proxies,
         start=1,
     ):
-        tag, outbound = make_singbox_outbound(
+        tag, outbound = make_outbound(
             proxy,
             index,
         )
@@ -292,7 +660,7 @@ def build_singbox_config(
 
     if not tags:
         raise RuntimeError(
-            "No Iranian proxies were found"
+            "No proxies are available for publication"
         )
 
     return {
@@ -318,7 +686,6 @@ def build_singbox_config(
                     "DIRECT",
                 ],
                 "default": "AUTO",
-                "interrupt_exist_connections": True,
             },
             {
                 "type": "urltest",
@@ -328,9 +695,8 @@ def build_singbox_config(
                     "https://www.gstatic.com/"
                     "generate_204"
                 ),
-                "interval": "5m",
+                "interval": "10m",
                 "tolerance": 200,
-                "interrupt_exist_connections": True,
             },
             *outbounds,
             {
@@ -349,71 +715,17 @@ def build_share_link(
     proxy: dict[str, Any],
     index: int,
 ) -> str:
-    protocol = proxy["protocol"]
     host = format_host(proxy["host"])
-    port = proxy["port"]
 
-    tag = make_tag(proxy, index)
-
-    encoded_tag = urllib.parse.quote(
-        tag,
+    tag = urllib.parse.quote(
+        make_tag(proxy, index),
         safe="",
     )
 
-    if protocol in {"http", "https"}:
-        # HTTPS-classified ProxyScrape records are exposed
-        # as HTTP proxy share links because the classification
-        # usually means CONNECT support.
-        scheme = "http"
-
-    elif protocol == "socks4":
-        scheme = "socks4"
-
-    elif protocol == "socks4a":
-        scheme = "socks4a"
-
-    elif protocol == "socks5":
-        scheme = "socks5"
-
-    else:
-        raise ValueError(
-            f"Unsupported protocol: {protocol}"
-        )
-
     return (
-        f"{scheme}://{host}:{port}"
-        f"#{encoded_tag}"
+        f"{proxy['protocol']}://"
+        f"{host}:{proxy['port']}#{tag}"
     )
-
-
-def write_text(
-    path: Path,
-    content: str,
-) -> None:
-    path.write_text(
-        content,
-        encoding="utf-8",
-    )
-
-
-def count_protocols(
-    proxies: list[dict[str, Any]],
-) -> dict[str, int]:
-    counts = {
-        protocol: 0
-        for protocol in sorted(
-            SUPPORTED_PROTOCOLS
-        )
-    }
-
-    for proxy in proxies:
-        protocol = proxy["protocol"]
-
-        counts[protocol] = (
-            counts.get(protocol, 0) + 1
-        )
-
-    return counts
 
 
 def main() -> None:
@@ -422,83 +734,76 @@ def main() -> None:
         exist_ok=True,
     )
 
+    now = utc_now()
+
     raw_items = download_source()
 
-    raw_iranian_items = [
-        item
-        for item in raw_items
-        if is_iranian(item)
-    ]
+    source_proxies = []
 
-    normalized_records: list[
-        dict[str, Any]
-    ] = []
-
-    rejected_records = 0
-
-    for item in raw_iranian_items:
+    for item in raw_items:
         proxy = normalize_proxy(item)
 
-        if proxy is None:
-            rejected_records += 1
-            continue
+        if proxy is not None:
+            source_proxies.append(proxy)
 
-        normalized_records.append(proxy)
+    # Remove only exact duplicate protocol/IP/port entries.
+    unique_source = {}
 
-    # Deduplicate only exact protocol + host + port duplicates.
-    unique: dict[
-        tuple[str, str, int],
-        dict[str, Any],
-    ] = {}
+    for proxy in source_proxies:
+        unique_source[
+            proxy_key(proxy)
+        ] = proxy
 
-    duplicate_records = 0
-
-    for proxy in normalized_records:
-        key = (
-            proxy["protocol"],
-            proxy["host"],
-            proxy["port"],
-        )
-
-        existing = unique.get(key)
-
-        if existing is None:
-            unique[key] = proxy
-            continue
-
-        duplicate_records += 1
-
-        # Keep the duplicate record with the higher reported uptime.
-        if (
-            proxy["uptime_percent"]
-            > existing["uptime_percent"]
-        ):
-            unique[key] = proxy
-
-    proxies = list(unique.values())
-
-    proxies.sort(
-        key=lambda proxy: (
-            -proxy["uptime_percent"],
-            proxy["latency_ms"],
-            proxy["protocol"],
-            proxy["host"],
-            proxy["port"],
-        )
+    source_proxies = list(
+        unique_source.values()
     )
 
-    if not proxies:
-        raise RuntimeError(
-            "No valid Iranian proxies were found"
-        )
+    history = load_history()
 
-    singbox_config = build_singbox_config(
-        proxies
+    merge_current_source(
+        history,
+        source_proxies,
+        now,
+    )
+
+    candidates = select_test_candidates(
+        history
+    )
+
+    update_test_results(
+        history,
+        candidates,
+        now,
+    )
+
+    expired_removed = remove_expired(
+        history,
+        now,
+    )
+
+    published = select_published_proxies(
+        history,
+        now,
+    )
+
+    HISTORY_FILE.write_text(
+        json.dumps(
+            history,
+            indent=2,
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    config = build_singbox_config(
+        published
     )
 
     SINGBOX_OUTPUT.write_text(
         json.dumps(
-            singbox_config,
+            config,
             indent=2,
             ensure_ascii=False,
         )
@@ -506,49 +811,63 @@ def main() -> None:
         encoding="utf-8",
     )
 
-    share_links = [
+    links = [
         build_share_link(
             proxy,
             index,
         )
         for index, proxy in enumerate(
-            proxies,
+            published,
             start=1,
         )
     ]
 
     plain_content = "\n".join(
-        share_links
+        links
     ) + "\n"
 
-    write_text(
-        PLAIN_OUTPUT,
+    PLAIN_OUTPUT.write_text(
         plain_content,
+        encoding="utf-8",
     )
 
-    write_text(
-        MIXED_SUB_PLAIN_OUTPUT,
+    SUB_PLAIN_OUTPUT.write_text(
         plain_content,
+        encoding="utf-8",
     )
 
-    base64_content = base64.b64encode(
-        plain_content.encode("utf-8")
-    ).decode("ascii")
-
-    write_text(
-        MIXED_SUB_OUTPUT,
-        base64_content,
+    SUB_OUTPUT.write_text(
+        base64.b64encode(
+            plain_content.encode("utf-8")
+        ).decode("ascii"),
+        encoding="ascii",
     )
 
-    raw_protocol_counts: dict[str, int] = {}
-
-    for item in raw_iranian_items:
-        protocol = normalize_protocol(
-            item.get("protocol")
+    working_now = sum(
+        bool(
+            proxy.get(
+                "last_test_result",
+                {},
+            ).get("working")
         )
+        for proxy in published
+    )
 
-        raw_protocol_counts[protocol] = (
-            raw_protocol_counts.get(
+    retained_from_history = sum(
+        not proxy.get(
+            "currently_in_source",
+            False,
+        )
+        for proxy in published
+    )
+
+    protocol_counts = {}
+
+    for proxy in published:
+        protocol = proxy["protocol"]
+
+        protocol_counts[protocol] = (
+            protocol_counts.get(
                 protocol,
                 0,
             )
@@ -556,38 +875,32 @@ def main() -> None:
         )
 
     report = {
+        "generated_at": iso_time(now),
         "source_url": SOURCE_URL,
         "global_records": len(raw_items),
-        "raw_iranian_records": len(
-            raw_iranian_items
+        "current_iranian_unique_records": len(
+            source_proxies
         ),
-        "raw_iranian_protocol_counts": (
-            raw_protocol_counts
+        "history_records": len(history),
+        "tested_records": len(candidates),
+        "working_now": working_now,
+        "retained_from_history": (
+            retained_from_history
         ),
-        "normalized_records": len(
-            normalized_records
+        "expired_records_removed": (
+            expired_removed
         ),
-        "rejected_records": rejected_records,
-        "duplicate_records_removed": (
-            duplicate_records
-        ),
-        "published_unique_proxies": len(
-            proxies
+        "retention_days": RETENTION_DAYS,
+        "published_proxies": len(
+            published
         ),
         "published_protocol_counts": (
-            count_protocols(proxies)
+            protocol_counts
         ),
-        "subscription_links_written": len(
-            share_links
-        ),
-        "filter": {
-            "country": "Iran",
-            "country_code": "IR",
-            "operator": "OR",
-        },
+        "test_urls": TEST_URLS,
     }
 
-    REPORT_OUTPUT.write_text(
+    REPORT_FILE.write_text(
         json.dumps(
             report,
             indent=2,
