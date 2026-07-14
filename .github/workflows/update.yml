@@ -8,6 +8,7 @@ on:
     paths:
       - "convert.py"
       - "prepare_history.py"
+      - "run_convert.py"
       - ".github/workflows/update.yml"
 
 permissions:
@@ -35,6 +36,7 @@ jobs:
         run: |
           python -m py_compile convert.py
           python -m py_compile prepare_history.py
+          python -m py_compile run_convert.py
 
       - name: Confirm curl SOCKS support
         run: curl --version
@@ -43,7 +45,7 @@ jobs:
         run: python prepare_history.py
 
       - name: Generate and test feeds
-        run: python convert.py
+        run: python run_convert.py
 
       - name: Validate JSON files
         run: |
