@@ -16,7 +16,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Check out repository
@@ -27,18 +27,22 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Generate proxy subscriptions
+      - name: Generate Iranian proxy feeds
         run: python convert.py
 
       - name: Validate generated files
         run: |
           python -m json.tool docs/iran-all.json > /dev/null
+          python -m json.tool docs/iran-report.json > /dev/null
 
           test -s docs/iran-all.json
           test -s docs/iran-all-plain.txt
           test -s docs/iran-v2ray.txt
           test -s docs/iran-v2ray-plain.txt
+          test -s docs/iran-report.json
 
+      - name: Validate Base64 subscription
+        run: |
           python - <<'PY'
           import base64
           from pathlib import Path
@@ -46,7 +50,7 @@ jobs:
           encoded = Path(
               "docs/iran-v2ray.txt"
           ).read_text(
-              encoding="ascii"
+              encoding="utf-8"
           ).strip()
 
           decoded = base64.b64decode(
@@ -55,42 +59,104 @@ jobs:
           ).decode("utf-8")
 
           links = [
-              line
+              line.strip()
               for line in decoded.splitlines()
               if line.strip()
           ]
 
           if not links:
               raise RuntimeError(
-                  "v2ray subscription contains no links"
+                  "The generated subscription is empty"
               )
+
+          allowed_prefixes = (
+              "http://",
+              "socks4://",
+              "socks4a://",
+              "socks5://",
+          )
 
           invalid = [
               link
               for link in links
               if not link.startswith(
-                  (
-                      "socks4://",
-                      "socks4a://",
-                      "socks5://",
-                  )
+                  allowed_prefixes
               )
           ]
 
           if invalid:
               raise RuntimeError(
-                  f"Invalid v2ray links: {invalid[:3]}"
+                  "Invalid subscription links: "
+                  + repr(invalid[:5])
               )
 
           print(
               f"Validated {len(links)} "
-              "v2rayN SOCKS links"
+              "subscription links"
+          )
+          PY
+
+      - name: Verify output count
+        run: |
+          python - <<'PY'
+          import base64
+          import json
+          from pathlib import Path
+
+          report = json.loads(
+              Path(
+                  "docs/iran-report.json"
+              ).read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          encoded = Path(
+              "docs/iran-v2ray.txt"
+          ).read_text(
+              encoding="utf-8"
+          ).strip()
+
+          decoded = base64.b64decode(
+              encoded
+          ).decode("utf-8")
+
+          actual_links = len(
+              [
+                  line
+                  for line in decoded.splitlines()
+                  if line.strip()
+              ]
+          )
+
+          expected_links = report[
+              "published_unique_proxies"
+          ]
+
+          if actual_links != expected_links:
+              raise RuntimeError(
+                  f"Expected {expected_links} links, "
+                  f"but generated {actual_links}"
+              )
+
+          print(
+              f"Output count confirmed: "
+              f"{actual_links}"
+          )
+
+          print(
+              json.dumps(
+                  report,
+                  indent=2,
+              )
           )
           PY
 
       - name: Commit updated feeds
         run: |
-          git config user.name "github-actions[bot]"
+          git config user.name \
+            "github-actions[bot]"
+
           git config user.email \
             "41898282+github-actions[bot]@users.noreply.github.com"
 
@@ -98,12 +164,15 @@ jobs:
             docs/iran-all.json \
             docs/iran-all-plain.txt \
             docs/iran-v2ray.txt \
-            docs/iran-v2ray-plain.txt
+            docs/iran-v2ray-plain.txt \
+            docs/iran-report.json
 
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
           fi
 
-          git commit -m "Update Iranian proxy feeds"
+          git commit \
+            -m "Update Iranian proxy feeds"
+
           git push
