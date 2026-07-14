@@ -4,17 +4,23 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "17,47 * * * *"
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "docs/**"
   pull_request:
     paths:
       - "convert.py"
       - "prepare_history.py"
+      - "tests/**"
       - ".github/workflows/update.yml"
 
 permissions:
   contents: write
 
 concurrency:
-  group: iran-proxy-feed-update-${{ github.ref }}
+  group: iran-proxy-feed-update-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'main' }}
   cancel-in-progress: true
 
 jobs:
@@ -36,21 +42,20 @@ jobs:
           python -m py_compile convert.py
           python -m py_compile prepare_history.py
 
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+
       - name: Confirm curl SOCKS support
         run: curl --version
-
-      - name: Normalize legacy history
-        run: python prepare_history.py
 
       - name: Generate and test feeds
         run: python convert.py
 
       - name: Validate JSON files
         run: |
-          python -m json.tool docs/iran-all.json > /dev/null
-          python -m json.tool docs/iran-report.json > /dev/null
-          python -m json.tool docs/iran-test-results.json > /dev/null
-          python -m json.tool docs/proxy-history.json > /dev/null
+          for file in docs/*.json; do
+            python -m json.tool "$file" > /dev/null
+          done
 
       - name: Validate subscriptions
         run: |
@@ -139,7 +144,7 @@ jobs:
           PY
 
       - name: Commit generated files
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
