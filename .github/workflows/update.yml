@@ -27,20 +27,35 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Generate and test proxy feeds
-        run: python convert.py
+      - name: Confirm curl availability
+        run: |
+          curl --version
 
-      - name: Validate generated JSON files
+      - name: Generate and test proxy feeds
+        run: |
+          python convert.py
+
+      - name: Validate JSON files
         run: |
           python -m json.tool docs/iran-all.json > /dev/null
           python -m json.tool docs/iran-report.json > /dev/null
+          python -m json.tool docs/iran-test-results.json > /dev/null
           python -m json.tool docs/proxy-history.json > /dev/null
 
-      - name: Validate generated subscription
+      - name: Validate report and subscription
         run: |
           python - <<'PY'
           import base64
+          import json
           from pathlib import Path
+
+          report = json.loads(
+              Path(
+                  "docs/iran-report.json"
+              ).read_text(
+                  encoding="utf-8"
+              )
+          )
 
           encoded = Path(
               "docs/iran-v2ray.txt"
@@ -48,10 +63,13 @@ jobs:
               encoding="ascii"
           ).strip()
 
-          decoded = base64.b64decode(
-              encoded,
-              validate=True,
-          ).decode("utf-8")
+          if encoded:
+              decoded = base64.b64decode(
+                  encoded,
+                  validate=True,
+              ).decode("utf-8")
+          else:
+              decoded = ""
 
           links = [
               line.strip()
@@ -59,12 +77,7 @@ jobs:
               if line.strip()
           ]
 
-          if not links:
-              raise RuntimeError(
-                  "Generated subscription is empty"
-              )
-
-          allowed = (
+          allowed_prefixes = (
               "http://",
               "socks4://",
               "socks5://",
@@ -73,16 +86,41 @@ jobs:
           invalid = [
               link
               for link in links
-              if not link.startswith(allowed)
+              if not link.startswith(
+                  allowed_prefixes
+              )
           ]
 
           if invalid:
               raise RuntimeError(
-                  f"Invalid links: {invalid[:5]}"
+                  "Invalid subscription links: "
+                  + repr(invalid[:5])
+              )
+
+          expected = report[
+              "published_proxies"
+          ]
+
+          if len(links) != expected:
+              raise RuntimeError(
+                  f"Report says {expected} proxies, "
+                  f"but subscription contains "
+                  f"{len(links)} links"
               )
 
           print(
-              f"Validated {len(links)} links"
+              f"Validated {len(links)} "
+              "published proxy links"
+          )
+
+          print(
+              f"Working now: "
+              f"{report['working_now_passed_both_urls']}"
+          )
+
+          print(
+              f"Retained from history: "
+              f"{report['retained_from_previous_success']}"
           )
           PY
 
@@ -100,6 +138,7 @@ jobs:
             docs/iran-v2ray.txt \
             docs/iran-v2ray-plain.txt \
             docs/iran-report.json \
+            docs/iran-test-results.json \
             docs/proxy-history.json
 
           if git diff --cached --quiet; then
@@ -108,6 +147,6 @@ jobs:
           fi
 
           git commit \
-            -m "Update and test Iranian proxy feeds"
+            -m "Test and update Iranian proxy feeds"
 
           git push
