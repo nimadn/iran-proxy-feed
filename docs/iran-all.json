@@ -17,135 +17,107 @@
       "tag": "PROXY",
       "outbounds": [
         "AUTO",
-        "IR-HTTP-001-Vaḩīdīyeh",
+        "IR-SOCKS4-001-Tehran",
         "IR-HTTP-002-Tehran",
-        "IR-HTTP-003-Mashhad",
-        "IR-SOCKS4-004-Tehran",
+        "IR-HTTP-003-Tehran",
+        "IR-HTTP-004-Tehran",
         "IR-HTTP-005-Tehran",
-        "IR-SOCKS4-006-Isfahan",
-        "IR-HTTP-007-Babol",
-        "IR-HTTP-008-Isfahan",
+        "IR-HTTP-006-Tehran",
+        "IR-HTTP-007-Tehran",
+        "IR-HTTP-008-Tehran",
         "IR-HTTP-009-Tehran",
-        "IR-HTTP-010-Qeshm",
-        "IR-HTTP-011-Mashhad",
-        "IR-HTTP-012-Tehran",
-        "IR-HTTP-013-Tehran",
-        "IR-HTTP-014-Tehran",
+        "IR-HTTP-010-Babol",
+        "IR-HTTP-011-Isfahan",
         "DIRECT"
       ],
-      "default": "AUTO",
-      "interrupt_exist_connections": true
+      "default": "AUTO"
     },
     {
       "type": "urltest",
       "tag": "AUTO",
       "outbounds": [
-        "IR-HTTP-001-Vaḩīdīyeh",
+        "IR-SOCKS4-001-Tehran",
         "IR-HTTP-002-Tehran",
-        "IR-HTTP-003-Mashhad",
-        "IR-SOCKS4-004-Tehran",
+        "IR-HTTP-003-Tehran",
+        "IR-HTTP-004-Tehran",
         "IR-HTTP-005-Tehran",
-        "IR-SOCKS4-006-Isfahan",
-        "IR-HTTP-007-Babol",
-        "IR-HTTP-008-Isfahan",
+        "IR-HTTP-006-Tehran",
+        "IR-HTTP-007-Tehran",
+        "IR-HTTP-008-Tehran",
         "IR-HTTP-009-Tehran",
-        "IR-HTTP-010-Qeshm",
-        "IR-HTTP-011-Mashhad",
-        "IR-HTTP-012-Tehran",
-        "IR-HTTP-013-Tehran",
-        "IR-HTTP-014-Tehran"
+        "IR-HTTP-010-Babol",
+        "IR-HTTP-011-Isfahan"
       ],
       "url": "https://www.gstatic.com/generate_204",
-      "interval": "5m",
-      "tolerance": 200,
-      "interrupt_exist_connections": true
+      "interval": "10m",
+      "tolerance": 200
     },
     {
-      "type": "http",
-      "tag": "IR-HTTP-001-Vaḩīdīyeh",
-      "server": "5.200.72.62",
-      "server_port": 3128
+      "type": "socks",
+      "tag": "IR-SOCKS4-001-Tehran",
+      "server": "81.12.54.13",
+      "server_port": 9080,
+      "version": "4",
+      "network": "tcp"
     },
     {
       "type": "http",
       "tag": "IR-HTTP-002-Tehran",
+      "server": "46.209.30.11",
+      "server_port": 8080
+    },
+    {
+      "type": "http",
+      "tag": "IR-HTTP-003-Tehran",
+      "server": "185.212.195.34",
+      "server_port": 8085
+    },
+    {
+      "type": "http",
+      "tag": "IR-HTTP-004-Tehran",
       "server": "5.202.52.103",
       "server_port": 6220
     },
     {
       "type": "http",
-      "tag": "IR-HTTP-003-Mashhad",
-      "server": "2.180.22.218",
-      "server_port": 80
-    },
-    {
-      "type": "socks",
-      "tag": "IR-SOCKS4-004-Tehran",
-      "server": "87.236.212.108",
-      "server_port": 10808,
-      "version": "4",
-      "network": "tcp"
+      "tag": "IR-HTTP-005-Tehran",
+      "server": "5.202.171.181",
+      "server_port": 9050
     },
     {
       "type": "http",
-      "tag": "IR-HTTP-005-Tehran",
-      "server": "178.252.171.226",
+      "tag": "IR-HTTP-006-Tehran",
+      "server": "84.241.29.213",
       "server_port": 8080
     },
     {
-      "type": "socks",
-      "tag": "IR-SOCKS4-006-Isfahan",
-      "server": "194.32.213.175",
-      "server_port": 10808,
-      "version": "4",
-      "network": "tcp"
+      "type": "http",
+      "tag": "IR-HTTP-007-Tehran",
+      "server": "213.207.198.254",
+      "server_port": 8080
     },
     {
       "type": "http",
-      "tag": "IR-HTTP-007-Babol",
+      "tag": "IR-HTTP-008-Tehran",
+      "server": "37.191.95.202",
+      "server_port": 80
+    },
+    {
+      "type": "http",
+      "tag": "IR-HTTP-009-Tehran",
+      "server": "185.109.244.69",
+      "server_port": 8080
+    },
+    {
+      "type": "http",
+      "tag": "IR-HTTP-010-Babol",
       "server": "2.181.34.250",
       "server_port": 8080
     },
     {
       "type": "http",
-      "tag": "IR-HTTP-008-Isfahan",
-      "server": "91.199.27.249",
-      "server_port": 8080
-    },
-    {
-      "type": "http",
-      "tag": "IR-HTTP-009-Tehran",
-      "server": "87.236.212.108",
-      "server_port": 10808
-    },
-    {
-      "type": "http",
-      "tag": "IR-HTTP-010-Qeshm",
-      "server": "185.145.185.218",
-      "server_port": 8080
-    },
-    {
-      "type": "http",
-      "tag": "IR-HTTP-011-Mashhad",
-      "server": "31.25.92.114",
-      "server_port": 8080
-    },
-    {
-      "type": "http",
-      "tag": "IR-HTTP-012-Tehran",
-      "server": "46.209.15.187",
-      "server_port": 8080
-    },
-    {
-      "type": "http",
-      "tag": "IR-HTTP-013-Tehran",
-      "server": "85.9.87.26",
-      "server_port": 8080
-    },
-    {
-      "type": "http",
-      "tag": "IR-HTTP-014-Tehran",
-      "server": "46.209.207.148",
+      "tag": "IR-HTTP-011-Isfahan",
+      "server": "193.178.203.140",
       "server_port": 8080
     },
     {
