@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
+import base64
 import ipaddress
 import json
 import re
+import urllib.parse
 import urllib.request
 from pathlib import Path
 from typing import Any
@@ -13,8 +15,11 @@ SOURCE_URL = (
     "free-proxy-list@main/proxies/countries/ir/data.txt"
 )
 
-OUTPUT_FILE = Path("docs/iran-all.json")
-PLAIN_FILE = Path("docs/iran-all-plain.txt")
+SINGBOX_OUTPUT = Path("docs/iran-all.json")
+PLAIN_OUTPUT = Path("docs/iran-all-plain.txt")
+
+V2RAY_OUTPUT = Path("docs/iran-v2ray.txt")
+V2RAY_PLAIN_OUTPUT = Path("docs/iran-v2ray-plain.txt")
 
 SUPPORTED_SCHEMES = {
     "http",
@@ -29,7 +34,7 @@ def download_source() -> str:
     request = urllib.request.Request(
         SOURCE_URL,
         headers={
-            "User-Agent": "IranProxyFeed/5.0",
+            "User-Agent": "IranProxyFeed/6.0",
             "Accept": "text/plain",
         },
     )
@@ -42,10 +47,6 @@ def download_source() -> str:
 
 
 def extract_proxy_values(text: str) -> list[str]:
-    """
-    Supports both newline-separated and whitespace-separated sources.
-    """
-
     pattern = re.compile(
         r"(?:https?|socks4a?|socks5)://"
         r"(?:\[[0-9a-fA-F:]+\]|[^ \t\r\n:/#]+)"
@@ -69,7 +70,6 @@ def normalize_host(host: str) -> str | None:
     except ValueError:
         pass
 
-    # Permit a conventional hostname if one appears in the source.
     if (
         len(value) <= 253
         and " " not in value
@@ -80,9 +80,7 @@ def normalize_host(host: str) -> str | None:
     return None
 
 
-def parse_proxy(
-    value: str,
-) -> dict[str, Any] | None:
+def parse_proxy(value: str) -> dict[str, Any] | None:
     try:
         parsed = urlsplit(value)
     except ValueError:
@@ -113,6 +111,18 @@ def parse_proxy(
     }
 
 
+def format_host(host: str) -> str:
+    try:
+        address = ipaddress.ip_address(host)
+
+        if address.version == 6:
+            return f"[{host}]"
+    except ValueError:
+        pass
+
+    return host
+
+
 def make_outbound(
     proxy: dict[str, Any],
     index: int,
@@ -124,9 +134,6 @@ def make_outbound(
     tag = f"IR-{scheme.upper()}-{index:03d}"
 
     if scheme in {"http", "https"}:
-        # ProxyScrape's HTTPS entries generally identify HTTP proxies
-        # capable of HTTPS CONNECT, not necessarily TLS-wrapped proxy
-        # servers. Therefore both are represented as HTTP outbounds.
         outbound = {
             "type": "http",
             "tag": tag,
@@ -166,20 +173,21 @@ def make_outbound(
     return tag, outbound
 
 
-def build_config(
+def build_singbox_config(
     proxies: list[dict[str, Any]],
 ) -> dict[str, Any]:
     tags: list[str] = []
-    outbounds: list[dict[str, Any]] = []
+    proxy_outbounds: list[dict[str, Any]] = []
 
     for index, proxy in enumerate(proxies, start=1):
         tag, outbound = make_outbound(proxy, index)
         tags.append(tag)
-        outbounds.append(outbound)
+        proxy_outbounds.append(outbound)
 
-    selector_members = ["AUTO", *tags, "DIRECT"]
+    if not tags:
+        raise RuntimeError("No proxies found in source")
 
-    config: dict[str, Any] = {
+    return {
         "log": {
             "level": "info",
             "timestamp": True,
@@ -196,7 +204,11 @@ def build_config(
             {
                 "type": "selector",
                 "tag": "PROXY",
-                "outbounds": selector_members,
+                "outbounds": [
+                    "AUTO",
+                    *tags,
+                    "DIRECT",
+                ],
                 "default": "AUTO",
                 "interrupt_exist_connections": True,
             },
@@ -209,7 +221,7 @@ def build_config(
                 "tolerance": 200,
                 "interrupt_exist_connections": True,
             },
-            *outbounds,
+            *proxy_outbounds,
             {
                 "type": "direct",
                 "tag": "DIRECT",
@@ -221,7 +233,64 @@ def build_config(
         },
     }
 
-    return config
+
+def build_v2ray_links(
+    proxies: list[dict[str, Any]],
+) -> list[str]:
+    """
+    v2rayN subscription output.
+
+    HTTP entries are excluded because v2rayN's documented subscription
+    protocol list includes SOCKS but not HTTP proxy subscriptions.
+    """
+
+    links: list[str] = []
+
+    socks_proxies = [
+        proxy
+        for proxy in proxies
+        if proxy["scheme"] in {
+            "socks4",
+            "socks4a",
+            "socks5",
+        }
+    ]
+
+    for index, proxy in enumerate(socks_proxies, start=1):
+        scheme = proxy["scheme"]
+        host = format_host(proxy["host"])
+        port = proxy["port"]
+
+        name = urllib.parse.quote(
+            f"IR-{scheme.upper()}-{index:03d}",
+            safe="",
+        )
+
+        links.append(
+            f"{scheme}://{host}:{port}#{name}"
+        )
+
+    return links
+
+
+def write_v2ray_subscription(
+    links: list[str],
+) -> None:
+    plain_content = "\n".join(links)
+
+    encoded_content = base64.b64encode(
+        plain_content.encode("utf-8")
+    ).decode("ascii")
+
+    V2RAY_PLAIN_OUTPUT.write_text(
+        plain_content + ("\n" if plain_content else ""),
+        encoding="utf-8",
+    )
+
+    V2RAY_OUTPUT.write_text(
+        encoded_content,
+        encoding="ascii",
+    )
 
 
 def main() -> None:
@@ -257,14 +326,19 @@ def main() -> None:
         )
     )
 
-    config = build_config(proxies)
+    if not proxies:
+        raise RuntimeError(
+            "No valid proxies were found in the source"
+        )
 
-    OUTPUT_FILE.parent.mkdir(
+    SINGBOX_OUTPUT.parent.mkdir(
         parents=True,
         exist_ok=True,
     )
 
-    OUTPUT_FILE.write_text(
+    config = build_singbox_config(proxies)
+
+    SINGBOX_OUTPUT.write_text(
         json.dumps(
             config,
             indent=2,
@@ -275,16 +349,21 @@ def main() -> None:
     )
 
     plain_lines = [
-        f"{proxy['scheme']}://"
-        f"{proxy['host']}:{proxy['port']}"
+        (
+            f"{proxy['scheme']}://"
+            f"{format_host(proxy['host'])}:"
+            f"{proxy['port']}"
+        )
         for proxy in proxies
     ]
 
-    PLAIN_FILE.write_text(
-        "\n".join(plain_lines)
-        + ("\n" if plain_lines else ""),
+    PLAIN_OUTPUT.write_text(
+        "\n".join(plain_lines) + "\n",
         encoding="utf-8",
     )
+
+    v2ray_links = build_v2ray_links(proxies)
+    write_v2ray_subscription(v2ray_links)
 
     counts = {
         scheme: sum(
@@ -294,16 +373,12 @@ def main() -> None:
         for scheme in sorted(SUPPORTED_SCHEMES)
     }
 
-    print(f"Source entries found: {len(raw_values)}")
-    print(f"Unique valid proxies: {len(proxies)}")
+    print(f"Source entries: {len(raw_values)}")
+    print(f"Unique proxies: {len(proxies)}")
     print(f"Protocol counts: {counts}")
-    print(f"Config written to: {OUTPUT_FILE}")
-    print(f"Plain list written to: {PLAIN_FILE}")
-
-    if not proxies:
-        raise RuntimeError(
-            "No valid proxies were found in the source."
-        )
+    print(f"v2rayN SOCKS nodes: {len(v2ray_links)}")
+    print(f"Sing-box config: {SINGBOX_OUTPUT}")
+    print(f"v2rayN subscription: {V2RAY_OUTPUT}")
 
 
 if __name__ == "__main__":
