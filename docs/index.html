@@ -133,23 +133,6 @@
       overflow-wrap: anywhere;
     }
 
-    .happ-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 12px;
-      padding: 9px 14px;
-      border-radius: 999px;
-      background: var(--accent);
-      color: #ffffff;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .happ-link:hover,
-    .happ-link:focus-visible {
-      filter: brightness(1.08);
-    }
 
     .diagnostics li {
       margin-bottom: 12px;
@@ -191,151 +174,86 @@
   </header>
 
   <main>
-    <h2>Subscriptions</h2>
+    <h2>App-specific subscriptions</h2>
 
     <p>
-      Scan a QR code with Hiddify or another compatible client,
-      open the feed URL, or send it directly to HAPP.
+      Copy the URL for your application, or scan its QR code.
+      Each feed uses that application's supported protocols and
+      expected subscription format.
     </p>
 
-    <section class="subscription-grid" aria-label="Proxy subscriptions">
-    <article class="subscription-card">
-      <h3>Verified HTTP/SOCKS proxies</h3>
-      <p>Tested subscription</p>
-      <a class="qr-link" href="iran-verified-proxies.txt" aria-label="Open Verified HTTP/SOCKS proxies">
-        <img
-          class="qr-code"
-          src="qr/iran-verified-proxies.txt.svg"
-          alt="QR code for Verified HTTP/SOCKS proxies"
-          width="208"
-          height="208"
-          loading="lazy"
-        >
-      </a>
-      <p class="scan-label">Scan to import</p>
-      <a class="feed-link" href="iran-verified-proxies.txt">iran-verified-proxies.txt</a>
-      <a
-        class="happ-link"
-        href="happ://add/https://nimadn.github.io/iran-proxy-feed/iran-verified-proxies.txt"
-        aria-label="Open iran-verified-proxies.txt in HAPP"
-      >Open in HAPP</a>
-      <code>https://nimadn.github.io/iran-proxy-feed/iran-verified-proxies.txt</code>
-    </article>
+    <section class="subscription-grid" aria-label="Application subscriptions">
+      <article class="subscription-card">
+        <h3>Hiddify</h3>
+        <p>Plain URI list: VLESS, VMess, Trojan, Shadowsocks, Hysteria2 and TUIC</p>
+        <a class="qr-link" href="hiddify.txt" aria-label="Open Hiddify subscription">
+          <img
+            class="qr-code"
+            src="qr/hiddify.txt.svg"
+            alt="QR code for the Hiddify subscription"
+            width="208"
+            height="208"
+            loading="lazy"
+          >
+        </a>
+        <p class="scan-label">Scan or copy URL</p>
+        <a class="feed-link" href="hiddify.txt">hiddify.txt</a>
+        <code>https://nimadn.github.io/iran-proxy-feed/hiddify.txt</code>
+      </article>
 
-    <article class="subscription-card">
-      <h3>Verified HTTP/SOCKS — readable</h3>
-      <p>Plain-text subscription</p>
-      <a class="qr-link" href="iran-verified-proxies-plain.txt" aria-label="Open Verified HTTP/SOCKS — readable">
-        <img
-          class="qr-code"
-          src="qr/iran-verified-proxies-plain.txt.svg"
-          alt="QR code for Verified HTTP/SOCKS — readable"
-          width="208"
-          height="208"
-          loading="lazy"
-        >
-      </a>
-      <p class="scan-label">Scan to import</p>
-      <a class="feed-link" href="iran-verified-proxies-plain.txt">iran-verified-proxies-plain.txt</a>
-      <a
-        class="happ-link"
-        href="happ://add/https://nimadn.github.io/iran-proxy-feed/iran-verified-proxies-plain.txt"
-        aria-label="Open iran-verified-proxies-plain.txt in HAPP"
-      >Open in HAPP</a>
-      <code>https://nimadn.github.io/iran-proxy-feed/iran-verified-proxies-plain.txt</code>
-    </article>
+      <article class="subscription-card">
+        <h3>v2rayN</h3>
+        <p>Base64 URI list: VLESS, VMess, Trojan, Shadowsocks, Hysteria2, TUIC and SOCKS5</p>
+        <a class="qr-link" href="v2rayn.txt" aria-label="Open v2rayN subscription">
+          <img
+            class="qr-code"
+            src="qr/v2rayn.txt.svg"
+            alt="QR code for the v2rayN subscription"
+            width="208"
+            height="208"
+            loading="lazy"
+          >
+        </a>
+        <p class="scan-label">Scan or copy URL</p>
+        <a class="feed-link" href="v2rayn.txt">v2rayn.txt</a>
+        <code>https://nimadn.github.io/iran-proxy-feed/v2rayn.txt</code>
+      </article>
 
-    <article class="subscription-card">
-      <h3>OpenRay VLESS/VMess/Shadowsocks</h3>
-      <p>Unverified OpenRay subscription</p>
-      <a class="qr-link" href="iran-openray.txt" aria-label="Open OpenRay VLESS/VMess/Shadowsocks">
-        <img
-          class="qr-code"
-          src="qr/iran-openray.txt.svg"
-          alt="QR code for OpenRay VLESS/VMess/Shadowsocks"
-          width="208"
-          height="208"
-          loading="lazy"
-        >
-      </a>
-      <p class="scan-label">Scan to import</p>
-      <a class="feed-link" href="iran-openray.txt">iran-openray.txt</a>
-      <a
-        class="happ-link"
-        href="happ://add/https://nimadn.github.io/iran-proxy-feed/iran-openray.txt"
-        aria-label="Open iran-openray.txt in HAPP"
-      >Open in HAPP</a>
-      <code>https://nimadn.github.io/iran-proxy-feed/iran-openray.txt</code>
-    </article>
+      <article class="subscription-card">
+        <h3>HAPP</h3>
+        <p>Plain URI list: VLESS, VMess, Trojan, Shadowsocks and SOCKS5 only</p>
+        <a class="qr-link" href="happ.txt" aria-label="Open HAPP subscription">
+          <img
+            class="qr-code"
+            src="qr/happ.txt.svg"
+            alt="QR code for the HAPP subscription"
+            width="208"
+            height="208"
+            loading="lazy"
+          >
+        </a>
+        <p class="scan-label">Scan or copy URL</p>
+        <a class="feed-link" href="happ.txt">happ.txt</a>
+        <code>https://nimadn.github.io/iran-proxy-feed/happ.txt</code>
+      </article>
 
-    <article class="subscription-card">
-      <h3>OpenRay — readable</h3>
-      <p>Plain-text OpenRay list</p>
-      <a class="qr-link" href="iran-openray-plain.txt" aria-label="Open OpenRay — readable">
-        <img
-          class="qr-code"
-          src="qr/iran-openray-plain.txt.svg"
-          alt="QR code for OpenRay — readable"
-          width="208"
-          height="208"
-          loading="lazy"
-        >
-      </a>
-      <p class="scan-label">Scan to import</p>
-      <a class="feed-link" href="iran-openray-plain.txt">iran-openray-plain.txt</a>
-      <a
-        class="happ-link"
-        href="happ://add/https://nimadn.github.io/iran-proxy-feed/iran-openray-plain.txt"
-        aria-label="Open iran-openray-plain.txt in HAPP"
-      >Open in HAPP</a>
-      <code>https://nimadn.github.io/iran-proxy-feed/iran-openray-plain.txt</code>
-    </article>
-
-    <article class="subscription-card">
-      <h3>Combined subscription</h3>
-      <p>Verified proxies plus OpenRay links</p>
-      <a class="qr-link" href="iran-combined.txt" aria-label="Open Combined subscription">
-        <img
-          class="qr-code"
-          src="qr/iran-combined.txt.svg"
-          alt="QR code for Combined subscription"
-          width="208"
-          height="208"
-          loading="lazy"
-        >
-      </a>
-      <p class="scan-label">Scan to import</p>
-      <a class="feed-link" href="iran-combined.txt">iran-combined.txt</a>
-      <a
-        class="happ-link"
-        href="happ://add/https://nimadn.github.io/iran-proxy-feed/iran-combined.txt"
-        aria-label="Open iran-combined.txt in HAPP"
-      >Open in HAPP</a>
-      <code>https://nimadn.github.io/iran-proxy-feed/iran-combined.txt</code>
-    </article>
-
-    <article class="subscription-card">
-      <h3>Combined — readable</h3>
-      <p>Plain-text combined list</p>
-      <a class="qr-link" href="iran-combined-plain.txt" aria-label="Open Combined — readable">
-        <img
-          class="qr-code"
-          src="qr/iran-combined-plain.txt.svg"
-          alt="QR code for Combined — readable"
-          width="208"
-          height="208"
-          loading="lazy"
-        >
-      </a>
-      <p class="scan-label">Scan to import</p>
-      <a class="feed-link" href="iran-combined-plain.txt">iran-combined-plain.txt</a>
-      <a
-        class="happ-link"
-        href="happ://add/https://nimadn.github.io/iran-proxy-feed/iran-combined-plain.txt"
-        aria-label="Open iran-combined-plain.txt in HAPP"
-      >Open in HAPP</a>
-      <code>https://nimadn.github.io/iran-proxy-feed/iran-combined-plain.txt</code>
-    </article>
+      <article class="subscription-card">
+        <h3>sing-box</h3>
+        <p>Native JSON configuration: verified HTTP, SOCKS4 and SOCKS5 proxies</p>
+        <a class="qr-link" href="sing-box.json" aria-label="Open sing-box configuration">
+          <img
+            class="qr-code"
+            src="qr/sing-box.json.svg"
+            alt="QR code for the sing-box configuration"
+            width="208"
+            height="208"
+            loading="lazy"
+          >
+        </a>
+        <p class="scan-label">Scan or copy URL</p>
+        <a class="feed-link" href="sing-box.json">sing-box.json</a>
+        <code>https://nimadn.github.io/iran-proxy-feed/sing-box.json</code>
+      </article>
     </section>
 
     <section class="diagnostics">
