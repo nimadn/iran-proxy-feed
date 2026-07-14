@@ -7,6 +7,7 @@ on:
   pull_request:
     paths:
       - "convert.py"
+      - "prepare_history.py"
       - ".github/workflows/update.yml"
 
 permissions:
@@ -31,10 +32,15 @@ jobs:
           python-version: "3.12"
 
       - name: Check Python syntax
-        run: python -m py_compile convert.py
+        run: |
+          python -m py_compile convert.py
+          python -m py_compile prepare_history.py
 
       - name: Confirm curl SOCKS support
         run: curl --version
+
+      - name: Normalize legacy history
+        run: python prepare_history.py
 
       - name: Generate and test feeds
         run: python convert.py
