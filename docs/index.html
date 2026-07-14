@@ -8,105 +8,153 @@
     content="width=device-width, initial-scale=1"
   >
 
-  <title>Iran Proxy Feed</title>
+  <title>Iran Proxy Feeds</title>
 
   <style>
     body {
-      max-width: 850px;
+      max-width: 900px;
       margin: 40px auto;
       padding: 0 20px;
       font-family: system-ui, sans-serif;
       line-height: 1.6;
     }
 
+    li {
+      margin-bottom: 16px;
+    }
+
     code {
       overflow-wrap: anywhere;
     }
 
-    li {
-      margin-bottom: 14px;
-    }
-
     .warning {
       padding: 14px;
-      border: 1px solid #999;
+      border: 1px solid #888;
       border-radius: 8px;
     }
   </style>
 </head>
 
 <body>
-  <h1>Iran Proxy Feed</h1>
+  <h1>Iran Proxy Feeds</h1>
 
   <p>
-    Proxies are imported from ProxyScrape when either
-    <code>country = Iran</code> or
-    <code>country_code = IR</code>.
+    Conventional HTTP, SOCKS4 and SOCKS5 proxies are
+    collected from several sources, deduplicated and tested.
   </p>
 
   <p>
-    A proxy is published only when it successfully:
+    A conventional proxy is published only after:
   </p>
 
   <ol>
-    <li>Accepts a TCP connection.</li>
-    <li>Opens ISNA through the proxy.</li>
-    <li>Opens Google's generate_204 endpoint through the proxy.</li>
+    <li>Its TCP port opens.</li>
+    <li>ISNA opens through that proxy.</li>
+    <li>Google generate_204 opens through that proxy.</li>
   </ol>
 
   <p>
-    A previously successful proxy is retained for up to 30 days
-    after its latest successful test.
+    Previously verified proxies remain available for up to
+    30 days after their most recent successful test.
   </p>
+
+  <h2>Subscriptions</h2>
 
   <ul>
     <li>
-      <strong>Full sing-box configuration</strong><br>
-      <a href="iran-all.json">
-        iran-all.json
+      <strong>
+        Verified HTTP/SOCKS proxies
+      </strong><br>
+
+      <a href="iran-verified-proxies.txt">
+        iran-verified-proxies.txt
       </a>
     </li>
 
     <li>
-      <strong>Base64 mixed subscription</strong><br>
-      <a href="iran-v2ray.txt">
-        iran-v2ray.txt
+      <strong>
+        Verified HTTP/SOCKS proxies — readable
+      </strong><br>
+
+      <a href="iran-verified-proxies-plain.txt">
+        iran-verified-proxies-plain.txt
       </a>
     </li>
 
     <li>
-      <strong>Readable subscription</strong><br>
-      <a href="iran-v2ray-plain.txt">
-        iran-v2ray-plain.txt
+      <strong>
+        OpenRay VLESS/VMess/Shadowsocks
+      </strong><br>
+
+      <a href="iran-openray.txt">
+        iran-openray.txt
       </a>
     </li>
 
     <li>
-      <strong>Detailed test evidence</strong><br>
-      <a href="iran-test-results.json">
-        iran-test-results.json
+      <strong>
+        OpenRay — readable
+      </strong><br>
+
+      <a href="iran-openray-plain.txt">
+        iran-openray-plain.txt
       </a>
     </li>
 
     <li>
-      <strong>Generation report</strong><br>
+      <strong>
+        Combined subscription
+      </strong><br>
+
+      <a href="iran-combined.txt">
+        iran-combined.txt
+      </a>
+    </li>
+
+    <li>
+      <strong>
+        Combined subscription — readable
+      </strong><br>
+
+      <a href="iran-combined-plain.txt">
+        iran-combined-plain.txt
+      </a>
+    </li>
+  </ul>
+
+  <h2>Diagnostics</h2>
+
+  <ul>
+    <li>
       <a href="iran-report.json">
-        iran-report.json
+        Generation report
       </a>
     </li>
 
     <li>
-      <strong>Persistent 30-day history</strong><br>
+      <a href="iran-test-results.json">
+        Detailed proxy test results
+      </a>
+    </li>
+
+    <li>
       <a href="proxy-history.json">
-        proxy-history.json
+        Persistent 30-day proxy history
+      </a>
+    </li>
+
+    <li>
+      <a href="iran-all.json">
+        Verified sing-box configuration
       </a>
     </li>
   </ul>
 
   <div class="warning">
-    Public proxies may inspect, modify, or log traffic.
-    Do not use these proxies for banking, email, passwords,
-    private accounts, or sensitive data.
+    OpenRay links are collected and deduplicated but are not
+    verified by the HTTP/SOCKS curl test. Public proxies and
+    public VPN nodes may inspect, modify or log traffic. Do not
+    use them for passwords, banking, email or sensitive data.
   </div>
 </body>
 </html>
