@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1"
   >
+
   <title>Iran Proxy Feed</title>
 
   <style>
@@ -22,7 +24,13 @@
     }
 
     li {
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+    }
+
+    .warning {
+      padding: 14px;
+      border: 1px solid #999;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -31,45 +39,74 @@
   <h1>Iran Proxy Feed</h1>
 
   <p>
-    Automatically generated from ProxyScrape's global JSON feed.
-    Entries are included when either
+    Proxies are imported from ProxyScrape when either
     <code>country = Iran</code> or
     <code>country_code = IR</code>.
   </p>
 
+  <p>
+    A proxy is published only when it successfully:
+  </p>
+
+  <ol>
+    <li>Accepts a TCP connection.</li>
+    <li>Opens ISNA through the proxy.</li>
+    <li>Opens Google's generate_204 endpoint through the proxy.</li>
+  </ol>
+
+  <p>
+    A previously successful proxy is retained for up to 30 days
+    after its latest successful test.
+  </p>
+
   <ul>
     <li>
-      <strong>Full sing-box configuration:</strong><br>
+      <strong>Full sing-box configuration</strong><br>
       <a href="iran-all.json">
         iran-all.json
       </a>
     </li>
 
     <li>
-      <strong>Base64 mixed subscription:</strong><br>
+      <strong>Base64 mixed subscription</strong><br>
       <a href="iran-v2ray.txt">
         iran-v2ray.txt
       </a>
     </li>
 
     <li>
-      <strong>Readable mixed subscription:</strong><br>
+      <strong>Readable subscription</strong><br>
       <a href="iran-v2ray-plain.txt">
         iran-v2ray-plain.txt
       </a>
     </li>
 
     <li>
-      <strong>Generation report:</strong><br>
+      <strong>Detailed test evidence</strong><br>
+      <a href="iran-test-results.json">
+        iran-test-results.json
+      </a>
+    </li>
+
+    <li>
+      <strong>Generation report</strong><br>
       <a href="iran-report.json">
         iran-report.json
       </a>
     </li>
+
+    <li>
+      <strong>Persistent 30-day history</strong><br>
+      <a href="proxy-history.json">
+        proxy-history.json
+      </a>
+    </li>
   </ul>
 
-  <p>
-    Public proxies may be unavailable, unsafe, or incorrectly
-    geolocated. Do not use them for sensitive accounts or data.
-  </p>
+  <div class="warning">
+    Public proxies may inspect, modify, or log traffic.
+    Do not use these proxies for banking, email, passwords,
+    private accounts, or sensitive data.
+  </div>
 </body>
 </html>
