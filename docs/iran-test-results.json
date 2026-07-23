@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-23T19:47:58+00:00",
+  "generated_at": "2026-07-23T21:30:05+00:00",
   "verification_rule": "TCP, ISNA and Google must all pass.",
   "records": [
     {
@@ -9,16 +9,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://109.201.13.186:8080",
-        "tested_at": "2026-07-23T19:47:59+00:00",
+        "tested_at": "2026-07-23T21:30:06+00:00",
         "tcp": {
           "success": false,
           "error": "[Errno 111] Connection refused"
@@ -34,39 +34,24 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-18T16:15:02+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-22T18:48:49+00:00",
       "success_count": 5,
-      "failure_count": 57,
+      "failure_count": 58,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://109.230.83.178:5060",
-        "tested_at": "2026-07-23T19:48:03+00:00",
+        "tested_at": "2026-07-23T21:30:09+00:00",
         "tcp": {
           "success": true,
-          "seconds": 4.288
+          "seconds": 3.288
         },
         "url_tests": [
           {
             "name": "ISNA",
             "url": "https://www.isna.ir/",
-            "success": true,
-            "proxy_argument": "http://109.230.83.178:5060",
-            "curl_returncode": 0,
-            "http_code": 200,
-            "http_status": 200,
-            "measured_seconds": 6.735,
-            "response_time": 6.735,
-            "remote_ip": "109.230.83.178",
-            "effective_url": "https://www.isna.ir/",
-            "stderr": "",
-            "error": ""
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
             "success": false,
             "proxy_argument": "http://109.230.83.178:5060",
             "curl_returncode": 28,
@@ -78,7 +63,22 @@
             "effective_url": "",
             "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
             "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002819||https://www.gstatic.com/generate_204"
+            "raw_output": "000|15.002327||https://www.isna.ir/"
+          },
+          {
+            "name": "Google",
+            "url": "https://www.gstatic.com/generate_204",
+            "success": true,
+            "proxy_argument": "http://109.230.83.178:5060",
+            "curl_returncode": 0,
+            "http_code": 204,
+            "http_status": 204,
+            "measured_seconds": 8.618,
+            "response_time": 8.618,
+            "remote_ip": "109.230.83.178",
+            "effective_url": "https://www.gstatic.com/generate_204",
+            "stderr": "",
+            "error": ""
           }
         ]
       }
@@ -89,7 +89,7 @@
         "proxyscrape",
         "databay"
       ],
-      "currently_in_source": true,
+      "currently_in_source": false,
       "first_seen": "2026-07-14T20:32:36+00:00",
       "last_seen_in_source": "2026-07-23T19:47:58+00:00",
       "last_tested": "2026-07-23T19:47:58+00:00",
@@ -97,15 +97,15 @@
       "success_count": 3,
       "failure_count": 89,
       "test_result": {
-        "working": false,
         "passed_all_tests": false,
         "proxy": "http://109.230.89.126:3128",
-        "tested_at": "2026-07-23T19:48:04+00:00",
         "tcp": {
-          "success": false,
-          "error": "timed out"
+          "error": "timed out",
+          "success": false
         },
-        "url_tests": []
+        "tested_at": "2026-07-23T19:48:04+00:00",
+        "url_tests": [],
+        "working": false
       }
     },
     {
@@ -116,16 +116,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T04:58:32+00:00",
       "success_count": 12,
-      "failure_count": 125,
+      "failure_count": 126,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://109.238.181.53:8083",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:11+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -140,19 +140,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://128.140.113.110:1080",
-        "tested_at": "2026-07-23T19:47:59+00:00",
+        "tested_at": "2026-07-23T21:30:06+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.098
+          "seconds": 0.093
         },
         "url_tests": [
           {
@@ -169,7 +169,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 403",
             "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.197640|128.140.113.110|https://www.isna.ir/"
+            "raw_output": "000|0.202500|128.140.113.110|https://www.isna.ir/"
           },
           {
             "name": "Google",
@@ -185,7 +185,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 403",
             "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.194342|128.140.113.110|https://www.gstatic.com/generate_204"
+            "raw_output": "000|0.191363|128.140.113.110|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -197,19 +197,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://128.140.113.110:3128",
-        "tested_at": "2026-07-23T19:47:59+00:00",
+        "tested_at": "2026-07-23T21:30:06+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.098
+          "seconds": 0.101
         },
         "url_tests": [
           {
@@ -226,7 +226,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 403",
             "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.201120|128.140.113.110|https://www.isna.ir/"
+            "raw_output": "000|0.194815|128.140.113.110|https://www.isna.ir/"
           },
           {
             "name": "Google",
@@ -242,7 +242,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 403",
             "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.194930|128.140.113.110|https://www.gstatic.com/generate_204"
+            "raw_output": "000|0.185570|128.140.113.110|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -254,36 +254,35 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://128.140.113.110:4145",
-        "tested_at": "2026-07-23T19:47:59+00:00",
+        "tested_at": "2026-07-23T21:30:06+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.097
+          "seconds": 0.093
         },
         "url_tests": [
           {
             "name": "ISNA",
             "url": "https://www.isna.ir/",
-            "success": false,
+            "success": true,
             "proxy_argument": "http://128.140.113.110:4145",
-            "curl_returncode": 56,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (56) CONNECT tunnel failed, response 403",
-            "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.201387|128.140.113.110|https://www.isna.ir/"
+            "curl_returncode": 0,
+            "http_code": 200,
+            "http_status": 200,
+            "measured_seconds": 6.98,
+            "response_time": 6.98,
+            "remote_ip": "128.140.113.110",
+            "effective_url": "https://www.isna.ir/",
+            "stderr": "",
+            "error": ""
           },
           {
             "name": "Google",
@@ -299,7 +298,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 403",
             "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.190888|128.140.113.110|https://www.gstatic.com/generate_204"
+            "raw_output": "000|0.200245|128.140.113.110|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -311,19 +310,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://128.140.113.110:5153",
-        "tested_at": "2026-07-23T19:47:59+00:00",
+        "tested_at": "2026-07-23T21:30:06+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.1
+          "seconds": 0.099
         },
         "url_tests": [
           {
@@ -340,7 +339,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 403",
             "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.196981|128.140.113.110|https://www.isna.ir/"
+            "raw_output": "000|0.187383|128.140.113.110|https://www.isna.ir/"
           },
           {
             "name": "Google",
@@ -356,7 +355,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 403",
             "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.195143|128.140.113.110|https://www.gstatic.com/generate_204"
+            "raw_output": "000|0.190858|128.140.113.110|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -368,19 +367,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://128.140.113.110:5678",
-        "tested_at": "2026-07-23T19:47:59+00:00",
+        "tested_at": "2026-07-23T21:30:06+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.095
+          "seconds": 0.1
         },
         "url_tests": [
           {
@@ -397,7 +396,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 403",
             "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.203871|128.140.113.110|https://www.isna.ir/"
+            "raw_output": "000|0.185834|128.140.113.110|https://www.isna.ir/"
           },
           {
             "name": "Google",
@@ -413,7 +412,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 403",
             "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.194994|128.140.113.110|https://www.gstatic.com/generate_204"
+            "raw_output": "000|0.185364|128.140.113.110|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -425,19 +424,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://128.140.113.110:8080",
-        "tested_at": "2026-07-23T19:47:59+00:00",
+        "tested_at": "2026-07-23T21:30:06+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.1
+          "seconds": 0.101
         },
         "url_tests": [
           {
@@ -454,7 +453,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 403",
             "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.204340|128.140.113.110|https://www.isna.ir/"
+            "raw_output": "000|0.186592|128.140.113.110|https://www.isna.ir/"
           },
           {
             "name": "Google",
@@ -470,7 +469,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 403",
             "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.195372|128.140.113.110|https://www.gstatic.com/generate_204"
+            "raw_output": "000|0.193745|128.140.113.110|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -482,35 +481,36 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://128.140.113.110:8081",
-        "tested_at": "2026-07-23T19:47:59+00:00",
+        "tested_at": "2026-07-23T21:30:06+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.097
+          "seconds": 0.099
         },
         "url_tests": [
           {
             "name": "ISNA",
             "url": "https://www.isna.ir/",
-            "success": true,
+            "success": false,
             "proxy_argument": "http://128.140.113.110:8081",
-            "curl_returncode": 0,
-            "http_code": 200,
-            "http_status": 200,
-            "measured_seconds": 5.531,
-            "response_time": 5.531,
-            "remote_ip": "128.140.113.110",
-            "effective_url": "https://www.isna.ir/",
-            "stderr": "",
-            "error": ""
+            "curl_returncode": 56,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (56) CONNECT tunnel failed, response 403",
+            "error": "curl: (56) CONNECT tunnel failed, response 403",
+            "raw_output": "000|0.186331|128.140.113.110|https://www.isna.ir/"
           },
           {
             "name": "Google",
@@ -526,7 +526,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 403",
             "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.194046|128.140.113.110|https://www.gstatic.com/generate_204"
+            "raw_output": "000|0.191662|128.140.113.110|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -538,36 +538,35 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://128.140.113.110:999",
-        "tested_at": "2026-07-23T19:47:59+00:00",
+        "tested_at": "2026-07-23T21:30:06+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.099
+          "seconds": 0.092
         },
         "url_tests": [
           {
             "name": "ISNA",
             "url": "https://www.isna.ir/",
-            "success": false,
+            "success": true,
             "proxy_argument": "http://128.140.113.110:999",
-            "curl_returncode": 56,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (56) CONNECT tunnel failed, response 403",
-            "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.197259|128.140.113.110|https://www.isna.ir/"
+            "curl_returncode": 0,
+            "http_code": 200,
+            "http_status": 200,
+            "measured_seconds": 5.823,
+            "response_time": 5.823,
+            "remote_ip": "128.140.113.110",
+            "effective_url": "https://www.isna.ir/",
+            "stderr": "",
+            "error": ""
           },
           {
             "name": "Google",
@@ -583,7 +582,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 403",
             "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.195098|128.140.113.110|https://www.gstatic.com/generate_204"
+            "raw_output": "000|0.186360|128.140.113.110|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -596,54 +595,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-23T19:47:58+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 1,
+      "failure_count": 2,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://151.239.44.44:8080",
-        "tested_at": "2026-07-23T19:48:37+00:00",
+        "tested_at": "2026-07-23T21:30:11+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 2.492
+          "success": false,
+          "error": "timed out"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": false,
-            "proxy_argument": "http://151.239.44.44:8080",
-            "curl_returncode": 28,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
-            "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002501|151.239.44.44|https://www.isna.ir/"
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": false,
-            "proxy_argument": "http://151.239.44.44:8080",
-            "curl_returncode": 28,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15001 milliseconds",
-            "error": "curl: (28) Connection timed out after 15001 milliseconds",
-            "raw_output": "000|15.001895|151.239.44.44|https://www.gstatic.com/generate_204"
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -653,16 +619,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://178.157.62.242:80",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:11+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -751,16 +717,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://178.252.177.40:3128",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:11+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -775,21 +741,54 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T07:44:55+00:00",
       "success_count": 47,
-      "failure_count": 84,
+      "failure_count": 85,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.100.47.106:443",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:10+00:00",
         "tcp": {
-          "success": false,
-          "error": "timed out"
+          "success": true,
+          "seconds": 4.334
         },
-        "url_tests": []
+        "url_tests": [
+          {
+            "name": "ISNA",
+            "url": "https://www.isna.ir/",
+            "success": false,
+            "proxy_argument": "http://185.100.47.106:443",
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15001 milliseconds",
+            "error": "curl: (28) Connection timed out after 15001 milliseconds",
+            "raw_output": "000|15.001523||https://www.isna.ir/"
+          },
+          {
+            "name": "Google",
+            "url": "https://www.gstatic.com/generate_204",
+            "success": false,
+            "proxy_argument": "http://185.100.47.106:443",
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
+            "error": "curl: (28) Connection timed out after 15002 milliseconds",
+            "raw_output": "000|15.002676||https://www.gstatic.com/generate_204"
+          }
+        ]
       }
     },
     {
@@ -799,19 +798,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-23T14:35:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 4,
+      "failure_count": 5,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.105.184.45:1110",
-        "tested_at": "2026-07-23T19:47:59+00:00",
+        "tested_at": "2026-07-23T21:30:06+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.159
+          "seconds": 0.166
         },
         "url_tests": [
           {
@@ -819,16 +818,16 @@
             "url": "https://www.isna.ir/",
             "success": false,
             "proxy_argument": "http://185.105.184.45:1110",
-            "curl_returncode": 35,
+            "curl_returncode": 28,
             "http_code": null,
             "http_status": null,
             "measured_seconds": null,
             "response_time": null,
             "remote_ip": "",
             "effective_url": "",
-            "stderr": "curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to www.isna.ir:443",
-            "error": "curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to www.isna.ir:443",
-            "raw_output": "000|0.631020|185.105.184.45|https://www.isna.ir/"
+            "stderr": "curl: (28) Connection timed out after 15001 milliseconds",
+            "error": "curl: (28) Connection timed out after 15001 milliseconds",
+            "raw_output": "000|15.001295|185.105.184.45|https://www.isna.ir/"
           },
           {
             "name": "Google",
@@ -842,9 +841,9 @@
             "response_time": null,
             "remote_ip": "",
             "effective_url": "",
-            "stderr": "curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to www.gstatic.com:443",
-            "error": "curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to www.gstatic.com:443",
-            "raw_output": "000|1.761066|185.105.184.45|https://www.gstatic.com/generate_204"
+            "stderr": "curl: (35) OpenSSL/3.0.13: error:0A00010B:SSL routines::wrong version number",
+            "error": "curl: (35) OpenSSL/3.0.13: error:0A00010B:SSL routines::wrong version number",
+            "raw_output": "000|1.159075|185.105.184.45|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -855,23 +854,23 @@
         "databay",
         "proxyscrape"
       ],
-      "currently_in_source": false,
+      "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T17:50:35+00:00",
-      "last_tested": "2026-07-23T17:50:35+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-22T01:10:02+00:00",
       "success_count": 5,
-      "failure_count": 107,
+      "failure_count": 108,
       "test_result": {
+        "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.109.244.69:8080",
+        "tested_at": "2026-07-23T21:30:11+00:00",
         "tcp": {
-          "error": "timed out",
-          "success": false
+          "success": false,
+          "error": "timed out"
         },
-        "tested_at": "2026-07-23T17:50:41+00:00",
-        "url_tests": [],
-        "working": false
+        "url_tests": []
       }
     },
     {
@@ -906,16 +905,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:27:25+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T07:44:55+00:00",
       "success_count": 15,
-      "failure_count": 107,
+      "failure_count": 108,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.129.213.210:8080",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:11+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -928,23 +927,56 @@
       "source_names": [
         "databay"
       ],
-      "currently_in_source": false,
+      "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T17:50:35+00:00",
-      "last_tested": "2026-07-23T17:50:35+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T16:15:26+00:00",
       "success_count": 20,
-      "failure_count": 85,
+      "failure_count": 86,
       "test_result": {
+        "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.140.232.21:1400",
+        "tested_at": "2026-07-23T21:30:10+00:00",
         "tcp": {
-          "error": "timed out",
-          "success": false
+          "success": true,
+          "seconds": 4.326
         },
-        "tested_at": "2026-07-23T17:50:41+00:00",
-        "url_tests": [],
-        "working": false
+        "url_tests": [
+          {
+            "name": "ISNA",
+            "url": "https://www.isna.ir/",
+            "success": false,
+            "proxy_argument": "http://185.140.232.21:1400",
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
+            "error": "curl: (28) Connection timed out after 15002 milliseconds",
+            "raw_output": "000|15.002464||https://www.isna.ir/"
+          },
+          {
+            "name": "Google",
+            "url": "https://www.gstatic.com/generate_204",
+            "success": false,
+            "proxy_argument": "http://185.140.232.21:1400",
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
+            "error": "curl: (28) Connection timed out after 15002 milliseconds",
+            "raw_output": "000|15.002397||https://www.gstatic.com/generate_204"
+          }
+        ]
       }
     },
     {
@@ -952,54 +984,23 @@
       "source_names": [
         "databay"
       ],
-      "currently_in_source": false,
+      "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-20T10:32:06+00:00",
-      "last_tested": "2026-07-23T14:35:10+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T14:35:10+00:00",
       "success_count": 14,
-      "failure_count": 55,
+      "failure_count": 56,
       "test_result": {
-        "passed_all_tests": true,
+        "working": false,
+        "passed_all_tests": false,
         "proxy": "http://185.140.232.27:1400",
+        "tested_at": "2026-07-23T21:30:11+00:00",
         "tcp": {
-          "seconds": 0.32,
-          "success": true
+          "success": false,
+          "error": "timed out"
         },
-        "tested_at": "2026-07-23T14:36:02+00:00",
-        "url_tests": [
-          {
-            "curl_returncode": 0,
-            "effective_url": "https://www.isna.ir/",
-            "error": "",
-            "http_code": 200,
-            "http_status": 200,
-            "measured_seconds": 2.248,
-            "name": "ISNA",
-            "proxy_argument": "http://185.140.232.27:1400",
-            "remote_ip": "185.140.232.27",
-            "response_time": 2.248,
-            "stderr": "",
-            "success": true,
-            "url": "https://www.isna.ir/"
-          },
-          {
-            "curl_returncode": 0,
-            "effective_url": "https://www.gstatic.com/generate_204",
-            "error": "",
-            "http_code": 204,
-            "http_status": 204,
-            "measured_seconds": 6.203,
-            "name": "Google",
-            "proxy_argument": "http://185.140.232.27:1400",
-            "remote_ip": "185.140.232.27",
-            "response_time": 6.203,
-            "stderr": "",
-            "success": true,
-            "url": "https://www.gstatic.com/generate_204"
-          }
-        ],
-        "working": true
+        "url_tests": []
       }
     },
     {
@@ -1008,7 +1009,7 @@
         "proxyscrape",
         "databay"
       ],
-      "currently_in_source": true,
+      "currently_in_source": false,
       "first_seen": "2026-07-17T16:52:25+00:00",
       "last_seen_in_source": "2026-07-23T19:47:58+00:00",
       "last_tested": "2026-07-23T19:47:58+00:00",
@@ -1016,15 +1017,15 @@
       "success_count": 3,
       "failure_count": 21,
       "test_result": {
-        "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.140.232.54:8080",
-        "tested_at": "2026-07-23T19:48:04+00:00",
         "tcp": {
-          "success": false,
-          "error": "timed out"
+          "error": "timed out",
+          "success": false
         },
-        "url_tests": []
+        "tested_at": "2026-07-23T19:48:04+00:00",
+        "url_tests": [],
+        "working": false
       }
     },
     {
@@ -1034,16 +1035,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-17T14:05:32+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T14:35:10+00:00",
       "success_count": 5,
-      "failure_count": 30,
+      "failure_count": 31,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.140.243.12:8080",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:11+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -1083,16 +1084,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T18:48:55+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T04:58:32+00:00",
       "success_count": 13,
-      "failure_count": 97,
+      "failure_count": 98,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.145.185.218:8080",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:11+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -1105,23 +1106,23 @@
       "source_names": [
         "databay"
       ],
-      "currently_in_source": false,
+      "currently_in_source": true,
       "first_seen": "2026-07-14T14:16:05+00:00",
-      "last_seen_in_source": "2026-07-23T16:15:26+00:00",
-      "last_tested": "2026-07-23T16:15:26+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T10:07:02+00:00",
       "success_count": 10,
-      "failure_count": 94,
+      "failure_count": 95,
       "test_result": {
+        "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.155.15.63:8080",
+        "tested_at": "2026-07-23T21:30:11+00:00",
         "tcp": {
-          "error": "timed out",
-          "success": false
+          "success": false,
+          "error": "timed out"
         },
-        "tested_at": "2026-07-23T16:15:32+00:00",
-        "url_tests": [],
-        "working": false
+        "url_tests": []
       }
     },
     {
@@ -1212,16 +1213,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.172.214.112:80",
-        "tested_at": "2026-07-23T19:47:59+00:00",
+        "tested_at": "2026-07-23T21:30:06+00:00",
         "tcp": {
           "success": false,
           "error": "[Errno 111] Connection refused"
@@ -1261,16 +1262,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:27:25+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-19T10:45:03+00:00",
       "success_count": 5,
-      "failure_count": 98,
+      "failure_count": 99,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.193.209.1:8080",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:11+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -1309,19 +1310,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.208.183.14:8888",
-        "tested_at": "2026-07-23T19:47:59+00:00",
+        "tested_at": "2026-07-23T21:30:06+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.172
+          "seconds": 0.162
         },
         "url_tests": [
           {
@@ -1338,7 +1339,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 403",
             "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.352952|185.208.183.14|https://www.isna.ir/"
+            "raw_output": "000|0.354076|185.208.183.14|https://www.isna.ir/"
           },
           {
             "name": "Google",
@@ -1354,7 +1355,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 403",
             "error": "curl: (56) CONNECT tunnel failed, response 403",
-            "raw_output": "000|0.486542|185.208.183.14|https://www.gstatic.com/generate_204"
+            "raw_output": "000|0.356690|185.208.183.14|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -1367,21 +1368,54 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-18T12:39:25+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 72,
+      "failure_count": 73,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.212.195.34:8085",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:06+00:00",
         "tcp": {
-          "success": false,
-          "error": "timed out"
+          "success": true,
+          "seconds": 0.221
         },
-        "url_tests": []
+        "url_tests": [
+          {
+            "name": "ISNA",
+            "url": "https://www.isna.ir/",
+            "success": false,
+            "proxy_argument": "http://185.212.195.34:8085",
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
+            "error": "curl: (28) Connection timed out after 15002 milliseconds",
+            "raw_output": "000|15.002531|185.212.195.34|https://www.isna.ir/"
+          },
+          {
+            "name": "Google",
+            "url": "https://www.gstatic.com/generate_204",
+            "success": false,
+            "proxy_argument": "http://185.212.195.34:8085",
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
+            "error": "curl: (28) Connection timed out after 15002 milliseconds",
+            "raw_output": "000|15.002344||https://www.gstatic.com/generate_204"
+          }
+        ]
       }
     },
     {
@@ -1390,7 +1424,7 @@
         "proxyscrape",
         "databay"
       ],
-      "currently_in_source": true,
+      "currently_in_source": false,
       "first_seen": "2026-07-17T06:05:33+00:00",
       "last_seen_in_source": "2026-07-23T19:47:58+00:00",
       "last_tested": "2026-07-23T19:47:58+00:00",
@@ -1398,47 +1432,47 @@
       "success_count": 7,
       "failure_count": 79,
       "test_result": {
-        "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.214.39.2:9944",
-        "tested_at": "2026-07-23T19:48:01+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 2.267
+          "seconds": 2.267,
+          "success": true
         },
+        "tested_at": "2026-07-23T19:48:01+00:00",
         "url_tests": [
           {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": false,
-            "proxy_argument": "http://185.214.39.2:9944",
             "curl_returncode": 28,
+            "effective_url": "",
+            "error": "curl: (28) Connection timed out after 15001 milliseconds",
             "http_code": null,
             "http_status": null,
             "measured_seconds": null,
-            "response_time": null,
+            "name": "ISNA",
+            "proxy_argument": "http://185.214.39.2:9944",
+            "raw_output": "000|15.001681|185.214.39.2|https://www.isna.ir/",
             "remote_ip": "",
-            "effective_url": "",
+            "response_time": null,
             "stderr": "curl: (28) Connection timed out after 15001 milliseconds",
-            "error": "curl: (28) Connection timed out after 15001 milliseconds",
-            "raw_output": "000|15.001681|185.214.39.2|https://www.isna.ir/"
+            "success": false,
+            "url": "https://www.isna.ir/"
           },
           {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": true,
-            "proxy_argument": "http://185.214.39.2:9944",
             "curl_returncode": 0,
+            "effective_url": "https://www.gstatic.com/generate_204",
+            "error": "",
             "http_code": 204,
             "http_status": 204,
             "measured_seconds": 10.159,
-            "response_time": 10.159,
+            "name": "Google",
+            "proxy_argument": "http://185.214.39.2:9944",
             "remote_ip": "185.214.39.2",
-            "effective_url": "https://www.gstatic.com/generate_204",
+            "response_time": 10.159,
             "stderr": "",
-            "error": ""
+            "success": true,
+            "url": "https://www.gstatic.com/generate_204"
           }
-        ]
+        ],
+        "working": false
       }
     },
     {
@@ -1472,16 +1506,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.255.88.176:8080",
-        "tested_at": "2026-07-23T19:47:59+00:00",
+        "tested_at": "2026-07-23T21:30:06+00:00",
         "tcp": {
           "success": false,
           "error": "[Errno 111] Connection refused"
@@ -1496,16 +1530,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T12:04:03+00:00",
       "success_count": 23,
-      "failure_count": 104,
+      "failure_count": 105,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.4.29.243:7887",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:11+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -1545,20 +1579,20 @@
       "currently_in_source": false,
       "first_seen": "2026-07-18T16:15:02+00:00",
       "last_seen_in_source": "2026-07-18T18:38:39+00:00",
-      "last_tested": "2026-07-22T20:32:49+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-18T16:15:02+00:00",
       "success_count": 1,
-      "failure_count": 5,
+      "failure_count": 6,
       "test_result": {
+        "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.60.59.245:10808",
+        "tested_at": "2026-07-23T21:30:47+00:00",
         "tcp": {
-          "error": "[Errno 111] Connection refused",
-          "success": false
+          "success": false,
+          "error": "[Errno 111] Connection refused"
         },
-        "tested_at": "2026-07-22T20:33:31+00:00",
-        "url_tests": [],
-        "working": false
+        "url_tests": []
       }
     },
     {
@@ -1568,16 +1602,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.83.182.197:443",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:12+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -1594,52 +1628,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-23T17:50:35+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T19:47:58+00:00",
       "success_count": 2,
-      "failure_count": 0,
+      "failure_count": 1,
       "test_result": {
-        "working": true,
-        "passed_all_tests": true,
+        "working": false,
+        "passed_all_tests": false,
         "proxy": "http://185.83.182.206:2020",
-        "tested_at": "2026-07-23T19:47:59+00:00",
+        "tested_at": "2026-07-23T21:30:11+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 0.175
+          "success": false,
+          "error": "[Errno 111] Connection refused"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": true,
-            "proxy_argument": "http://185.83.182.206:2020",
-            "curl_returncode": 0,
-            "http_code": 200,
-            "http_status": 200,
-            "measured_seconds": 0.701,
-            "response_time": 0.701,
-            "remote_ip": "185.83.182.206",
-            "effective_url": "https://www.isna.ir/",
-            "stderr": "",
-            "error": ""
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": true,
-            "proxy_argument": "http://185.83.182.206:2020",
-            "curl_returncode": 0,
-            "http_code": 204,
-            "http_status": 204,
-            "measured_seconds": 1.131,
-            "response_time": 1.131,
-            "remote_ip": "185.83.182.206",
-            "effective_url": "https://www.gstatic.com/generate_204",
-            "stderr": "",
-            "error": ""
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -1649,16 +1652,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.88.177.197:80",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:16+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -1673,16 +1676,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.88.177.197:8080",
-        "tested_at": "2026-07-23T19:48:05+00:00",
+        "tested_at": "2026-07-23T21:30:16+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -1697,16 +1700,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://185.88.177.197:8081",
-        "tested_at": "2026-07-23T19:48:06+00:00",
+        "tested_at": "2026-07-23T21:30:16+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -1721,54 +1724,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T17:50:35+00:00",
       "success_count": 22,
-      "failure_count": 97,
+      "failure_count": 98,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://188.136.196.190:2020",
-        "tested_at": "2026-07-23T19:48:05+00:00",
+        "tested_at": "2026-07-23T21:30:16+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 4.286
+          "success": false,
+          "error": "timed out"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": false,
-            "proxy_argument": "http://188.136.196.190:2020",
-            "curl_returncode": 28,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15000 milliseconds",
-            "error": "curl: (28) Connection timed out after 15000 milliseconds",
-            "raw_output": "000|15.000923|188.136.196.190|https://www.isna.ir/"
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": false,
-            "proxy_argument": "http://188.136.196.190:2020",
-            "curl_returncode": 28,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
-            "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002218||https://www.gstatic.com/generate_204"
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -1778,19 +1748,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://188.34.152.106:8080",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:11+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.099
+          "seconds": 0.095
         },
         "url_tests": [
           {
@@ -1807,7 +1777,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 501",
             "error": "curl: (56) CONNECT tunnel failed, response 501",
-            "raw_output": "000|0.194945|188.34.152.106|https://www.isna.ir/"
+            "raw_output": "000|0.185920|188.34.152.106|https://www.isna.ir/"
           },
           {
             "name": "Google",
@@ -1823,7 +1793,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 501",
             "error": "curl: (56) CONNECT tunnel failed, response 501",
-            "raw_output": "000|0.193862|188.34.152.106|https://www.gstatic.com/generate_204"
+            "raw_output": "000|0.185406|188.34.152.106|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -1835,16 +1805,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://188.75.78.130:443",
-        "tested_at": "2026-07-23T19:48:09+00:00",
+        "tested_at": "2026-07-23T21:30:16+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -1860,53 +1830,53 @@
       "currently_in_source": false,
       "first_seen": "2026-07-17T14:05:32+00:00",
       "last_seen_in_source": "2026-07-17T16:52:25+00:00",
-      "last_tested": "2026-07-22T20:32:49+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-17T15:44:07+00:00",
       "success_count": 1,
-      "failure_count": 7,
+      "failure_count": 8,
       "test_result": {
+        "working": false,
         "passed_all_tests": false,
         "proxy": "http://193.151.143.221:2083",
+        "tested_at": "2026-07-23T21:30:47+00:00",
         "tcp": {
-          "seconds": 0.177,
-          "success": true
+          "success": true,
+          "seconds": 0.17
         },
-        "tested_at": "2026-07-22T20:33:31+00:00",
         "url_tests": [
           {
+            "name": "ISNA",
+            "url": "https://www.isna.ir/",
+            "success": false,
+            "proxy_argument": "http://193.151.143.221:2083",
             "curl_returncode": 56,
-            "effective_url": "",
-            "error": "curl: (56) CONNECT tunnel failed, response 407",
             "http_code": null,
             "http_status": null,
             "measured_seconds": null,
-            "name": "ISNA",
-            "proxy_argument": "http://193.151.143.221:2083",
-            "raw_output": "000|0.350554|193.151.143.221|https://www.isna.ir/",
-            "remote_ip": "",
             "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 407",
-            "success": false,
-            "url": "https://www.isna.ir/"
+            "error": "curl: (56) CONNECT tunnel failed, response 407",
+            "raw_output": "000|0.335275|193.151.143.221|https://www.isna.ir/"
           },
           {
+            "name": "Google",
+            "url": "https://www.gstatic.com/generate_204",
+            "success": false,
+            "proxy_argument": "http://193.151.143.221:2083",
             "curl_returncode": 56,
-            "effective_url": "",
-            "error": "curl: (56) CONNECT tunnel failed, response 407",
             "http_code": null,
             "http_status": null,
             "measured_seconds": null,
-            "name": "Google",
-            "proxy_argument": "http://193.151.143.221:2083",
-            "raw_output": "000|0.360725|193.151.143.221|https://www.gstatic.com/generate_204",
-            "remote_ip": "",
             "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 407",
-            "success": false,
-            "url": "https://www.gstatic.com/generate_204"
+            "error": "curl: (56) CONNECT tunnel failed, response 407",
+            "raw_output": "000|0.328988|193.151.143.221|https://www.gstatic.com/generate_204"
           }
-        ],
-        "working": false
+        ]
       }
     },
     {
@@ -1916,16 +1886,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://193.151.150.160:3128",
-        "tested_at": "2026-07-23T19:48:09+00:00",
+        "tested_at": "2026-07-23T21:30:16+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -1964,23 +1934,23 @@
         "databay",
         "proxyscrape"
       ],
-      "currently_in_source": false,
+      "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T12:04:03+00:00",
-      "last_tested": "2026-07-23T12:04:03+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-21T20:07:20+00:00",
       "success_count": 3,
-      "failure_count": 106,
+      "failure_count": 107,
       "test_result": {
+        "working": false,
         "passed_all_tests": false,
         "proxy": "http://193.178.203.141:8080",
+        "tested_at": "2026-07-23T21:30:16+00:00",
         "tcp": {
-          "error": "timed out",
-          "success": false
+          "success": false,
+          "error": "timed out"
         },
-        "tested_at": "2026-07-23T12:04:14+00:00",
-        "url_tests": [],
-        "working": false
+        "url_tests": []
       }
     },
     {
@@ -1991,16 +1961,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T16:15:26+00:00",
       "success_count": 15,
-      "failure_count": 97,
+      "failure_count": 98,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://193.19.145.194:8080",
-        "tested_at": "2026-07-23T19:48:09+00:00",
+        "tested_at": "2026-07-23T21:30:16+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -2015,16 +1985,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://193.3.182.14:3128",
-        "tested_at": "2026-07-23T19:48:09+00:00",
+        "tested_at": "2026-07-23T21:30:16+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -2065,54 +2035,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-15T18:47:13+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-18T01:07:02+00:00",
       "success_count": 2,
-      "failure_count": 23,
+      "failure_count": 24,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://193.39.9.122:3128",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:16+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 0.165
+          "success": false,
+          "error": "timed out"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": false,
-            "proxy_argument": "http://193.39.9.122:3128",
-            "curl_returncode": 28,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
-            "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002260|193.39.9.122|https://www.isna.ir/"
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": false,
-            "proxy_argument": "http://193.39.9.122:3128",
-            "curl_returncode": 28,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
-            "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002180|193.39.9.122|https://www.gstatic.com/generate_204"
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -2122,16 +2059,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://194.39.254.196:80",
-        "tested_at": "2026-07-23T19:48:09+00:00",
+        "tested_at": "2026-07-23T21:30:16+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -2195,16 +2132,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T14:16:05+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-20T20:43:14+00:00",
       "success_count": 2,
-      "failure_count": 71,
+      "failure_count": 72,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://195.181.40.34:8080",
-        "tested_at": "2026-07-23T19:48:09+00:00",
+        "tested_at": "2026-07-23T21:30:16+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -2243,54 +2180,23 @@
         "proxyscrape",
         "databay"
       ],
-      "currently_in_source": false,
+      "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T16:15:26+00:00",
-      "last_tested": "2026-07-23T16:15:26+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T16:15:26+00:00",
       "success_count": 20,
-      "failure_count": 89,
+      "failure_count": 90,
       "test_result": {
-        "passed_all_tests": true,
+        "working": false,
+        "passed_all_tests": false,
         "proxy": "http://2.181.34.250:8080",
+        "tested_at": "2026-07-23T21:30:17+00:00",
         "tcp": {
-          "seconds": 1.18,
-          "success": true
+          "success": false,
+          "error": "timed out"
         },
-        "tested_at": "2026-07-23T16:15:33+00:00",
-        "url_tests": [
-          {
-            "curl_returncode": 0,
-            "effective_url": "https://www.isna.ir/",
-            "error": "",
-            "http_code": 200,
-            "http_status": 200,
-            "measured_seconds": 3.784,
-            "name": "ISNA",
-            "proxy_argument": "http://2.181.34.250:8080",
-            "remote_ip": "2.181.34.250",
-            "response_time": 3.784,
-            "stderr": "",
-            "success": true,
-            "url": "https://www.isna.ir/"
-          },
-          {
-            "curl_returncode": 0,
-            "effective_url": "https://www.gstatic.com/generate_204",
-            "error": "",
-            "http_code": 204,
-            "http_status": 204,
-            "measured_seconds": 3.285,
-            "name": "Google",
-            "proxy_argument": "http://2.181.34.250:8080",
-            "remote_ip": "2.181.34.250",
-            "response_time": 3.285,
-            "stderr": "",
-            "success": true,
-            "url": "https://www.gstatic.com/generate_204"
-          }
-        ],
-        "working": true
+        "url_tests": []
       }
     },
     {
@@ -2544,16 +2450,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://212.33.201.143:80",
-        "tested_at": "2026-07-23T19:48:09+00:00",
+        "tested_at": "2026-07-23T21:30:17+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -2570,53 +2476,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:38:37+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T16:15:26+00:00",
       "success_count": 12,
-      "failure_count": 111,
+      "failure_count": 112,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://213.207.198.254:8080",
-        "tested_at": "2026-07-23T19:48:08+00:00",
+        "tested_at": "2026-07-23T21:30:18+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 4.26
+          "success": false,
+          "error": "timed out"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": true,
-            "proxy_argument": "http://213.207.198.254:8080",
-            "curl_returncode": 0,
-            "http_code": 200,
-            "http_status": 200,
-            "measured_seconds": 3.859,
-            "response_time": 3.859,
-            "remote_ip": "213.207.198.254",
-            "effective_url": "https://www.isna.ir/",
-            "stderr": "",
-            "error": ""
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": false,
-            "proxy_argument": "http://213.207.198.254:8080",
-            "curl_returncode": 28,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (28) Operation timed out after 15000 milliseconds with 0 bytes received",
-            "error": "curl: (28) Operation timed out after 15000 milliseconds with 0 bytes received",
-            "raw_output": "000|15.000237|213.207.198.254|https://www.gstatic.com/generate_204"
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -2626,16 +2500,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://213.207.200.222:8080",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:16+00:00",
         "tcp": {
           "success": false,
           "error": "[Errno 111] Connection refused"
@@ -2650,16 +2524,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://217.219.173.237:8080",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:16+00:00",
         "tcp": {
           "success": false,
           "error": "[Errno 111] Connection refused"
@@ -2675,19 +2549,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:38:37+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T19:47:58+00:00",
       "success_count": 10,
-      "failure_count": 109,
+      "failure_count": 110,
       "test_result": {
-        "working": true,
-        "passed_all_tests": true,
+        "working": false,
+        "passed_all_tests": false,
         "proxy": "http://217.219.83.186:2222",
-        "tested_at": "2026-07-23T19:48:04+00:00",
+        "tested_at": "2026-07-23T21:30:17+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.308
+          "seconds": 1.343
         },
         "url_tests": [
           {
@@ -2698,8 +2572,8 @@
             "curl_returncode": 0,
             "http_code": 200,
             "http_status": 200,
-            "measured_seconds": 8.325,
-            "response_time": 8.325,
+            "measured_seconds": 7.319,
+            "response_time": 7.319,
             "remote_ip": "217.219.83.186",
             "effective_url": "https://www.isna.ir/",
             "stderr": "",
@@ -2708,17 +2582,18 @@
           {
             "name": "Google",
             "url": "https://www.gstatic.com/generate_204",
-            "success": true,
+            "success": false,
             "proxy_argument": "http://217.219.83.186:2222",
-            "curl_returncode": 0,
-            "http_code": 204,
-            "http_status": 204,
-            "measured_seconds": 6.543,
-            "response_time": 6.543,
-            "remote_ip": "217.219.83.186",
-            "effective_url": "https://www.gstatic.com/generate_204",
-            "stderr": "",
-            "error": ""
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15001 milliseconds",
+            "error": "curl: (28) Connection timed out after 15001 milliseconds",
+            "raw_output": "000|15.001851|217.219.83.186|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -2730,16 +2605,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://31.14.122.28:443",
-        "tested_at": "2026-07-23T19:48:09+00:00",
+        "tested_at": "2026-07-23T21:30:21+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -2755,21 +2630,53 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-19T19:56:50+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T17:50:35+00:00",
       "success_count": 2,
-      "failure_count": 19,
+      "failure_count": 20,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://31.25.92.114:8080",
-        "tested_at": "2026-07-23T19:48:09+00:00",
+        "tested_at": "2026-07-23T21:30:20+00:00",
         "tcp": {
-          "success": false,
-          "error": "timed out"
+          "success": true,
+          "seconds": 4.29
         },
-        "url_tests": []
+        "url_tests": [
+          {
+            "name": "ISNA",
+            "url": "https://www.isna.ir/",
+            "success": true,
+            "proxy_argument": "http://31.25.92.114:8080",
+            "curl_returncode": 0,
+            "http_code": 200,
+            "http_status": 200,
+            "measured_seconds": 9.632,
+            "response_time": 9.632,
+            "remote_ip": "31.25.92.114",
+            "effective_url": "https://www.isna.ir/",
+            "stderr": "",
+            "error": ""
+          },
+          {
+            "name": "Google",
+            "url": "https://www.gstatic.com/generate_204",
+            "success": false,
+            "proxy_argument": "http://31.25.92.114:8080",
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
+            "error": "curl: (28) Connection timed out after 15002 milliseconds",
+            "raw_output": "000|15.002444||https://www.gstatic.com/generate_204"
+          }
+        ]
       }
     },
     {
@@ -2827,54 +2734,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T12:02:30+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-21T03:51:38+00:00",
       "success_count": 14,
-      "failure_count": 61,
+      "failure_count": 62,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://37.191.78.226:8080",
-        "tested_at": "2026-07-23T19:48:07+00:00",
+        "tested_at": "2026-07-23T21:30:21+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 2.94
+          "success": false,
+          "error": "timed out"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": false,
-            "proxy_argument": "http://37.191.78.226:8080",
-            "curl_returncode": 56,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (56) Proxy CONNECT aborted",
-            "error": "curl: (56) Proxy CONNECT aborted",
-            "raw_output": "000|5.762497|37.191.78.226|https://www.isna.ir/"
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": false,
-            "proxy_argument": "http://37.191.78.226:8080",
-            "curl_returncode": 56,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (56) Recv failure: Connection reset by peer",
-            "error": "curl: (56) Recv failure: Connection reset by peer",
-            "raw_output": "000|4.568753|37.191.78.226|https://www.gstatic.com/generate_204"
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -2890,15 +2764,15 @@
       "success_count": 1,
       "failure_count": 9,
       "test_result": {
-        "working": false,
         "passed_all_tests": false,
         "proxy": "http://37.191.79.201:8080",
-        "tested_at": "2026-07-23T19:48:43+00:00",
         "tcp": {
-          "success": false,
-          "error": "timed out"
+          "error": "timed out",
+          "success": false
         },
-        "url_tests": []
+        "tested_at": "2026-07-23T19:48:43+00:00",
+        "url_tests": [],
+        "working": false
       }
     },
     {
@@ -2934,16 +2808,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:50:24+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-22T07:25:39+00:00",
       "success_count": 10,
-      "failure_count": 101,
+      "failure_count": 102,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://37.255.203.235:8080",
-        "tested_at": "2026-07-23T19:48:09+00:00",
+        "tested_at": "2026-07-23T21:30:21+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -2958,16 +2832,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://37.255.214.97:8080",
-        "tested_at": "2026-07-23T19:48:09+00:00",
+        "tested_at": "2026-07-23T21:30:21+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -3007,16 +2881,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://45.148.250.241:8080",
-        "tested_at": "2026-07-23T19:48:10+00:00",
+        "tested_at": "2026-07-23T21:30:21+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -3144,16 +3018,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-20T00:15:21+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-20T19:09:35+00:00",
       "success_count": 1,
-      "failure_count": 33,
+      "failure_count": 34,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://46.209.15.187:8080",
-        "tested_at": "2026-07-23T19:48:11+00:00",
+        "tested_at": "2026-07-23T21:30:21+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -3170,40 +3044,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T08:29:42+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-21T21:34:42+00:00",
       "success_count": 4,
-      "failure_count": 106,
+      "failure_count": 107,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://46.209.199.145:8090",
-        "tested_at": "2026-07-23T19:48:14+00:00",
-        "tcp": {
-          "success": false,
-          "error": "timed out"
-        },
-        "url_tests": []
-      }
-    },
-    {
-      "proxy": "http://46.209.207.147:8080",
-      "source_names": [
-        "proxyscrape"
-      ],
-      "currently_in_source": true,
-      "first_seen": "2026-07-23T19:47:58+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
-      "last_success": null,
-      "success_count": 0,
-      "failure_count": 1,
-      "test_result": {
-        "working": false,
-        "passed_all_tests": false,
-        "proxy": "http://46.209.207.147:8080",
-        "tested_at": "2026-07-23T19:48:40+00:00",
+        "tested_at": "2026-07-23T21:30:21+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -3219,16 +3069,40 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-23T19:47:58+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
+      "last_success": null,
+      "success_count": 0,
+      "failure_count": 2,
+      "test_result": {
+        "working": false,
+        "passed_all_tests": false,
+        "proxy": "http://46.209.207.155:8080",
+        "tested_at": "2026-07-23T21:30:21+00:00",
+        "tcp": {
+          "success": false,
+          "error": "timed out"
+        },
+        "url_tests": []
+      }
+    },
+    {
+      "proxy": "http://46.209.207.158:8080",
+      "source_names": [
+        "proxyscrape"
+      ],
+      "currently_in_source": true,
+      "first_seen": "2026-07-23T21:30:05+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
       "failure_count": 1,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
-        "proxy": "http://46.209.207.155:8080",
-        "tested_at": "2026-07-23T19:48:39+00:00",
+        "proxy": "http://46.209.207.158:8080",
+        "tested_at": "2026-07-23T21:30:51+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -3243,16 +3117,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-15T23:42:43+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-21T13:05:46+00:00",
       "success_count": 6,
-      "failure_count": 62,
+      "failure_count": 63,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://46.209.217.108:8088",
-        "tested_at": "2026-07-23T19:48:14+00:00",
+        "tested_at": "2026-07-23T21:30:21+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -3268,54 +3142,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T08:15:30+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T17:50:35+00:00",
       "success_count": 12,
-      "failure_count": 76,
+      "failure_count": 77,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://46.209.30.11:8080",
-        "tested_at": "2026-07-23T19:48:11+00:00",
+        "tested_at": "2026-07-23T21:30:22+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 2.223
+          "success": false,
+          "error": "timed out"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": false,
-            "proxy_argument": "http://46.209.30.11:8080",
-            "curl_returncode": 28,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
-            "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002567|46.209.30.11|https://www.isna.ir/"
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": false,
-            "proxy_argument": "http://46.209.30.11:8080",
-            "curl_returncode": 28,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15001 milliseconds",
-            "error": "curl: (28) Connection timed out after 15001 milliseconds",
-            "raw_output": "000|15.001673|46.209.30.11|https://www.gstatic.com/generate_204"
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -3325,16 +3166,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://46.245.69.171:8080",
-        "tested_at": "2026-07-23T19:48:14+00:00",
+        "tested_at": "2026-07-23T21:30:22+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -3349,19 +3190,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T14:16:05+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T01:18:11+00:00",
       "success_count": 23,
-      "failure_count": 73,
+      "failure_count": 74,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://46.249.124.244:1390",
-        "tested_at": "2026-07-23T19:48:12+00:00",
+        "tested_at": "2026-07-23T21:30:19+00:00",
         "tcp": {
           "success": true,
-          "seconds": 3.277
+          "seconds": 2.259
         },
         "url_tests": [
           {
@@ -3378,22 +3219,23 @@
             "effective_url": "",
             "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
             "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002854||https://www.isna.ir/"
+            "raw_output": "000|15.002508||https://www.isna.ir/"
           },
           {
             "name": "Google",
             "url": "https://www.gstatic.com/generate_204",
-            "success": true,
+            "success": false,
             "proxy_argument": "http://46.249.124.244:1390",
-            "curl_returncode": 0,
-            "http_code": 204,
-            "http_status": 204,
-            "measured_seconds": 1.87,
-            "response_time": 1.87,
-            "remote_ip": "46.249.124.244",
-            "effective_url": "https://www.gstatic.com/generate_204",
-            "stderr": "",
-            "error": ""
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
+            "error": "curl: (28) Connection timed out after 15002 milliseconds",
+            "raw_output": "000|15.002988||https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -3429,16 +3271,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://5.160.32.35:8080",
-        "tested_at": "2026-07-23T19:48:14+00:00",
+        "tested_at": "2026-07-23T21:30:23+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -3453,16 +3295,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://5.160.57.36:8080",
-        "tested_at": "2026-07-23T19:48:14+00:00",
+        "tested_at": "2026-07-23T21:30:26+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -3477,16 +3319,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://5.161.103.41:88",
-        "tested_at": "2026-07-23T19:48:14+00:00",
+        "tested_at": "2026-07-23T21:30:26+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -3501,16 +3343,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://5.161.181.70:8080",
-        "tested_at": "2026-07-23T19:48:14+00:00",
+        "tested_at": "2026-07-23T21:30:26+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -3525,16 +3367,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://5.161.243.152:29025",
-        "tested_at": "2026-07-23T19:48:14+00:00",
+        "tested_at": "2026-07-23T21:30:26+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -3549,16 +3391,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://5.161.81.198:8080",
-        "tested_at": "2026-07-23T19:48:14+00:00",
+        "tested_at": "2026-07-23T21:30:26+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -3573,16 +3415,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://5.190.36.2:3128",
-        "tested_at": "2026-07-23T19:48:10+00:00",
+        "tested_at": "2026-07-23T21:30:21+00:00",
         "tcp": {
           "success": false,
           "error": "[Errno 111] Connection refused"
@@ -3598,19 +3440,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T14:35:10+00:00",
       "success_count": 25,
-      "failure_count": 110,
+      "failure_count": 111,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://5.200.72.62:3128",
-        "tested_at": "2026-07-23T19:48:11+00:00",
+        "tested_at": "2026-07-23T21:30:21+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.296
+          "seconds": 0.303
         },
         "url_tests": [
           {
@@ -3627,23 +3469,22 @@
             "effective_url": "",
             "stderr": "curl: (56) Proxy CONNECT aborted",
             "error": "curl: (56) Proxy CONNECT aborted",
-            "raw_output": "000|0.586126|5.200.72.62|https://www.isna.ir/"
+            "raw_output": "000|0.615740|5.200.72.62|https://www.isna.ir/"
           },
           {
             "name": "Google",
             "url": "https://www.gstatic.com/generate_204",
-            "success": false,
+            "success": true,
             "proxy_argument": "http://5.200.72.62:3128",
-            "curl_returncode": 56,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (56) Proxy CONNECT aborted",
-            "error": "curl: (56) Proxy CONNECT aborted",
-            "raw_output": "000|0.610282|5.200.72.62|https://www.gstatic.com/generate_204"
+            "curl_returncode": 0,
+            "http_code": 204,
+            "http_status": 204,
+            "measured_seconds": 1.756,
+            "response_time": 1.756,
+            "remote_ip": "5.200.72.62",
+            "effective_url": "https://www.gstatic.com/generate_204",
+            "stderr": "",
+            "error": ""
           }
         ]
       }
@@ -3655,16 +3496,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://5.201.133.16:80",
-        "tested_at": "2026-07-23T19:48:16+00:00",
+        "tested_at": "2026-07-23T21:30:26+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -3680,54 +3521,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T10:26:20+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-21T21:34:42+00:00",
       "success_count": 2,
-      "failure_count": 102,
+      "failure_count": 103,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://5.202.120.123:3128",
-        "tested_at": "2026-07-23T19:48:12+00:00",
+        "tested_at": "2026-07-23T21:30:21+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 0.186
+          "success": false,
+          "error": "[Errno 111] Connection refused"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": false,
-            "proxy_argument": "http://5.202.120.123:3128",
-            "curl_returncode": 56,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (56) Proxy CONNECT aborted",
-            "error": "curl: (56) Proxy CONNECT aborted",
-            "raw_output": "000|0.408244|5.202.120.123|https://www.isna.ir/"
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": false,
-            "proxy_argument": "http://5.202.120.123:3128",
-            "curl_returncode": 7,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (7) Failed to connect to 5.202.120.123 port 3128 after 174 ms: Couldn't connect to server",
-            "error": "curl: (7) Failed to connect to 5.202.120.123 port 3128 after 174 ms: Couldn't connect to server",
-            "raw_output": "000|0.174002||https://www.gstatic.com/generate_204"
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -3737,53 +3545,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T14:16:05+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-22T22:45:59+00:00",
       "success_count": 15,
-      "failure_count": 88,
+      "failure_count": 89,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://5.202.120.92:8080",
-        "tested_at": "2026-07-23T19:48:17+00:00",
+        "tested_at": "2026-07-23T21:30:26+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 4.283
+          "success": false,
+          "error": "timed out"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": true,
-            "proxy_argument": "http://5.202.120.92:8080",
-            "curl_returncode": 0,
-            "http_code": 200,
-            "http_status": 200,
-            "measured_seconds": 5.689,
-            "response_time": 5.689,
-            "remote_ip": "5.202.120.92",
-            "effective_url": "https://www.isna.ir/",
-            "stderr": "",
-            "error": ""
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": false,
-            "proxy_argument": "http://5.202.120.92:8080",
-            "curl_returncode": 28,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
-            "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002691||https://www.gstatic.com/generate_204"
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -3876,21 +3652,53 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T08:29:42+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-21T23:42:45+00:00",
       "success_count": 11,
-      "failure_count": 121,
+      "failure_count": 122,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://5.202.52.101:6220",
-        "tested_at": "2026-07-23T19:48:19+00:00",
+        "tested_at": "2026-07-23T21:30:26+00:00",
         "tcp": {
-          "success": false,
-          "error": "timed out"
+          "success": true,
+          "seconds": 4.301
         },
-        "url_tests": []
+        "url_tests": [
+          {
+            "name": "ISNA",
+            "url": "https://www.isna.ir/",
+            "success": true,
+            "proxy_argument": "http://5.202.52.101:6220",
+            "curl_returncode": 0,
+            "http_code": 200,
+            "http_status": 200,
+            "measured_seconds": 4.415,
+            "response_time": 4.415,
+            "remote_ip": "5.202.52.101",
+            "effective_url": "https://www.isna.ir/",
+            "stderr": "",
+            "error": ""
+          },
+          {
+            "name": "Google",
+            "url": "https://www.gstatic.com/generate_204",
+            "success": false,
+            "proxy_argument": "http://5.202.52.101:6220",
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
+            "error": "curl: (28) Connection timed out after 15002 milliseconds",
+            "raw_output": "000|15.002366||https://www.gstatic.com/generate_204"
+          }
+        ]
       }
     },
     {
@@ -3902,21 +3710,52 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T08:15:30+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
-      "last_success": "2026-07-23T17:50:35+00:00",
-      "success_count": 18,
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
+      "last_success": "2026-07-23T21:30:05+00:00",
+      "success_count": 19,
       "failure_count": 113,
       "test_result": {
-        "working": false,
-        "passed_all_tests": false,
+        "working": true,
+        "passed_all_tests": true,
         "proxy": "http://5.202.52.103:6220",
-        "tested_at": "2026-07-23T19:48:19+00:00",
+        "tested_at": "2026-07-23T21:30:26+00:00",
         "tcp": {
-          "success": false,
-          "error": "timed out"
+          "success": true,
+          "seconds": 4.305
         },
-        "url_tests": []
+        "url_tests": [
+          {
+            "name": "ISNA",
+            "url": "https://www.isna.ir/",
+            "success": true,
+            "proxy_argument": "http://5.202.52.103:6220",
+            "curl_returncode": 0,
+            "http_code": 200,
+            "http_status": 200,
+            "measured_seconds": 12.466,
+            "response_time": 12.466,
+            "remote_ip": "5.202.52.103",
+            "effective_url": "https://www.isna.ir/",
+            "stderr": "",
+            "error": ""
+          },
+          {
+            "name": "Google",
+            "url": "https://www.gstatic.com/generate_204",
+            "success": true,
+            "proxy_argument": "http://5.202.52.103:6220",
+            "curl_returncode": 0,
+            "http_code": 204,
+            "http_status": 204,
+            "measured_seconds": 8.74,
+            "response_time": 8.74,
+            "remote_ip": "5.202.52.103",
+            "effective_url": "https://www.gstatic.com/generate_204",
+            "stderr": "",
+            "error": ""
+          }
+        ]
       }
     },
     {
@@ -3926,16 +3765,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://5.202.84.97:8080",
-        "tested_at": "2026-07-23T19:48:14+00:00",
+        "tested_at": "2026-07-23T21:30:22+00:00",
         "tcp": {
           "success": false,
           "error": "[Errno 111] Connection refused"
@@ -3950,16 +3789,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://5.75.153.75:8002",
-        "tested_at": "2026-07-23T19:48:14+00:00",
+        "tested_at": "2026-07-23T21:30:22+00:00",
         "tcp": {
           "success": false,
           "error": "[Errno 111] Connection refused"
@@ -3974,16 +3813,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://77.104.76.230:8080",
-        "tested_at": "2026-07-23T19:48:14+00:00",
+        "tested_at": "2026-07-23T21:30:22+00:00",
         "tcp": {
           "success": false,
           "error": "[Errno 111] Connection refused"
@@ -3998,16 +3837,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://78.38.100.121:8080",
-        "tested_at": "2026-07-23T19:48:19+00:00",
+        "tested_at": "2026-07-23T21:30:27+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -4022,16 +3861,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://78.38.123.67:8080",
-        "tested_at": "2026-07-23T19:48:14+00:00",
+        "tested_at": "2026-07-23T21:30:22+00:00",
         "tcp": {
           "success": false,
           "error": "[Errno 111] Connection refused"
@@ -4046,19 +3885,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://78.38.53.100:80",
-        "tested_at": "2026-07-23T19:48:14+00:00",
+        "tested_at": "2026-07-23T21:30:23+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.172
+          "seconds": 0.176
         },
         "url_tests": [
           {
@@ -4075,7 +3914,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 400",
             "error": "curl: (56) CONNECT tunnel failed, response 400",
-            "raw_output": "000|0.360622|78.38.53.100|https://www.isna.ir/"
+            "raw_output": "000|0.345841|78.38.53.100|https://www.isna.ir/"
           },
           {
             "name": "Google",
@@ -4091,7 +3930,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 400",
             "error": "curl: (56) CONNECT tunnel failed, response 400",
-            "raw_output": "000|0.333183|78.38.53.100|https://www.gstatic.com/generate_204"
+            "raw_output": "000|0.343187|78.38.53.100|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -4103,16 +3942,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://78.38.53.36:80",
-        "tested_at": "2026-07-23T19:48:19+00:00",
+        "tested_at": "2026-07-23T21:30:28+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -4127,16 +3966,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://78.39.10.11:3128",
-        "tested_at": "2026-07-23T19:48:19+00:00",
+        "tested_at": "2026-07-23T21:30:28+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -4175,23 +4014,23 @@
         "proxyscrape",
         "databay"
       ],
-      "currently_in_source": false,
+      "currently_in_source": true,
       "first_seen": "2026-07-16T19:35:54+00:00",
-      "last_seen_in_source": "2026-07-23T12:04:03+00:00",
-      "last_tested": "2026-07-23T12:04:03+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-21T22:38:36+00:00",
       "success_count": 5,
-      "failure_count": 54,
+      "failure_count": 55,
       "test_result": {
+        "working": false,
         "passed_all_tests": false,
         "proxy": "http://78.39.253.49:8080",
+        "tested_at": "2026-07-23T21:30:29+00:00",
         "tcp": {
-          "error": "timed out",
-          "success": false
+          "success": false,
+          "error": "timed out"
         },
-        "tested_at": "2026-07-23T12:04:30+00:00",
-        "url_tests": [],
-        "working": false
+        "url_tests": []
       }
     },
     {
@@ -4202,35 +4041,36 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T08:29:42+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T04:58:32+00:00",
       "success_count": 12,
-      "failure_count": 114,
+      "failure_count": 115,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://79.127.30.250:8080",
-        "tested_at": "2026-07-23T19:48:14+00:00",
+        "tested_at": "2026-07-23T21:30:28+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.173
+          "seconds": 2.219
         },
         "url_tests": [
           {
             "name": "ISNA",
             "url": "https://www.isna.ir/",
-            "success": true,
+            "success": false,
             "proxy_argument": "http://79.127.30.250:8080",
-            "curl_returncode": 0,
-            "http_code": 200,
-            "http_status": 200,
-            "measured_seconds": 12.914,
-            "response_time": 12.914,
-            "remote_ip": "79.127.30.250",
-            "effective_url": "https://www.isna.ir/",
-            "stderr": "",
-            "error": ""
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15003 milliseconds",
+            "error": "curl: (28) Connection timed out after 15003 milliseconds",
+            "raw_output": "000|15.003089||https://www.isna.ir/"
           },
           {
             "name": "Google",
@@ -4246,7 +4086,7 @@
             "effective_url": "",
             "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
             "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002426||https://www.gstatic.com/generate_204"
+            "raw_output": "000|15.002484||https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -4316,16 +4156,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T14:16:05+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-20T04:09:57+00:00",
       "success_count": 8,
-      "failure_count": 110,
+      "failure_count": 111,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://80.191.46.62:1090",
-        "tested_at": "2026-07-23T19:48:19+00:00",
+        "tested_at": "2026-07-23T21:30:31+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -4340,16 +4180,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://80.249.112.163:80",
-        "tested_at": "2026-07-23T19:48:19+00:00",
+        "tested_at": "2026-07-23T21:30:31+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -4364,16 +4204,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://80.249.112.165:80",
-        "tested_at": "2026-07-23T19:48:15+00:00",
+        "tested_at": "2026-07-23T21:30:26+00:00",
         "tcp": {
           "success": false,
           "error": "[Errno 111] Connection refused"
@@ -4389,52 +4229,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-18T04:16:35+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T19:47:58+00:00",
       "success_count": 7,
-      "failure_count": 55,
+      "failure_count": 56,
       "test_result": {
-        "working": true,
-        "passed_all_tests": true,
+        "working": false,
+        "passed_all_tests": false,
         "proxy": "http://81.12.70.98:8080",
-        "tested_at": "2026-07-23T19:48:17+00:00",
+        "tested_at": "2026-07-23T21:30:31+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 2.259
+          "success": false,
+          "error": "timed out"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": true,
-            "proxy_argument": "http://81.12.70.98:8080",
-            "curl_returncode": 0,
-            "http_code": 200,
-            "http_status": 200,
-            "measured_seconds": 7.13,
-            "response_time": 7.13,
-            "remote_ip": "81.12.70.98",
-            "effective_url": "https://www.isna.ir/",
-            "stderr": "",
-            "error": ""
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": true,
-            "proxy_argument": "http://81.12.70.98:8080",
-            "curl_returncode": 0,
-            "http_code": 204,
-            "http_status": 204,
-            "measured_seconds": 4.308,
-            "response_time": 4.308,
-            "remote_ip": "81.12.70.98",
-            "effective_url": "https://www.gstatic.com/generate_204",
-            "stderr": "",
-            "error": ""
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -4471,21 +4280,53 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T08:29:42+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T10:07:02+00:00",
       "success_count": 24,
-      "failure_count": 93,
+      "failure_count": 94,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://81.12.89.74:8080",
-        "tested_at": "2026-07-23T19:48:21+00:00",
+        "tested_at": "2026-07-23T21:30:27+00:00",
         "tcp": {
-          "success": false,
-          "error": "timed out"
+          "success": true,
+          "seconds": 1.218
         },
-        "url_tests": []
+        "url_tests": [
+          {
+            "name": "ISNA",
+            "url": "https://www.isna.ir/",
+            "success": false,
+            "proxy_argument": "http://81.12.89.74:8080",
+            "curl_returncode": 56,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (56) Recv failure: Connection reset by peer",
+            "error": "curl: (56) Recv failure: Connection reset by peer",
+            "raw_output": "000|12.620889|81.12.89.74|https://www.isna.ir/"
+          },
+          {
+            "name": "Google",
+            "url": "https://www.gstatic.com/generate_204",
+            "success": true,
+            "proxy_argument": "http://81.12.89.74:8080",
+            "curl_returncode": 0,
+            "http_code": 204,
+            "http_status": 204,
+            "measured_seconds": 5.484,
+            "response_time": 5.484,
+            "remote_ip": "81.12.89.74",
+            "effective_url": "https://www.gstatic.com/generate_204",
+            "stderr": "",
+            "error": ""
+          }
+        ]
       }
     },
     {
@@ -4518,23 +4359,56 @@
         "proxyscrape",
         "databay"
       ],
-      "currently_in_source": false,
+      "currently_in_source": true,
       "first_seen": "2026-07-14T08:29:42+00:00",
-      "last_seen_in_source": "2026-07-23T17:50:35+00:00",
-      "last_tested": "2026-07-23T17:50:35+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-21T21:34:42+00:00",
       "success_count": 7,
-      "failure_count": 97,
+      "failure_count": 98,
       "test_result": {
+        "working": false,
         "passed_all_tests": false,
         "proxy": "http://81.90.144.170:9000",
+        "tested_at": "2026-07-23T21:30:29+00:00",
         "tcp": {
-          "error": "timed out",
-          "success": false
+          "success": true,
+          "seconds": 2.999
         },
-        "tested_at": "2026-07-23T17:51:04+00:00",
-        "url_tests": [],
-        "working": false
+        "url_tests": [
+          {
+            "name": "ISNA",
+            "url": "https://www.isna.ir/",
+            "success": false,
+            "proxy_argument": "http://81.90.144.170:9000",
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
+            "error": "curl: (28) Connection timed out after 15002 milliseconds",
+            "raw_output": "000|15.002196|81.90.144.170|https://www.isna.ir/"
+          },
+          {
+            "name": "Google",
+            "url": "https://www.gstatic.com/generate_204",
+            "success": false,
+            "proxy_argument": "http://81.90.144.170:9000",
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
+            "error": "curl: (28) Connection timed out after 15002 milliseconds",
+            "raw_output": "000|15.002231||https://www.gstatic.com/generate_204"
+          }
+        ]
       }
     },
     {
@@ -4544,19 +4418,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://81.91.139.76:80",
-        "tested_at": "2026-07-23T19:48:18+00:00",
+        "tested_at": "2026-07-23T21:30:26+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.184
+          "seconds": 0.18
         },
         "url_tests": [
           {
@@ -4573,7 +4447,7 @@
             "effective_url": "",
             "stderr": "curl: (56) CONNECT tunnel failed, response 400",
             "error": "curl: (56) CONNECT tunnel failed, response 400",
-            "raw_output": "000|0.353959|81.91.139.76|https://www.isna.ir/"
+            "raw_output": "000|0.389044|81.91.139.76|https://www.isna.ir/"
           },
           {
             "name": "Google",
@@ -4587,9 +4461,9 @@
             "response_time": null,
             "remote_ip": "",
             "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
-            "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002773|81.91.139.76|https://www.gstatic.com/generate_204"
+            "stderr": "curl: (28) Connection timed out after 15001 milliseconds",
+            "error": "curl: (28) Connection timed out after 15001 milliseconds",
+            "raw_output": "000|15.001079|81.91.139.76|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -4602,16 +4476,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-19T14:14:42+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-22T10:08:17+00:00",
       "success_count": 2,
-      "failure_count": 37,
+      "failure_count": 38,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://82.99.227.43:8080",
-        "tested_at": "2026-07-23T19:48:24+00:00",
+        "tested_at": "2026-07-23T21:30:32+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -4627,52 +4501,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T08:15:30+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T19:47:58+00:00",
       "success_count": 14,
-      "failure_count": 99,
+      "failure_count": 100,
       "test_result": {
-        "working": true,
-        "passed_all_tests": true,
+        "working": false,
+        "passed_all_tests": false,
         "proxy": "http://84.241.29.213:8080",
-        "tested_at": "2026-07-23T19:48:22+00:00",
+        "tested_at": "2026-07-23T21:30:33+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 3.277
+          "success": false,
+          "error": "timed out"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": true,
-            "proxy_argument": "http://84.241.29.213:8080",
-            "curl_returncode": 0,
-            "http_code": 200,
-            "http_status": 200,
-            "measured_seconds": 6.45,
-            "response_time": 6.45,
-            "remote_ip": "84.241.29.213",
-            "effective_url": "https://www.isna.ir/",
-            "stderr": "",
-            "error": ""
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": true,
-            "proxy_argument": "http://84.241.29.213:8080",
-            "curl_returncode": 0,
-            "http_code": 204,
-            "http_status": 204,
-            "measured_seconds": 0.958,
-            "response_time": 0.958,
-            "remote_ip": "84.241.29.213",
-            "effective_url": "https://www.gstatic.com/generate_204",
-            "stderr": "",
-            "error": ""
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -4707,52 +4550,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T19:47:58+00:00",
       "success_count": 6,
-      "failure_count": 131,
+      "failure_count": 132,
       "test_result": {
-        "working": true,
-        "passed_all_tests": true,
+        "working": false,
+        "passed_all_tests": false,
         "proxy": "http://84.241.30.214:8080",
-        "tested_at": "2026-07-23T19:48:19+00:00",
+        "tested_at": "2026-07-23T21:30:33+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 0.167
+          "success": false,
+          "error": "timed out"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": true,
-            "proxy_argument": "http://84.241.30.214:8080",
-            "curl_returncode": 0,
-            "http_code": 200,
-            "http_status": 200,
-            "measured_seconds": 5.556,
-            "response_time": 5.556,
-            "remote_ip": "84.241.30.214",
-            "effective_url": "https://www.isna.ir/",
-            "stderr": "",
-            "error": ""
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": true,
-            "proxy_argument": "http://84.241.30.214:8080",
-            "curl_returncode": 0,
-            "http_code": 204,
-            "http_status": 204,
-            "measured_seconds": 3.571,
-            "response_time": 3.571,
-            "remote_ip": "84.241.30.214",
-            "effective_url": "https://www.gstatic.com/generate_204",
-            "stderr": "",
-            "error": ""
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -4763,16 +4575,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-15T14:30:09+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-18T04:16:35+00:00",
       "success_count": 4,
-      "failure_count": 85,
+      "failure_count": 86,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://84.241.30.38:8080",
-        "tested_at": "2026-07-23T19:48:24+00:00",
+        "tested_at": "2026-07-23T21:30:34+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -4871,19 +4683,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T08:29:42+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
-      "last_success": "2026-07-23T19:47:58+00:00",
-      "success_count": 35,
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
+      "last_success": "2026-07-23T21:30:05+00:00",
+      "success_count": 36,
       "failure_count": 96,
       "test_result": {
         "working": true,
         "passed_all_tests": true,
         "proxy": "http://85.133.190.40:8097",
-        "tested_at": "2026-07-23T19:48:21+00:00",
+        "tested_at": "2026-07-23T21:30:35+00:00",
         "tcp": {
           "success": true,
-          "seconds": 2.233
+          "seconds": 4.273
         },
         "url_tests": [
           {
@@ -4894,8 +4706,8 @@
             "curl_returncode": 0,
             "http_code": 200,
             "http_status": 200,
-            "measured_seconds": 4.392,
-            "response_time": 4.392,
+            "measured_seconds": 2.794,
+            "response_time": 2.794,
             "remote_ip": "85.133.190.40",
             "effective_url": "https://www.isna.ir/",
             "stderr": "",
@@ -4909,8 +4721,8 @@
             "curl_returncode": 0,
             "http_code": 204,
             "http_status": 204,
-            "measured_seconds": 1.695,
-            "response_time": 1.695,
+            "measured_seconds": 2.533,
+            "response_time": 2.533,
             "remote_ip": "85.133.190.40",
             "effective_url": "https://www.gstatic.com/generate_204",
             "stderr": "",
@@ -4924,7 +4736,7 @@
       "source_names": [
         "proxyscrape"
       ],
-      "currently_in_source": true,
+      "currently_in_source": false,
       "first_seen": "2026-07-23T14:35:10+00:00",
       "last_seen_in_source": "2026-07-23T19:47:58+00:00",
       "last_tested": "2026-07-23T19:47:58+00:00",
@@ -4932,46 +4744,46 @@
       "success_count": 2,
       "failure_count": 2,
       "test_result": {
-        "working": true,
         "passed_all_tests": true,
         "proxy": "http://85.133.248.62:10808",
-        "tested_at": "2026-07-23T19:48:19+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 0.173
+          "seconds": 0.173,
+          "success": true
         },
+        "tested_at": "2026-07-23T19:48:19+00:00",
         "url_tests": [
           {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": true,
-            "proxy_argument": "http://85.133.248.62:10808",
             "curl_returncode": 0,
+            "effective_url": "https://www.isna.ir/",
+            "error": "",
             "http_code": 200,
             "http_status": 200,
             "measured_seconds": 2.717,
-            "response_time": 2.717,
+            "name": "ISNA",
+            "proxy_argument": "http://85.133.248.62:10808",
             "remote_ip": "85.133.248.62",
-            "effective_url": "https://www.isna.ir/",
+            "response_time": 2.717,
             "stderr": "",
-            "error": ""
+            "success": true,
+            "url": "https://www.isna.ir/"
           },
           {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": true,
-            "proxy_argument": "http://85.133.248.62:10808",
             "curl_returncode": 0,
+            "effective_url": "https://www.gstatic.com/generate_204",
+            "error": "",
             "http_code": 204,
             "http_status": 204,
             "measured_seconds": 5.41,
-            "response_time": 5.41,
+            "name": "Google",
+            "proxy_argument": "http://85.133.248.62:10808",
             "remote_ip": "85.133.248.62",
-            "effective_url": "https://www.gstatic.com/generate_204",
+            "response_time": 5.41,
             "stderr": "",
-            "error": ""
+            "success": true,
+            "url": "https://www.gstatic.com/generate_204"
           }
-        ]
+        ],
+        "working": true
       }
     },
     {
@@ -4981,16 +4793,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-19T10:45:03+00:00",
       "success_count": 3,
-      "failure_count": 134,
+      "failure_count": 135,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://85.185.206.195:3131",
-        "tested_at": "2026-07-23T19:48:24+00:00",
+        "tested_at": "2026-07-23T21:30:36+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -5005,16 +4817,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://85.198.12.20:3128",
-        "tested_at": "2026-07-23T19:48:24+00:00",
+        "tested_at": "2026-07-23T21:30:36+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -5088,52 +4900,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T17:35:32+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T19:47:58+00:00",
       "success_count": 5,
-      "failure_count": 85,
+      "failure_count": 86,
       "test_result": {
-        "working": true,
-        "passed_all_tests": true,
+        "working": false,
+        "passed_all_tests": false,
         "proxy": "http://85.9.87.26:8080",
-        "tested_at": "2026-07-23T19:48:24+00:00",
+        "tested_at": "2026-07-23T21:30:37+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 3.236
+          "success": false,
+          "error": "timed out"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": true,
-            "proxy_argument": "http://85.9.87.26:8080",
-            "curl_returncode": 0,
-            "http_code": 200,
-            "http_status": 200,
-            "measured_seconds": 6.924,
-            "response_time": 6.924,
-            "remote_ip": "85.9.87.26",
-            "effective_url": "https://www.isna.ir/",
-            "stderr": "",
-            "error": ""
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": true,
-            "proxy_argument": "http://85.9.87.26:8080",
-            "curl_returncode": 0,
-            "http_code": 204,
-            "http_status": 204,
-            "measured_seconds": 9.46,
-            "response_time": 9.46,
-            "remote_ip": "85.9.87.26",
-            "effective_url": "https://www.gstatic.com/generate_204",
-            "stderr": "",
-            "error": ""
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -5143,16 +4924,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://87.107.146.209:8118",
-        "tested_at": "2026-07-23T19:48:29+00:00",
+        "tested_at": "2026-07-23T21:30:38+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -5167,16 +4948,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://87.107.166.108:8090",
-        "tested_at": "2026-07-23T19:48:29+00:00",
+        "tested_at": "2026-07-23T21:30:38+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -5216,16 +4997,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://88.135.72.7:80",
-        "tested_at": "2026-07-23T19:48:29+00:00",
+        "tested_at": "2026-07-23T21:30:38+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -5266,21 +5047,53 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-20T21:51:33+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T12:04:03+00:00",
       "success_count": 3,
-      "failure_count": 29,
+      "failure_count": 30,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://89.46.219.133:8000",
-        "tested_at": "2026-07-23T19:48:29+00:00",
+        "tested_at": "2026-07-23T21:30:36+00:00",
         "tcp": {
-          "success": false,
-          "error": "timed out"
+          "success": true,
+          "seconds": 2.282
         },
-        "url_tests": []
+        "url_tests": [
+          {
+            "name": "ISNA",
+            "url": "https://www.isna.ir/",
+            "success": true,
+            "proxy_argument": "http://89.46.219.133:8000",
+            "curl_returncode": 0,
+            "http_code": 200,
+            "http_status": 200,
+            "measured_seconds": 2.598,
+            "response_time": 2.598,
+            "remote_ip": "89.46.219.133",
+            "effective_url": "https://www.isna.ir/",
+            "stderr": "",
+            "error": ""
+          },
+          {
+            "name": "Google",
+            "url": "https://www.gstatic.com/generate_204",
+            "success": false,
+            "proxy_argument": "http://89.46.219.133:8000",
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
+            "error": "curl: (28) Connection timed out after 15002 milliseconds",
+            "raw_output": "000|15.002443||https://www.gstatic.com/generate_204"
+          }
+        ]
       }
     },
     {
@@ -5290,16 +5103,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://91.106.67.245:8080",
-        "tested_at": "2026-07-23T19:48:30+00:00",
+        "tested_at": "2026-07-23T21:30:41+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -5314,16 +5127,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://91.107.196.144:3128",
-        "tested_at": "2026-07-23T19:48:31+00:00",
+        "tested_at": "2026-07-23T21:30:41+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -5339,54 +5152,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-19T22:10:58+00:00",
       "success_count": 4,
-      "failure_count": 80,
+      "failure_count": 81,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://91.199.27.248:8080",
-        "tested_at": "2026-07-23T19:48:28+00:00",
+        "tested_at": "2026-07-23T21:30:41+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 1.222
+          "success": false,
+          "error": "timed out"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": false,
-            "proxy_argument": "http://91.199.27.248:8080",
-            "curl_returncode": 28,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
-            "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002426||https://www.isna.ir/"
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": false,
-            "proxy_argument": "http://91.199.27.248:8080",
-            "curl_returncode": 28,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
-            "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002308||https://www.gstatic.com/generate_204"
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -5395,7 +5175,7 @@
         "proxyscrape",
         "databay"
       ],
-      "currently_in_source": true,
+      "currently_in_source": false,
       "first_seen": "2026-07-18T23:13:07+00:00",
       "last_seen_in_source": "2026-07-23T19:47:58+00:00",
       "last_tested": "2026-07-23T19:47:58+00:00",
@@ -5403,15 +5183,15 @@
       "success_count": 3,
       "failure_count": 39,
       "test_result": {
-        "working": false,
         "passed_all_tests": false,
         "proxy": "http://91.199.27.249:8080",
-        "tested_at": "2026-07-23T19:48:32+00:00",
         "tcp": {
-          "success": false,
-          "error": "timed out"
+          "error": "timed out",
+          "success": false
         },
-        "url_tests": []
+        "tested_at": "2026-07-23T19:48:32+00:00",
+        "url_tests": [],
+        "working": false
       }
     },
     {
@@ -5445,16 +5225,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://93.126.40.12:8080",
-        "tested_at": "2026-07-23T19:48:33+00:00",
+        "tested_at": "2026-07-23T21:30:42+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -5518,21 +5298,54 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-22T07:25:39+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-22T12:05:45+00:00",
       "success_count": 1,
-      "failure_count": 8,
+      "failure_count": 9,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://94.101.187.3:3128",
-        "tested_at": "2026-07-23T19:48:33+00:00",
+        "tested_at": "2026-07-23T21:30:38+00:00",
         "tcp": {
-          "success": false,
-          "error": "timed out"
+          "success": true,
+          "seconds": 0.178
         },
-        "url_tests": []
+        "url_tests": [
+          {
+            "name": "ISNA",
+            "url": "https://www.isna.ir/",
+            "success": false,
+            "proxy_argument": "http://94.101.187.3:3128",
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15001 milliseconds",
+            "error": "curl: (28) Connection timed out after 15001 milliseconds",
+            "raw_output": "000|15.001270|94.101.187.3|https://www.isna.ir/"
+          },
+          {
+            "name": "Google",
+            "url": "https://www.gstatic.com/generate_204",
+            "success": false,
+            "proxy_argument": "http://94.101.187.3:3128",
+            "curl_returncode": 28,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
+            "error": "curl: (28) Connection timed out after 15002 milliseconds",
+            "raw_output": "000|15.002881|94.101.187.3|https://www.gstatic.com/generate_204"
+          }
+        ]
       }
     },
     {
@@ -5542,16 +5355,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://94.182.146.250:8080",
-        "tested_at": "2026-07-23T19:48:29+00:00",
+        "tested_at": "2026-07-23T21:30:38+00:00",
         "tcp": {
           "success": false,
           "error": "[Errno 111] Connection refused"
@@ -5567,19 +5380,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://94.182.177.92:80",
-        "tested_at": "2026-07-23T19:48:30+00:00",
+        "tested_at": "2026-07-23T21:30:38+00:00",
         "tcp": {
           "success": true,
-          "seconds": 1.198
+          "seconds": 0.172
         },
         "url_tests": [
           {
@@ -5587,32 +5400,32 @@
             "url": "https://www.isna.ir/",
             "success": false,
             "proxy_argument": "http://94.182.177.92:80",
-            "curl_returncode": 28,
+            "curl_returncode": 56,
             "http_code": null,
             "http_status": null,
             "measured_seconds": null,
             "response_time": null,
             "remote_ip": "",
             "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15001 milliseconds",
-            "error": "curl: (28) Connection timed out after 15001 milliseconds",
-            "raw_output": "000|15.001924||https://www.isna.ir/"
+            "stderr": "curl: (56) CONNECT tunnel failed, response 400",
+            "error": "curl: (56) CONNECT tunnel failed, response 400",
+            "raw_output": "000|0.352351|94.182.177.92|https://www.isna.ir/"
           },
           {
             "name": "Google",
             "url": "https://www.gstatic.com/generate_204",
             "success": false,
             "proxy_argument": "http://94.182.177.92:80",
-            "curl_returncode": 28,
+            "curl_returncode": 56,
             "http_code": null,
             "http_status": null,
             "measured_seconds": null,
             "response_time": null,
             "remote_ip": "",
             "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15001 milliseconds",
-            "error": "curl: (28) Connection timed out after 15001 milliseconds",
-            "raw_output": "000|15.001927|94.182.177.92|https://www.gstatic.com/generate_204"
+            "stderr": "curl: (56) CONNECT tunnel failed, response 400",
+            "error": "curl: (56) CONNECT tunnel failed, response 400",
+            "raw_output": "000|0.349893|94.182.177.92|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -5624,16 +5437,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://94.182.208.169:8080",
-        "tested_at": "2026-07-23T19:48:34+00:00",
+        "tested_at": "2026-07-23T21:30:43+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -5648,16 +5461,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://94.74.130.26:80",
-        "tested_at": "2026-07-23T19:48:34+00:00",
+        "tested_at": "2026-07-23T21:30:44+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -5674,20 +5487,20 @@
       "currently_in_source": false,
       "first_seen": "2026-07-19T18:41:17+00:00",
       "last_seen_in_source": "2026-07-21T20:07:20+00:00",
-      "last_tested": "2026-07-22T20:32:49+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-20T00:15:21+00:00",
       "success_count": 3,
-      "failure_count": 21,
+      "failure_count": 22,
       "test_result": {
+        "working": false,
         "passed_all_tests": false,
         "proxy": "http://95.215.161.153:8080",
+        "tested_at": "2026-07-23T21:30:52+00:00",
         "tcp": {
-          "error": "timed out",
-          "success": false
+          "success": false,
+          "error": "timed out"
         },
-        "tested_at": "2026-07-22T20:33:36+00:00",
-        "url_tests": [],
-        "working": false
+        "url_tests": []
       }
     },
     {
@@ -5697,16 +5510,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "http://95.38.95.40:3128",
-        "tested_at": "2026-07-23T19:48:34+00:00",
+        "tested_at": "2026-07-23T21:30:44+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -5722,19 +5535,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-23T16:15:26+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 3,
+      "failure_count": 4,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://151.232.18.66:5678",
-        "tested_at": "2026-07-23T19:48:30+00:00",
+        "tested_at": "2026-07-23T21:30:40+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.293
+          "seconds": 0.17
         },
         "url_tests": [
           {
@@ -5751,7 +5564,7 @@
             "effective_url": "",
             "stderr": "curl: (97) Recv failure: Connection reset by peer",
             "error": "curl: (97) Recv failure: Connection reset by peer",
-            "raw_output": "000|2.861899|151.232.18.66|https://www.isna.ir/"
+            "raw_output": "000|0.360857|151.232.18.66|https://www.isna.ir/"
           },
           {
             "name": "Google",
@@ -5767,7 +5580,7 @@
             "effective_url": "",
             "stderr": "curl: (97) Recv failure: Connection reset by peer",
             "error": "curl: (97) Recv failure: Connection reset by peer",
-            "raw_output": "000|0.815261|151.232.18.66|https://www.gstatic.com/generate_204"
+            "raw_output": "000|0.341641|151.232.18.66|https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -5785,15 +5598,15 @@
       "success_count": 1,
       "failure_count": 5,
       "test_result": {
-        "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://185.60.59.245:10808",
-        "tested_at": "2026-07-23T19:48:38+00:00",
         "tcp": {
-          "success": false,
-          "error": "[Errno 111] Connection refused"
+          "error": "[Errno 111] Connection refused",
+          "success": false
         },
-        "url_tests": []
+        "tested_at": "2026-07-23T19:48:38+00:00",
+        "url_tests": [],
+        "working": false
       }
     },
     {
@@ -5856,56 +5669,78 @@
       "source_names": [
         "proxyscrape"
       ],
-      "currently_in_source": false,
+      "currently_in_source": true,
       "first_seen": "2026-07-18T01:07:02+00:00",
-      "last_seen_in_source": "2026-07-23T17:50:35+00:00",
-      "last_tested": "2026-07-23T17:50:35+00:00",
-      "last_success": "2026-07-23T16:15:26+00:00",
-      "success_count": 4,
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
+      "last_success": "2026-07-23T21:30:05+00:00",
+      "success_count": 5,
       "failure_count": 12,
       "test_result": {
-        "passed_all_tests": false,
+        "working": true,
+        "passed_all_tests": true,
         "proxy": "socks4://2.188.210.83:4443",
+        "tested_at": "2026-07-23T21:30:40+00:00",
         "tcp": {
-          "seconds": 0.298,
-          "success": true
+          "success": true,
+          "seconds": 0.164
         },
-        "tested_at": "2026-07-23T17:51:12+00:00",
         "url_tests": [
           {
-            "curl_returncode": 35,
-            "effective_url": "",
-            "error": "curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to www.isna.ir:443",
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
             "name": "ISNA",
+            "url": "https://www.isna.ir/",
+            "success": true,
             "proxy_argument": "socks4a://2.188.210.83:4443",
-            "raw_output": "000|3.575917|2.188.210.83|https://www.isna.ir/",
-            "remote_ip": "",
-            "response_time": null,
-            "stderr": "curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to www.isna.ir:443",
-            "success": false,
-            "url": "https://www.isna.ir/"
+            "curl_returncode": 0,
+            "http_code": 200,
+            "http_status": 200,
+            "measured_seconds": 0.992,
+            "response_time": 0.992,
+            "remote_ip": "2.188.210.83",
+            "effective_url": "https://www.isna.ir/",
+            "stderr": "",
+            "error": ""
           },
           {
-            "curl_returncode": 35,
-            "effective_url": "",
-            "error": "curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to www.gstatic.com:443",
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
             "name": "Google",
+            "url": "https://www.gstatic.com/generate_204",
+            "success": true,
             "proxy_argument": "socks4a://2.188.210.83:4443",
-            "raw_output": "000|3.661779|2.188.210.83|https://www.gstatic.com/generate_204",
-            "remote_ip": "",
-            "response_time": null,
-            "stderr": "curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to www.gstatic.com:443",
-            "success": false,
-            "url": "https://www.gstatic.com/generate_204"
+            "curl_returncode": 0,
+            "http_code": 204,
+            "http_status": 204,
+            "measured_seconds": 0.911,
+            "response_time": 0.911,
+            "remote_ip": "2.188.210.83",
+            "effective_url": "https://www.gstatic.com/generate_204",
+            "stderr": "",
+            "error": ""
           }
-        ],
-        "working": false
+        ]
+      }
+    },
+    {
+      "proxy": "socks4://2.188.218.202:1080",
+      "source_names": [
+        "databay"
+      ],
+      "currently_in_source": true,
+      "first_seen": "2026-07-23T21:30:05+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
+      "last_success": null,
+      "success_count": 0,
+      "failure_count": 1,
+      "test_result": {
+        "working": false,
+        "passed_all_tests": false,
+        "proxy": "socks4://2.188.218.202:1080",
+        "tested_at": "2026-07-23T21:30:52+00:00",
+        "tcp": {
+          "success": false,
+          "error": "timed out"
+        },
+        "url_tests": []
       }
     },
     {
@@ -5915,16 +5750,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://217.218.242.75:5678",
-        "tested_at": "2026-07-23T19:48:34+00:00",
+        "tested_at": "2026-07-23T21:30:45+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -5939,16 +5774,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-23T04:58:32+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 8,
+      "failure_count": 9,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://217.219.162.114:5678",
-        "tested_at": "2026-07-23T19:48:34+00:00",
+        "tested_at": "2026-07-23T21:30:46+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -5964,19 +5799,19 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-23T14:35:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T16:15:26+00:00",
       "success_count": 2,
-      "failure_count": 2,
+      "failure_count": 3,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://31.47.51.152:1111",
-        "tested_at": "2026-07-23T19:48:30+00:00",
+        "tested_at": "2026-07-23T21:30:44+00:00",
         "tcp": {
           "success": true,
-          "seconds": 0.181
+          "seconds": 3.253
         },
         "url_tests": [
           {
@@ -5991,9 +5826,9 @@
             "response_time": null,
             "remote_ip": "",
             "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
-            "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002191|31.47.51.152|https://www.isna.ir/"
+            "stderr": "curl: (28) Connection timed out after 15001 milliseconds",
+            "error": "curl: (28) Connection timed out after 15001 milliseconds",
+            "raw_output": "000|15.001973|31.47.51.152|https://www.isna.ir/"
           },
           {
             "name": "Google",
@@ -6009,7 +5844,7 @@
             "effective_url": "",
             "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
             "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002670|31.47.51.152|https://www.gstatic.com/generate_204"
+            "raw_output": "000|15.002495||https://www.gstatic.com/generate_204"
           }
         ]
       }
@@ -6021,54 +5856,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-20T15:22:19+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 41,
+      "failure_count": 42,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://31.7.65.18:443",
-        "tested_at": "2026-07-23T19:48:34+00:00",
+        "tested_at": "2026-07-23T21:30:46+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 2.232
+          "success": false,
+          "error": "timed out"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": false,
-            "proxy_argument": "socks4a://31.7.65.18:443",
-            "curl_returncode": 28,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
-            "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002155||https://www.isna.ir/"
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": false,
-            "proxy_argument": "socks4a://31.7.65.18:443",
-            "curl_returncode": 28,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (28) Connection timed out after 15002 milliseconds",
-            "error": "curl: (28) Connection timed out after 15002 milliseconds",
-            "raw_output": "000|15.002277|31.7.65.18|https://www.gstatic.com/generate_204"
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -6131,20 +5933,21 @@
     {
       "proxy": "socks4://46.245.123.30:1080",
       "source_names": [
-        "databay"
+        "databay",
+        "proxyscrape"
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-23T19:47:58+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 1,
+      "failure_count": 2,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://46.245.123.30:1080",
-        "tested_at": "2026-07-23T19:48:43+00:00",
+        "tested_at": "2026-07-23T21:30:46+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -6160,21 +5963,54 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-18T12:39:25+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 72,
+      "failure_count": 73,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://5.160.103.246:8080",
-        "tested_at": "2026-07-23T19:48:37+00:00",
+        "tested_at": "2026-07-23T21:30:45+00:00",
         "tcp": {
-          "success": false,
-          "error": "timed out"
+          "success": true,
+          "seconds": 3.253
         },
-        "url_tests": []
+        "url_tests": [
+          {
+            "name": "ISNA",
+            "url": "https://www.isna.ir/",
+            "success": false,
+            "proxy_argument": "socks4a://5.160.103.246:8080",
+            "curl_returncode": 97,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (97) Can't complete SOCKS4 connection to 0.0.0.0:0. (91), request rejected or failed.",
+            "error": "curl: (97) Can't complete SOCKS4 connection to 0.0.0.0:0. (91), request rejected or failed.",
+            "raw_output": "000|2.376653|5.160.103.246|https://www.isna.ir/"
+          },
+          {
+            "name": "Google",
+            "url": "https://www.gstatic.com/generate_204",
+            "success": false,
+            "proxy_argument": "socks4a://5.160.103.246:8080",
+            "curl_returncode": 97,
+            "http_code": null,
+            "http_status": null,
+            "measured_seconds": null,
+            "response_time": null,
+            "remote_ip": "",
+            "effective_url": "",
+            "stderr": "curl: (97) Can't complete SOCKS4 connection to 0.0.0.0:0. (91), request rejected or failed.",
+            "error": "curl: (97) Can't complete SOCKS4 connection to 0.0.0.0:0. (91), request rejected or failed.",
+            "raw_output": "000|5.539269|5.160.103.246|https://www.gstatic.com/generate_204"
+          }
+        ]
       }
     },
     {
@@ -6185,16 +6021,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-23T16:15:26+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 3,
+      "failure_count": 4,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://5.160.247.48:8443",
-        "tested_at": "2026-07-23T19:48:38+00:00",
+        "tested_at": "2026-07-23T21:30:47+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -6209,16 +6045,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-23T17:50:35+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 2,
+      "failure_count": 3,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://78.38.67.210:3636",
-        "tested_at": "2026-07-23T19:48:38+00:00",
+        "tested_at": "2026-07-23T21:30:47+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -6229,20 +6065,21 @@
     {
       "proxy": "socks4://78.38.67.95:4153",
       "source_names": [
-        "databay"
+        "databay",
+        "proxyscrape"
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-23T17:50:35+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 2,
+      "failure_count": 3,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://78.38.67.95:4153",
-        "tested_at": "2026-07-23T19:48:38+00:00",
+        "tested_at": "2026-07-23T21:30:48+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -6316,16 +6153,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-23T07:44:55+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 7,
+      "failure_count": 8,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://80.191.40.131:5678",
-        "tested_at": "2026-07-23T19:48:38+00:00",
+        "tested_at": "2026-07-23T21:30:49+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -6340,16 +6177,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-23T17:50:35+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 2,
+      "failure_count": 3,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://80.191.40.133:5678",
-        "tested_at": "2026-07-23T19:48:39+00:00",
+        "tested_at": "2026-07-23T21:30:49+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -6412,53 +6249,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-23T14:35:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 4,
+      "failure_count": 5,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://85.133.248.62:10808",
-        "tested_at": "2026-07-23T19:48:34+00:00",
+        "tested_at": "2026-07-23T21:30:50+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 0.176
+          "success": false,
+          "error": "timed out"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": false,
-            "proxy_argument": "socks4a://85.133.248.62:10808",
-            "curl_returncode": 35,
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
-            "response_time": null,
-            "remote_ip": "",
-            "effective_url": "",
-            "stderr": "curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to www.isna.ir:443",
-            "error": "curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to www.isna.ir:443",
-            "raw_output": "000|6.005643|85.133.248.62|https://www.isna.ir/"
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": true,
-            "proxy_argument": "socks4a://85.133.248.62:10808",
-            "curl_returncode": 0,
-            "http_code": 204,
-            "http_status": 204,
-            "measured_seconds": 2.247,
-            "response_time": 2.247,
-            "remote_ip": "85.133.248.62",
-            "effective_url": "https://www.gstatic.com/generate_204",
-            "stderr": "",
-            "error": ""
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -6470,52 +6275,21 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T15:51:51+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-23T19:47:58+00:00",
       "success_count": 10,
-      "failure_count": 78,
+      "failure_count": 79,
       "test_result": {
-        "working": true,
-        "passed_all_tests": true,
+        "working": false,
+        "passed_all_tests": false,
         "proxy": "socks4://87.107.68.231:1081",
-        "tested_at": "2026-07-23T19:48:36+00:00",
+        "tested_at": "2026-07-23T21:30:50+00:00",
         "tcp": {
-          "success": true,
-          "seconds": 2.251
+          "success": false,
+          "error": "timed out"
         },
-        "url_tests": [
-          {
-            "name": "ISNA",
-            "url": "https://www.isna.ir/",
-            "success": true,
-            "proxy_argument": "socks4a://87.107.68.231:1081",
-            "curl_returncode": 0,
-            "http_code": 200,
-            "http_status": 200,
-            "measured_seconds": 5.867,
-            "response_time": 5.867,
-            "remote_ip": "87.107.68.231",
-            "effective_url": "https://www.isna.ir/",
-            "stderr": "",
-            "error": ""
-          },
-          {
-            "name": "Google",
-            "url": "https://www.gstatic.com/generate_204",
-            "success": true,
-            "proxy_argument": "socks4a://87.107.68.231:1081",
-            "curl_returncode": 0,
-            "http_code": 204,
-            "http_status": 204,
-            "measured_seconds": 5.453,
-            "response_time": 5.453,
-            "remote_ip": "87.107.68.231",
-            "effective_url": "https://www.gstatic.com/generate_204",
-            "stderr": "",
-            "error": ""
-          }
-        ]
+        "url_tests": []
       }
     },
     {
@@ -6525,16 +6299,16 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-14T09:19:10+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
-      "failure_count": 137,
+      "failure_count": 138,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://87.107.74.39:1028",
-        "tested_at": "2026-07-23T19:48:39+00:00",
+        "tested_at": "2026-07-23T21:30:50+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -6550,20 +6324,20 @@
       "currently_in_source": false,
       "first_seen": "2026-07-17T14:05:32+00:00",
       "last_seen_in_source": "2026-07-17T18:17:09+00:00",
-      "last_tested": "2026-07-22T20:32:49+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": "2026-07-17T14:05:32+00:00",
       "success_count": 1,
-      "failure_count": 8,
+      "failure_count": 9,
       "test_result": {
+        "working": false,
         "passed_all_tests": false,
         "proxy": "socks4://91.223.61.127:10808",
+        "tested_at": "2026-07-23T21:30:53+00:00",
         "tcp": {
-          "error": "timed out",
-          "success": false
+          "success": false,
+          "error": "timed out"
         },
-        "tested_at": "2026-07-22T20:33:36+00:00",
-        "url_tests": [],
-        "working": false
+        "url_tests": []
       }
     },
     {
@@ -6573,16 +6347,40 @@
       ],
       "currently_in_source": true,
       "first_seen": "2026-07-23T19:47:58+00:00",
-      "last_seen_in_source": "2026-07-23T19:47:58+00:00",
-      "last_tested": "2026-07-23T19:47:58+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
+      "last_success": null,
+      "success_count": 0,
+      "failure_count": 2,
+      "test_result": {
+        "working": false,
+        "passed_all_tests": false,
+        "proxy": "socks4://93.118.135.176:1080",
+        "tested_at": "2026-07-23T21:30:50+00:00",
+        "tcp": {
+          "success": false,
+          "error": "timed out"
+        },
+        "url_tests": []
+      }
+    },
+    {
+      "proxy": "socks4://94.182.199.250:8080",
+      "source_names": [
+        "databay"
+      ],
+      "currently_in_source": true,
+      "first_seen": "2026-07-23T21:30:05+00:00",
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
       "last_success": null,
       "success_count": 0,
       "failure_count": 1,
       "test_result": {
         "working": false,
         "passed_all_tests": false,
-        "proxy": "socks4://93.118.135.176:1080",
-        "tested_at": "2026-07-23T19:48:42+00:00",
+        "proxy": "socks4://94.182.199.250:8080",
+        "tested_at": "2026-07-23T21:30:51+00:00",
         "tcp": {
           "success": false,
           "error": "timed out"
@@ -6619,55 +6417,54 @@
       "source_names": [
         "proxyscrape"
       ],
-      "currently_in_source": false,
+      "currently_in_source": true,
       "first_seen": "2026-07-23T12:04:03+00:00",
-      "last_seen_in_source": "2026-07-23T17:50:35+00:00",
-      "last_tested": "2026-07-23T17:50:35+00:00",
-      "last_success": "2026-07-23T16:15:26+00:00",
-      "success_count": 2,
+      "last_seen_in_source": "2026-07-23T21:30:05+00:00",
+      "last_tested": "2026-07-23T21:30:05+00:00",
+      "last_success": "2026-07-23T21:30:05+00:00",
+      "success_count": 3,
       "failure_count": 2,
       "test_result": {
-        "passed_all_tests": false,
+        "working": true,
+        "passed_all_tests": true,
         "proxy": "socks5://2.188.210.5:4443",
+        "tested_at": "2026-07-23T21:30:46+00:00",
         "tcp": {
-          "seconds": 0.302,
-          "success": true
+          "success": true,
+          "seconds": 0.172
         },
-        "tested_at": "2026-07-23T17:51:18+00:00",
         "url_tests": [
           {
-            "curl_returncode": 28,
-            "effective_url": "",
-            "error": "curl: (28) Operation timed out after 15002 milliseconds with 0 bytes received",
-            "http_code": null,
-            "http_status": null,
-            "measured_seconds": null,
             "name": "ISNA",
+            "url": "https://www.isna.ir/",
+            "success": true,
             "proxy_argument": "socks5h://2.188.210.5:4443",
-            "raw_output": "000|15.002629|2.188.210.5|https://www.isna.ir/",
-            "remote_ip": "",
-            "response_time": null,
-            "stderr": "curl: (28) Operation timed out after 15002 milliseconds with 0 bytes received",
-            "success": false,
-            "url": "https://www.isna.ir/"
+            "curl_returncode": 0,
+            "http_code": 200,
+            "http_status": 200,
+            "measured_seconds": 2.226,
+            "response_time": 2.226,
+            "remote_ip": "2.188.210.5",
+            "effective_url": "https://www.isna.ir/",
+            "stderr": "",
+            "error": ""
           },
           {
+            "name": "Google",
+            "url": "https://www.gstatic.com/generate_204",
+            "success": true,
+            "proxy_argument": "socks5h://2.188.210.5:4443",
             "curl_returncode": 0,
-            "effective_url": "https://www.gstatic.com/generate_204",
-            "error": "",
             "http_code": 204,
             "http_status": 204,
-            "measured_seconds": 3.17,
-            "name": "Google",
-            "proxy_argument": "socks5h://2.188.210.5:4443",
+            "measured_seconds": 1.13,
+            "response_time": 1.13,
             "remote_ip": "2.188.210.5",
-            "response_time": 3.17,
+            "effective_url": "https://www.gstatic.com/generate_204",
             "stderr": "",
-            "success": true,
-            "url": "https://www.gstatic.com/generate_204"
+            "error": ""
           }
-        ],
-        "working": false
+        ]
       }
     },
     {
@@ -6841,15 +6638,15 @@
       "success_count": 1,
       "failure_count": 7,
       "test_result": {
-        "working": false,
         "passed_all_tests": false,
         "proxy": "socks5://206.123.156.209:5262",
-        "tested_at": "2026-07-23T19:48:38+00:00",
         "tcp": {
-          "success": false,
-          "error": "[Errno 111] Connection refused"
+          "error": "[Errno 111] Connection refused",
+          "success": false
         },
-        "url_tests": []
+        "tested_at": "2026-07-23T19:48:38+00:00",
+        "url_tests": [],
+        "working": false
       }
     },
     {
